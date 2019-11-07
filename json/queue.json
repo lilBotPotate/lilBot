@@ -1,4 +1,18 @@
 {
-  "up": false,
-  "queue": []
+  "up": true,
+  "queue": [
+    {
+      "username": "LittleBunnyRabbit",
+      "discordID": "237509022301814784",
+      "subscriber": false,
+      "password": "c5kk1"
+    },
+    {
+      "username": "lilBunane",
+      "id": "123739701",
+      "twitchID": "lilbunane",
+      "subscriber": true,
+      "password": "91jcd"
+    }
+  ]
 }
