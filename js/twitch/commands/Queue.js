@@ -68,6 +68,8 @@ function join(client, tags, channel) {
         tags.username, 
         `You are ${queueLen}. in the queue. When its your turn, you will get notified in the chat. Join the private match with the following information: USERNAME: lilpotate, PASSWORD: ${password}`
     );
+
+    `[Twitch][Queue] ${tags["display-name"]} joined the queue. Password: ${password}`.sendLog();
 }
 
 function leave(client, tags, channel) {

@@ -74,6 +74,7 @@ function join(client, msg) {
         .setDescription(`When its your turn, you will get notified in the chat. Join the private match with the following information: **USERNAME: lilpotate**, **PASSWORD: ${password}**`);
 
     msg.author.send(queueEmbed);
+    `[Discord][DM][Queue] ${msg.author.username} joined the queue. Password: ${password}`.sendLog();
 }
 
 function leave(msg) {
