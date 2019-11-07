@@ -16,7 +16,7 @@ async function checkTwitch(client) {
     if(jStream.data.length > 0) {
         if(twitchLive) return;
         twitchLive = true;
-        const message = "**lilPotate** is going live! Run!!!";
+        const message = "@everyone **lilPotate** is now live! Come join us! <:lilpotHypebot:642086734774927363>";
         try {
             return await client.channels.get(live_channel).send(message).then(m => {
                 return client.commands.get("TWITCH").execute(client, m, []);

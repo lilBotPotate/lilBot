@@ -61,7 +61,6 @@ clientT.on("join", onJoinTwitch);
 clientT.connect();
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ASYNC ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/*
 const updates = require("./js/Updates.js");
 
 Async.forever(
@@ -74,7 +73,7 @@ Async.forever(
     },
     function(err) { return console.log(err); }
 );
-*/
+
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 function setUp() {
     const setUpArr = [
