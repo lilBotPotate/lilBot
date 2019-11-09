@@ -30,6 +30,6 @@ module.exports = {
             kickedMember.kick();
         });
 
-        kickedMember.send(eKick);
+        if(!kickedMember.user.bot) kickedMember.send(eKick);
     }
 };

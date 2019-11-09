@@ -28,11 +28,13 @@ function add(client, msg, args) {
     if(client.commands.has(name)) return msg.channel.send("That command allready exists!");
     if(!output) return msg.channel.send("You need to enter the output of the command");
 
+    const FormatCommand = require("../../../FormatCommand.js");
+
     jCommands.set(`commands.${name}`, output);
     client.commands.set(name, {
         name: name,
         description: { "info": "Custom command" },
-        execute(client, msg, args) { return msg.channel.send(output); }
+        execute(client, msg, args) { return msg.channel.send(FormatCommand(msg, output)); }
     });
 
     msg.channel.send(`Command **${name}** was added!`);

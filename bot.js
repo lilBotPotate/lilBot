@@ -17,7 +17,8 @@ const {
 const {
     discord_token,
     twitch_token,
-    twitch_username
+    twitch_username,
+    twitch_channels
 } = require("./config.json");
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISCORD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -43,10 +44,7 @@ const clientT = new tmi.client({
         username: twitch_username,
         password: twitch_token
     },
-    channels: [ 
-        "lilbunane",
-        "lilpotate"
-    ]
+    channels: twitch_channels
 });
 
 SetTwitch(clientT);
@@ -91,13 +89,15 @@ function setUp() {
         }
     }
 
+    const FormatCommand = require("./js/FormatCommand.js");
+
     const customCommands = jCommands.get("commands");
     if(customCommands) {
         for(command in customCommands) {
             clientD.commands.set(command.toUpperCase(), {
                 name: command.toUpperCase(),
                 description: { "info": "Custom command" },
-                execute(client, msg, args) { return msg.channel.send(customCommands[command]); }
+                execute(client, msg, args) { return msg.channel.send(FormatCommand(msg, customCommands[command])); }
             });
         }
     }

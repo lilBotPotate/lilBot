@@ -19,7 +19,7 @@ module.exports = {
         }
 
         let msgLimit = args[0] && !isNaN(args[0]) ? args[0] : 25;
-        if(msgLimit > 100) msgLimit == 100;
+        if(msgLimit > 100) msgLimit = 100;
 
         msg.channel.fetchMessages({ limit: msgLimit }).then(function(messages) {
             let userMsg = "";

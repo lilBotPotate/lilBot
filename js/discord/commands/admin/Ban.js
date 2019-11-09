@@ -30,6 +30,6 @@ module.exports = {
             bannedMember.ban();
         });
 
-        bannedMember.send(eBan);
+        if(!bannedMember.user.bot) bannedMember.send(eBan);
     }
 };
