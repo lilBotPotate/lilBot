@@ -94,10 +94,13 @@ function setUp() {
     const customCommands = jCommands.get("commands");
     if(customCommands) {
         for(command in customCommands) {
+            let output = customCommands[command];
             clientD.commands.set(command.toUpperCase(), {
                 name: command.toUpperCase(),
                 description: { "info": "Custom command" },
-                execute(client, msg, args) { return msg.channel.send(FormatCommand(msg, customCommands[command])); }
+                execute(client, msg, args) { 
+                    return msg.channel.send(FormatCommand(msg, output)); 
+                }
             });
         }
     }
