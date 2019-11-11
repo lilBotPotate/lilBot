@@ -2,6 +2,8 @@ const {
     Discord
 } = require("../../../Imports.js");
 
+const jInfo = require("../../../../json/info.json");
+
 module.exports = {
     name: "SETTINGS",
     description: {
@@ -11,8 +13,6 @@ module.exports = {
         }
     },
     execute(client, msg, args) {
-        const jInfo = require("../../../../json/info.json");
-
         let settingsList = "";
         for(i in jInfo.settings) settingsList += `**${i.toUpperCase()}:** ${jInfo.settings[i]}\n`
 
