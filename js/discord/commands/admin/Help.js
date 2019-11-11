@@ -57,7 +57,7 @@ function listAllCommands(client, msg, prefix) {
 		.setColor("RANDOM")
 		.setTitle("**LIST OF COMMANDS**")
 		.setDescription(`**Prefix:** ${prefix}`)
-		.addField("**Commands:**", commands);
+		.addField("**COMMANDS:**", commands);
 
 	msg.channel.send(helpEmbed).catch();
 }

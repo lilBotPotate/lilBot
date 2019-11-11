@@ -10,5 +10,7 @@ function insertMentions(msg, output) {
         return `Missing **${difference}** mention${difference > 1 ? "s" : ""}!`;
     }
     for (let i = 0; i < numMentions; i++) output = output.replace("-m", mentUsers.shift());
+    
+    output = output.replace(/-u/g, msg.author);
     return output;
 }

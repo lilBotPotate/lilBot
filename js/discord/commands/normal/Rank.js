@@ -49,7 +49,8 @@ async function sendRank(client, msg, steamID) {
         .setColor("#0099ff")
         .setTitle(`**${(profileJSON.name).toUpperCase()}**`)
         .setURL(profileJSON.profileLink)
-        .setThumbnail(`${profileJSON.avatarLink}`);
+        .setThumbnail(`${profileJSON.avatarLink}`)
+        .setFooter("Powered by calculated.gg", "https://pbs.twimg.com/profile_images/1138967093703921664/QvAS48No_400x400.png");
 
     for(mode of order) {
         const sRank = ranksJSON[mode];

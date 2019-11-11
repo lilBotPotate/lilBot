@@ -7,7 +7,7 @@ module.exports = {
     description: {
         "info": "Are my default commands not good enough for you :cry:",
         "uses": {
-            "command add {name} {output}": "adds the command",
+            "command add {name} {output}": "adds the command. Parameters:\n**-m**: mention\n**-u**: user who used the command",
             "command remove {name}": "removes the command"
         }
     },

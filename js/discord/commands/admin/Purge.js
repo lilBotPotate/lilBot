@@ -11,10 +11,10 @@ module.exports = {
 	},
 	execute(client, msg, args) {
         const mentionedUser = msg.mentions.users.first();
+
         if(mentionedUser) {
             for (let i = 0; i < args.length; i++) {
-                if(!args[i].endsWith(">")) continue;
-                if(args[i].startsWith("<@")) { args.splice(i, 1); i--; }
+                if(args[i].match(/^<@!?(\d+)>$/) != null) { args.splice(i, 1); i--; }
             }
         }
 
@@ -28,9 +28,7 @@ module.exports = {
                 userMsg = ` from **${mentionedUser.username}**`
             }
             `Purging **${messages.size}** ${messages.size == 1 ? "message" : "messages"}${userMsg}!`.sendTemporary(msg);
-            messages.forEach(message => {
-                message.delete().catch();
-            });
+            messages.forEach(m => { m.delete(); });
         }).catch(console.error);
 	}
 };

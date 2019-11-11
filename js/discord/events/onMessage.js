@@ -20,7 +20,7 @@ function dmCommands(client, msg) {
     const args = msg.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toUpperCase();
 
-    if(!client.dm.has(command)) return `That command does't exist... **${prefix}help**`.sendTemporary(msg);
+    if(!client.dm.has(command)) return;
     try {
         `[Discord][DM]: ${msg.author.tag} executed ${command} ${args}`.sendLog();
         return client.dm.get(command).execute(client, msg, args);
@@ -31,7 +31,7 @@ function normalCommands(client, msg) {
     const args = msg.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toUpperCase();
 
-    if(!client.commands.has(command)) return `That command does't exist... **${prefix}help**`.sendTemporary(msg);
+    if(!client.commands.has(command)) return;
     try {
         `[Discord][N]: ${msg.author.tag} executed ${command} ${args}`.sendLog();
         return client.commands.get(command).execute(client, msg, args);
@@ -48,7 +48,7 @@ function adminCommands(client, msg) {
     if(!isAdmin) for(i of admin_roles) if(msg.member.roles.has(i)) isAdmin = true;
     
     if(!isAdmin) return "You dont have ADMIN/MOD permissions".sendTemporary(msg);
-    if(!client.admin.has(command)) return `That command does't exist... **${prefixA}help**`.sendTemporary(msg);
+    if(!client.admin.has(command)) return;
     try {
         `[Discord][A]: ${msg.author.tag} executed ${command} ${args}`.sendLog();
         return client.admin.get(command).execute(client, msg, args);
