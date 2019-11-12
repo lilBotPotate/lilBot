@@ -2,7 +2,8 @@ const {
     Discord,
     Async,
     tmi,
-    fs
+    fs,
+    Store
 } = require("./js/Imports.js");
 
 const {
@@ -74,6 +75,7 @@ Async.forever(
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 function setUp() {
+    /* COMMANDS */
     const setUpArr = [
         ["./js/discord/commands/normal", clientD.commands = new Discord.Collection()],
         ["./js/discord/commands/admin", clientD.admin = new Discord.Collection()],
@@ -89,6 +91,7 @@ function setUp() {
         }
     }
 
+    /* CUSTOM COMMANDS */
     const FormatCommand = require("./js/FormatCommand.js");
 
     const customCommands = jCommands.get("commands");
@@ -103,6 +106,16 @@ function setUp() {
                 }
             });
         }
+    }
+
+    /* POKE SETUP */
+    clientD.pokemon = new Discord.Collection();
+    const commandFiles = fs.readdirSync("./json/pokemon").filter(file => file.endsWith(".json"));
+    for (const file of commandFiles) {
+        clientD.pokemon.set(
+            file.replace(".json", ""), 
+            new Store({ path: `./json/pokemon/${file}`, indent: null })
+        );
     }
 
     "[Server]: Finished Set Up".sendLog();
