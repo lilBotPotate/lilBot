@@ -114,7 +114,7 @@ function setUp() {
     for (const file of commandFiles) {
         clientD.pokemon.set(
             file.replace(".json", ""), 
-            new Store({ path: `./json/pokemon/${file}`, indent: null })
+            new Store({ path: `./json/pokemon/${file}`, indent: 2 })
         );
     }
 
