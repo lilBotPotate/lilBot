@@ -108,15 +108,5 @@ function setUp() {
         }
     }
 
-    /* POKE SETUP */
-    clientD.pokemon = new Discord.Collection();
-    const commandFiles = fs.readdirSync("./json/pokemon").filter(file => file.endsWith(".json"));
-    for (const file of commandFiles) {
-        clientD.pokemon.set(
-            file.replace(".json", ""), 
-            new Store({ path: `./json/pokemon/${file}`, indent: 2 })
-        );
-    }
-
     "[Server]: Finished Set Up".sendLog();
 }
