@@ -36,7 +36,6 @@ module.exports = {
 };
 
 async function sendNewGrid(msg) {
-    // if(boggleGrid.length > 0) return "Game is in progress".sendTemporary(msg);
     gameAuthor = msg.author.id;
     gameAuthorName = msg.author.username;
     color = await GFun.randomHexColor();

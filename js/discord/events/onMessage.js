@@ -7,25 +7,10 @@ const { prefix, prefixA, admin_roles } = require("../../../config.json");
 module.exports = function(msg) {
     const client = this;
     if(msg.author.bot) return;
-    if(msg.guild === null) return dmCommands(client, msg);
     else if(msg.content.startsWith(prefix)) return normalCommands(client, msg);
     else if(msg.content.startsWith(prefixA)) return adminCommands(client, msg);
-    else if(msg.isMemberMentioned(client.user)) return botMention(msg, false);
+    else if(msg.isMemberMentioned(client.user)) return botMention(msg);
 };
-
-function dmCommands(client, msg) {
-    if(msg.isMemberMentioned(client.user)) return botMention(msg, true);
-    if(!msg.content.startsWith(prefix)) return msg.author.send("Hello im **lilBot**! Join the lilClub :stuck_out_tongue_winking_eye:");
-
-    const args = msg.content.slice(prefix.length).split(/ +/);
-    const command = args.shift().toUpperCase();
-
-    if(!client.dm.has(command)) return;
-    try {
-        `[Discord][DM]: ${msg.author.tag} executed ${command} ${args}`.sendLog();
-        return client.dm.get(command).execute(client, msg, args);
-    } catch (error) { `[Error]: ${error}`.sendLog(); }
-}
 
 function normalCommands(client, msg) {
     const args = msg.content.slice(prefix.length).split(/ +/);
@@ -33,7 +18,7 @@ function normalCommands(client, msg) {
 
     if(!client.commands.has(command)) return;
     try {
-        `[Discord][N]: ${msg.author.tag} executed ${command} ${args}`.sendLog();
+        `[Discord]${msg.guild === null ? "[DM]" : "[N]"}: ${msg.author.tag} executed ${command} ${args}`.sendLog();
         return client.commands.get(command).execute(client, msg, args);
     } catch (error) { `[Error]: ${error}`.sendLog();  }
     return;
@@ -57,7 +42,7 @@ function adminCommands(client, msg) {
 }
 
 function botMention(msg, dm) {
-    `[Discord]${dm ? "[DM]" : ""}: ${msg.author.tag} mentioned the bot`.sendLog();
+    `[Discord]${msg.guild === null ? "[DM]" : ""}: ${msg.author.tag} mentioned the bot`.sendLog();
     const helpChannel = `**${prefix}help:** Normal commands`
                       + `\n**${prefixA}help:** Admin commands`
 

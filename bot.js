@@ -2,8 +2,7 @@ const {
     Discord,
     Async,
     tmi,
-    fs,
-    Store
+    fs
 } = require("./js/Imports.js");
 
 const {
@@ -79,7 +78,6 @@ function setUp() {
     const setUpArr = [
         ["./js/discord/commands/normal", clientD.commands = new Discord.Collection()],
         ["./js/discord/commands/admin", clientD.admin = new Discord.Collection()],
-        ["./js/discord/commands/dm", clientD.dm = new Discord.Collection()],
         ["./js/twitch/commands/", clientD.twitch = new Discord.Collection()]
     ]
 
@@ -93,7 +91,6 @@ function setUp() {
 
     /* CUSTOM COMMANDS */
     const FormatCommand = require("./js/FormatCommand.js");
-
     const customCommands = jCommands.get("commands");
     if(customCommands) {
         for(command in customCommands) {

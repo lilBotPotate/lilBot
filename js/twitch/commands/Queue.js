@@ -14,12 +14,6 @@ const { twitch_admins } = require("../../../config.json");
 
 module.exports = {
     name: "QUEUE",
-    description: {
-        "info": "Just a template",
-        "uses": {
-            "template": "does nothing"
-        }
-    },
     execute(client, channel, tags, args, self) {
         if(tags["message-type"] != "chat") return client.whisper(tags.username, "I don't do DM's...");
 
