@@ -11,7 +11,8 @@ module.exports = {
             "command remove {name}": "removes the command"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
+        const client = global.gClientDiscord;
         const command = args.shift().toUpperCase();
         switch(command) {
             case "ADD": return add(client, msg, args);
@@ -34,7 +35,7 @@ function add(client, msg, args) {
     client.commands.set(name, {
         name: name,
         description: { "info": "Custom command" },
-        execute(client, msg, args) { return msg.channel.send(FormatCommand(msg, output)); }
+        execute(msg, args) { return msg.channel.send(FormatCommand(msg, output)); }
     });
 
     msg.channel.send(`Command **${name}** was added!`);

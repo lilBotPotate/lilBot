@@ -9,7 +9,7 @@ module.exports = {
           "purge {mention user} {amount}": "deletes the amount of messages from the user that you specify. Max = 100"
 		}
 	},
-	execute(client, msg, args) {
+	execute(msg, args) {
         const mentionedUser = msg.mentions.users.first();
 
         if(mentionedUser) {

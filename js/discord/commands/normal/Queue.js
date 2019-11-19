@@ -7,12 +7,6 @@ const {
     jQueue
 } = require("../../../Stores.js");
 
-const {
-    clientTwitch
-} = require("../../../Clients.js");
-
-const { disord_admins } = require("../../../../config.json");
-
 module.exports = {
     name: "QUEUE",
     description: {
@@ -27,14 +21,14 @@ module.exports = {
             "queue stop": "closes the queue"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         const command = args[0] ? args.shift().toUpperCase() : "LIST";
         switch (command) {
-            case "JOIN": return join(client, msg);
+            case "JOIN": return join(msg);
             case "LEAVE": return leave(msg);
             case "EMPTY":
             case "CLEAR": return clear(msg);
-            case "NEXT": return next(client, msg);
+            case "NEXT": return next(msg);
             case "OPEN":
             case "START": return start(msg);
             case "CLOSE":
@@ -45,7 +39,7 @@ module.exports = {
     }
 };
 
-function join(client, msg) {
+function join(msg) {
     if(!jQueue.get("up")) return msg.channel.send("Queue is closed...");
 
     const password = GFun.generatePassword(5);
@@ -70,7 +64,7 @@ function join(client, msg) {
     const queueEmbed = new Discord.RichEmbed()
         .setColor("RANDOM")
         .setTitle(`You are **${queueLen}.** in the queue!`)
-        .setDescription(`When its your turn, you will get notified in the chat. Join the private match with the following information: **USERNAME: lilpotate**, **PASSWORD: ${password}**`);
+        .setDescription(`When its your turn, you will get notified in the chat. Join the private match with the following information:\n**USERNAME: lilpotate**\n**PASSWORD: ${password}**`);
 
     msg.author.send(queueEmbed);
 
@@ -97,7 +91,7 @@ function clear(msg) {
     return msg.channel.send("Queue was cleared!");
 }
 
-function next(client, msg) {
+function next(msg) {
     if(!hasPermission(msg)) return msg.channel.send("You don't have permission to use that command!");
     
     const queueArr = jQueue.get("queue");
@@ -112,8 +106,8 @@ function next(client, msg) {
 
     msg.author.send(playerEmbed);
 
-    if(user.discordID) client.users.get(user.discordID).send("You are **UP**!");
-    clientTwitch().say("lilpotate", `@${user.username} is next!`);
+    if(user.discordID) global.gClientDiscord.users.get(user.discordID).send("You are **UP**!");
+    global.gClientTwitch.say("lilpotate", `@${user.username} is next!`);
 }
 
 function start(msg) {
@@ -135,6 +129,6 @@ function list(msg) {
 }
 
 function hasPermission(msg) {
-    for(i in disord_admins) if(disord_admins[i] == msg.author.id) return true;
+    for(i in global.gConfig.disord_admins) if(global.gConfig.disord_admins[i] == msg.author.id) return true;
     return false;
 }

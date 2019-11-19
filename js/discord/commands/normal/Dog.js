@@ -11,7 +11,7 @@ module.exports = {
             "dog": "sends a random dog image"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         return sendImage(msg);
     }
 };

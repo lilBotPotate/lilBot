@@ -11,9 +11,7 @@ module.exports = {
             "meme": "sends a random meme"
         }
     },
-    execute(client, msg, args) {
-        return sendMeme(msg);
-    }
+    execute(msg, args) { return sendMeme(msg); }
 };
 
 async function sendMeme(msg) {

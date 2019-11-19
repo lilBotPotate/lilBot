@@ -12,7 +12,7 @@ module.exports = {
             "dab {tag}": "lilPotate dabbs on tagged user"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         return createImage(msg);
     }
 };

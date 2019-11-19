@@ -2,8 +2,6 @@ const {
     Discord
 } = require("../../Imports.js");
 
-const { def_role } = require("../../../config.json");
-
 module.exports = function(member) {
     const socials = "**Twitch:** https://www.twitch.tv/lilpotate/"
                   + "\n**Twitter:** https://twitter.com/thelilpotate"
@@ -17,5 +15,5 @@ module.exports = function(member) {
         .addField("**SOCIALS**", socials);
 
     member.user.send(eWellcome);
-    member.addRole(def_role);
+    member.addRole(global.gConfig.def_role);
 };

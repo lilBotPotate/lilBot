@@ -6,7 +6,7 @@ module.exports = {
             "rr {number}": "well you know how this goes"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         if(args.length < 1) return msg.channel.send("Define the amount of potatoes");
         if(isNaN(args[0])) return msg.channel.send("Argument has to be a number!");
 

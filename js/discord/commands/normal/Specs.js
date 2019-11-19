@@ -10,7 +10,7 @@ module.exports = {
             "specs": "get the potato PC specs"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         const jInfo = require("../../../../json/info.json");
 
         let specsList = "";

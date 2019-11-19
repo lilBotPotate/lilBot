@@ -2,8 +2,6 @@ const {
     Discord
 } = require("../../../Imports.js");
 
-const { prefixA } = require("../../../../config.json");
-
 module.exports = {
 	name: "HELP",
 	description: {
@@ -13,10 +11,10 @@ module.exports = {
 		  "help {command}": "get information about a specific command"
 		}
 	},
-	execute(client, msg, args) {
-        const { prefixA } = require("../../../../config.json");
+	execute(msg, args) {
+		const client = global.gClientDiscord;
 		if(args[0]) listCommand(client, msg, args[0].toUpperCase());
-		else listAllCommands(client, msg, prefixA);
+		else listAllCommands(client, msg);
 	}
 };
 
@@ -34,14 +32,14 @@ function listCommand(client, msg, command) {
 	if(usesJSON) {
 		let usesList = "";
 		for(use in usesJSON) {
-			usesList += `**${prefixA}${use}:** ${usesJSON[use]}\n`;
+			usesList += `**${global.gConfig.prefixA}${use}:** ${usesJSON[use]}\n`;
 		}
 		helpEmbed.addField("**USES:**", usesList);
 	}
 	msg.channel.send(helpEmbed).catch();
 }
 
-function listAllCommands(client, msg, prefix) {
+function listAllCommands(client, msg) {
 	let commandsArr = [];
 	client.admin.map(u => {
 		if(u.name) {
@@ -56,7 +54,7 @@ function listAllCommands(client, msg, prefix) {
 	const helpEmbed = new Discord.RichEmbed()
 		.setColor("RANDOM")
 		.setTitle("**LIST OF COMMANDS**")
-		.setDescription(`**Prefix:** ${prefix}`)
+		.setDescription(`**Prefix:** ${global.gConfig.prefixA}`)
 		.addField("**COMMANDS:**", commands);
 
 	msg.channel.send(helpEmbed).catch();

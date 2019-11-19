@@ -11,7 +11,7 @@ module.exports = {
             "calc {expression}": "calculate the expression"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         if(!args[0]) return msg.channel.send("Missing expression!");
         const expression = args.join(" ");
         const encodedExpression = encodeURIComponent(expression);

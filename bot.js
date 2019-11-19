@@ -6,40 +6,37 @@ const {
 } = require("./js/Imports.js");
 
 const {
-    SetDiscord,
-    SetTwitch
-} = require("./js/Clients.js");
-
-const {
     jCommands
 } = require("./js/Stores.js");
+
+global.gConfig = require("./config.json");
 
 const {
     discord_token,
     twitch_token,
     twitch_username,
     twitch_channels
-} = require("./config.json");
+} = global.gConfig;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISCORD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-const clientD = new Discord.Client();
-
-SetDiscord(clientD);
+const clientDiscord = new Discord.Client();
 
 const onReadyDiscord = require("./js/discord/events/onReady.js");
 const onMessageDiscord = require("./js/discord/events/onMessage.js");
 const onVoiceStateUpdate = require("./js/discord/events/onVoiceStateUpdate.js");
 const onGuildMemberAdd = require("./js/discord/events/onGuildMemberAdd.js");
 
-clientD.on("ready", onReadyDiscord);
-clientD.on("message", onMessageDiscord);
-clientD.on("voiceStateUpdate", (oldMember, newMember) => onVoiceStateUpdate(oldMember, newMember, clientD));
-clientD.on("guildMemberAdd", onGuildMemberAdd);
+clientDiscord.on("ready", onReadyDiscord);
+clientDiscord.on("message", onMessageDiscord);
+clientDiscord.on("voiceStateUpdate", (oldMember, newMember) => onVoiceStateUpdate(oldMember, newMember, clientDiscord));
+clientDiscord.on("guildMemberAdd", onGuildMemberAdd);
 
-clientD.login(discord_token).then(setUp());
+clientDiscord.login(discord_token).then(setUp());
+
+global.gClientDiscord = clientDiscord;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TWITCH ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-const clientT = new tmi.client({
+const clientTwitch = new tmi.client({
     identity: {
         username: twitch_username,
         password: twitch_token
@@ -47,16 +44,16 @@ const clientT = new tmi.client({
     channels: twitch_channels
 });
 
-SetTwitch(clientT);
-
 const onMessageTwitch = require("./js/twitch/events/onMessage.js");
 const onConnectedTwitch = require("./js/twitch/events/onConnected.js");
 const onJoinTwitch = require("./js/twitch/events/onJoin.js");
 
-clientT.on("message", (channel, tags, message, self) => onMessageTwitch(clientT, channel, tags, message, self, clientD.twitch));
-clientT.on("connected", onConnectedTwitch);
-clientT.on("join", onJoinTwitch);
-clientT.connect();
+clientTwitch.on("message", (channel, tags, message, self) => onMessageTwitch(clientTwitch, channel, tags, message, self, clientDiscord.twitch));
+clientTwitch.on("connected", onConnectedTwitch);
+clientTwitch.on("join", onJoinTwitch);
+clientTwitch.connect();
+
+global.gClientTwitch = clientTwitch;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ASYNC ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 const updates = require("./js/Updates.js");
@@ -64,7 +61,7 @@ const updates = require("./js/Updates.js");
 Async.forever(
     function(next) {
         setTimeout(function() {
-            try { updates(clientD); } 
+            try { updates(); } 
             catch (error) { console.log(error) }
             next();
         }, (Math.floor(Math.random() * 60) + 15) * 1000);
@@ -76,9 +73,9 @@ Async.forever(
 function setUp() {
     /* COMMANDS */
     const setUpArr = [
-        ["./js/discord/commands/normal", clientD.commands = new Discord.Collection()],
-        ["./js/discord/commands/admin", clientD.admin = new Discord.Collection()],
-        ["./js/twitch/commands/", clientD.twitch = new Discord.Collection()]
+        ["./js/discord/commands/normal", clientDiscord.commands = new Discord.Collection()],
+        ["./js/discord/commands/admin", clientDiscord.admin = new Discord.Collection()],
+        ["./js/twitch/commands/", clientDiscord.twitch = new Discord.Collection()]
     ]
 
     for (set of setUpArr) {
@@ -95,7 +92,7 @@ function setUp() {
     if(customCommands) {
         for(command in customCommands) {
             let output = customCommands[command];
-            clientD.commands.set(command.toUpperCase(), {
+            clientDiscord.commands.set(command.toUpperCase(), {
                 name: command.toUpperCase(),
                 description: { "info": "Custom command" },
                 execute(client, msg, args) { 

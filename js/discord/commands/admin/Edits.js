@@ -11,7 +11,7 @@ module.exports = {
             "EDITS {msg ID}": "Get edits of a message"
         }
     },
-    execute(client, msg, args) {    
+    execute(msg, args) {    
         if(args.length < 1) return msg.channel.send("You need to insert the message ID");
         const msgID = args[0];
         if(isNaN(msgID)) return msg.channel.send("Message ID is invalid");

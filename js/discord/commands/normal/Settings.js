@@ -12,7 +12,7 @@ module.exports = {
             "settings": "get the potato settings"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         let settingsList = "";
         for(i in jInfo.settings) settingsList += `**${i.toUpperCase()}:** ${jInfo.settings[i]}\n`
 

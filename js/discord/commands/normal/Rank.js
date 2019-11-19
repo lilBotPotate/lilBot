@@ -3,8 +3,6 @@ const {
     request
 } = require("../../../Imports.js");
 
-const { steam_key } = require("../../../../config.json");
-
 module.exports = {
     name: "RANK",
     description: {
@@ -14,7 +12,8 @@ module.exports = {
             "rank {steam ID}": "get rank based on the steam ID"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
+        const client = global.gClientDiscord;
         const potateID = "76561198205508836";
         if(args.length < 1) return sendRank(client, msg, potateID);
         if(!isNaN(args[0])) return sendRank(client, msg, args[0]);
@@ -24,7 +23,7 @@ module.exports = {
 };
 
 async function checkName(client, msg, name) {
-    const url = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${steam_key}&vanityurl=${name}`;
+    const url = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${global.gConfig.steam_key}&vanityurl=${name}`;
     const jID = await getJSON(url);
     if(jID.response.success != 1) return await msg.channel.send("That user doesn't exist!");
     return await sendRank(client, msg, jID.response.steamid);

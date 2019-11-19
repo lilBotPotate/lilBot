@@ -10,7 +10,7 @@ module.exports = {
             "followage {twitch username}": "get how long you have been following lilPotate"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         if(args.length < 1) return "Missing arguments!".sendTemporary(msg);
         const username = args[0];
         return getFollowAge(msg, username);

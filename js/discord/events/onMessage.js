@@ -2,30 +2,28 @@ const {
     Discord
 } = require("../../Imports.js");
 
-const { prefix, prefixA, admin_roles } = require("../../../config.json");
-
 module.exports = function(msg) {
-    const client = this;
+    const client = global.gClientDiscord;
     if(msg.author.bot) return;
-    else if(msg.content.startsWith(prefix)) return normalCommands(client, msg);
-    else if(msg.content.startsWith(prefixA)) return adminCommands(client, msg);
+    else if(msg.content.startsWith(global.gConfig.prefix)) return normalCommands(client, msg);
+    else if(msg.content.startsWith(global.gConfig.prefixA)) return adminCommands(client, msg);
     else if(msg.isMemberMentioned(client.user)) return botMention(msg);
 };
 
 function normalCommands(client, msg) {
-    const args = msg.content.slice(prefix.length).split(/ +/);
+    const args = msg.content.slice(global.gConfig.prefix.length).split(/ +/);
     const command = args.shift().toUpperCase();
 
     if(!client.commands.has(command)) return;
     try {
         `[Discord]${msg.guild === null ? "[DM]" : "[N]"}: ${msg.author.tag} executed ${command} ${args}`.sendLog();
-        return client.commands.get(command).execute(client, msg, args);
+        return client.commands.get(command).execute(msg, args);
     } catch (error) { `[Error]: ${error}`.sendLog();  }
     return;
 }
 
 function adminCommands(client, msg) {
-    const args = msg.content.slice(prefixA.length).split(/ +/);
+    const args = msg.content.slice(global.gConfig.prefixA.length).split(/ +/);
     const command = args.shift().toUpperCase();
 
     let isAdmin = false;
@@ -36,17 +34,17 @@ function adminCommands(client, msg) {
     if(!client.admin.has(command)) return;
     try {
         `[Discord][A]: ${msg.author.tag} executed ${command} ${args}`.sendLog();
-        return client.admin.get(command).execute(client, msg, args);
+        return client.admin.get(command).execute(msg, args);
     } catch (error) { console.log(error) }
     return;
 }
 
 function botMention(msg, dm) {
     `[Discord]${msg.guild === null ? "[DM]" : ""}: ${msg.author.tag} mentioned the bot`.sendLog();
-    const helpChannel = `**${prefix}help:** Normal commands`
-                      + `\n**${prefixA}help:** Admin commands`
+    const helpChannel = `**${global.gConfig.prefix}help:** Normal commands`
+                      + `\n**${global.gConfig.prefixA}help:** Admin commands`
 
-    const helpDM = `**${prefix}help:** DM commands`
+    const helpDM = `**${global.gConfig.prefix}help:** DM commands`
 
     const eMention = new Discord.RichEmbed()
         .setColor("RANDOM")

@@ -6,12 +6,6 @@ const {
     jQueue
 } = require("../../Stores.js");
 
-const {
-    clientDiscord
-} = require("../../Clients.js");
-
-const { twitch_admins } = require("../../../config.json");
-
 module.exports = {
     name: "QUEUE",
     execute(client, channel, tags, args, self) {
@@ -96,11 +90,11 @@ function next(client, tags, channel) {
 
     const userInfo = `${user.subscriber ? "🥔" : ""} ${user.username.toUpperCase()}: ${user.password}`;
 
-    for(a in twitch_admins) {
+    for(a in global.gConfig.twitch_admins) {
         client.whisper(a, userInfo);
     }
     
-    if(user.discordID) clientDiscord().users.get(user.discordID).send("You are **UP**");
+    if(user.discordID) global.gClientDiscord.users.get(user.discordID).send("You are **UP**");
     client.say(channel, `@${user.username} is next!`);
 }
 
@@ -130,6 +124,6 @@ function list(client, tags, channel) {
 }
 
 function hasPermission(tags) {
-    for(i in twitch_admins) if(twitch_admins[i] == tags["user-id"]) return true;
+    for(i in global.gConfig.twitch_admins) if(global.gConfig.twitch_admins[i] == tags["user-id"]) return true;
     return false;
 }

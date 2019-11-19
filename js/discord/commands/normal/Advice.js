@@ -11,7 +11,7 @@ module.exports = {
             "advice {mention}": "gives that user an advice"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         return sendAdvice(msg);
     }
 };

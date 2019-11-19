@@ -10,7 +10,7 @@ module.exports = {
             "socials": "tells you where lilPotate is hiding"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         const jInfo = require("../../../../json/info.json");
 
         let socialsList = "";

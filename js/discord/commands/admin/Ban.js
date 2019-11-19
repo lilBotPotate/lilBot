@@ -10,7 +10,7 @@ module.exports = {
             "ban {tag} {reason}": "bans the user"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         if(!msg.mentions.members.first()) return "You need to tag the person you want to ban!".sendTemporary(msg);
         const bannedMember = msg.mentions.members.first();
         args.shift();

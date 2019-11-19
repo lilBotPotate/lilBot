@@ -6,7 +6,7 @@ module.exports = {
             "dice": "returns a random value from 1 - 6"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         const text = "**ROLLING!**";
         msg.channel.send(text).then(m => {
             rolling(5, m);

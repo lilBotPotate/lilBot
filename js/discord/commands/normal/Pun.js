@@ -8,7 +8,7 @@ module.exports = {
             "pun": "sends a random pun"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         const pun = punArr[Math.floor(Math.random() * punArr.length)];
         return msg.channel.send(pun);
     }

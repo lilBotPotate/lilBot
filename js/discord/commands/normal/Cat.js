@@ -11,7 +11,7 @@ module.exports = {
             "cat": "sends a random cat image"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         return sendImage(msg);
     }
 };

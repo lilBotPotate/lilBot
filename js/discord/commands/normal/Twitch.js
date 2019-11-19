@@ -3,8 +3,6 @@ const {
     request
 } = require("../../../Imports.js");
 
-const { client_id } = require("../../../../config.json");
-
 module.exports = {
     name: "TWITCH",
     description: {
@@ -14,7 +12,7 @@ module.exports = {
             "twitch {username}": "get defined users status"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         const channel = args[0] ? args[0] : "lilpotate";
         sendData(msg, channel);
     }
@@ -54,7 +52,7 @@ async function sendData(msg, channel) {
 function getJSON(url) {
     return new Promise(function (resolve, reject) {
         request({
-            headers: { "Client-ID": client_id },
+            headers: { "Client-ID": global.gConfig.client_id },
             uri: url,
             method: "GET",
             json: true

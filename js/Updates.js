@@ -2,15 +2,13 @@ const {
     request
 } = require("./Imports.js");
 
-const { client_id, live_channel } = require("../config.json");
-
 let twitchLive = false;
 
-module.exports = function(client) {
-    checkTwitch(client);
+module.exports = function() {
+    return checkTwitch();
 };
 
-async function checkTwitch(client) {
+async function checkTwitch() {
     let jStream = await getJSON(`https://api.twitch.tv/helix/streams?user_login=lilpotate`);
 
     if(jStream.data.length > 0) {
@@ -18,8 +16,8 @@ async function checkTwitch(client) {
         twitchLive = true;
         const message = "@everyone **lilPotate** is now live! Come join us! <:lilpotHypebot:642086734774927363>";
         try {
-            return await client.channels.get(live_channel).send(message).then(m => {
-                return client.commands.get("TWITCH").execute(client, m, []);
+            return await global.gClientDiscord.channels.get(global.gConfig.live_channel).send(message).then(m => {
+                return global.gClientDiscord.commands.get("TWITCH").execute(m, []);
             }); 
         } catch (error) { `[Error]: ${error}`}
     } 
@@ -28,7 +26,7 @@ async function checkTwitch(client) {
     function getJSON(url) {
         return new Promise(function (resolve, reject) {
             request({
-                headers: { "Client-ID": client_id },
+                headers: { "Client-ID": global.gConfig.client_id },
                 uri: url,
                 method: "GET",
                 json: true

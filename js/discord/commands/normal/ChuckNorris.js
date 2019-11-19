@@ -4,14 +4,14 @@ const {
 } = require("../../../Imports.js");
 
 module.exports = {
-    name: "CHUCKNORRIS",
+    name: "CN",
     description: {
         "info": "Chuck Norris writes code that optimizes itself",
         "uses": {
             "chucknorris": "get random Chuck Norris joke"
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         request("https://api.chucknorris.io/jokes/random", { json: true }, sendJoke);
 
         function sendJoke(err, res, body) {

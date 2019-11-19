@@ -22,7 +22,7 @@ module.exports = {
             "boggle resend": "resends the Boggle grid",
         }
     },
-    execute(client, msg, args) {
+    execute(msg, args) {
         const command = args[0] ? args.shift().toUpperCase() : null;
         switch(command) {
             case "NEW": 
