@@ -2,8 +2,7 @@ const {
     Discord,
     Async,
     tmi,
-    fs,
-    Store
+    fs
 } = require("./js/Imports.js");
 
 const {
@@ -24,11 +23,9 @@ const clientD = new Discord.Client();
 global.gClientDiscord = clientD;
 
 const onMessageDiscord = require("./js/discord/events/onMessage.js");
-const onVoiceStateUpdate = require("./js/discord/events/onVoiceStateUpdate.js");
 const onGuildMemberAdd = require("./js/discord/events/onGuildMemberAdd.js");
 
 clientD.on("message", onMessageDiscord);
-clientD.on("voiceStateUpdate", (oldMember, newMember) => onVoiceStateUpdate(oldMember, newMember, clientD));
 clientD.on("guildMemberAdd", onGuildMemberAdd);
 
 // clientD.on("debug", (info) =>            `[Server][D]: ${info}`.sendLog());
