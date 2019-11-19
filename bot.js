@@ -2,7 +2,8 @@ const {
     Discord,
     Async,
     tmi,
-    fs
+    fs,
+    Store
 } = require("./js/Imports.js");
 
 const {
@@ -19,21 +20,29 @@ const {
 } = global.gConfig;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISCORD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-const clientDiscord = new Discord.Client();
+const clientD = new Discord.Client();
+global.gClientDiscord = clientD;
 
-const onReadyDiscord = require("./js/discord/events/onReady.js");
 const onMessageDiscord = require("./js/discord/events/onMessage.js");
 const onVoiceStateUpdate = require("./js/discord/events/onVoiceStateUpdate.js");
 const onGuildMemberAdd = require("./js/discord/events/onGuildMemberAdd.js");
 
-clientDiscord.on("ready", onReadyDiscord);
-clientDiscord.on("message", onMessageDiscord);
-clientDiscord.on("voiceStateUpdate", (oldMember, newMember) => onVoiceStateUpdate(oldMember, newMember, clientDiscord));
-clientDiscord.on("guildMemberAdd", onGuildMemberAdd);
+clientD.on("message", onMessageDiscord);
+clientD.on("voiceStateUpdate", (oldMember, newMember) => onVoiceStateUpdate(oldMember, newMember, clientD));
+clientD.on("guildMemberAdd", onGuildMemberAdd);
 
-clientDiscord.login(discord_token).then(setUp());
+// clientD.on("debug", (info) =>            `[Server][D]: ${info}`.sendLog());
+clientD.on("disconnect", (event) =>      `[Server][D]: Disconnected: ${event}`.sendLog());
+clientD.on("error", (error) =>           `[Server][D]: Error: ${error}`.sendLog());
+clientD.on("ready", () =>                `[Server][D]: Logged in as ${clientD.user.tag} (${clientD.users.size} users, ${clientD.channels.size} channels, ${clientD.guilds.size} guilds)`.sendLog());
+clientD.on("reconnecting", (replayed) => `[Server][D]: Reconnecting: ${replayed} replays`.sendLog());
+clientD.on("resume", (replayed) =>       `[Server][D]: Resuming: ${replayed} replays`.sendLog());
+clientD.on("warn", (info) =>             `[Server][D]: Warning: ${info}`.sendLog());
 
-global.gClientDiscord = clientDiscord;
+clientD.login(discord_token).then(() => {
+    clientD.user.setActivity("mention me for help :)", { type: "WATCHING" });
+    setUp();
+});
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TWITCH ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 const clientTwitch = new tmi.client({
@@ -44,16 +53,20 @@ const clientTwitch = new tmi.client({
     channels: twitch_channels
 });
 
-const onMessageTwitch = require("./js/twitch/events/onMessage.js");
-const onConnectedTwitch = require("./js/twitch/events/onConnected.js");
-const onJoinTwitch = require("./js/twitch/events/onJoin.js");
-
-clientTwitch.on("message", (channel, tags, message, self) => onMessageTwitch(clientTwitch, channel, tags, message, self, clientDiscord.twitch));
-clientTwitch.on("connected", onConnectedTwitch);
-clientTwitch.on("join", onJoinTwitch);
-clientTwitch.connect();
-
 global.gClientTwitch = clientTwitch;
+
+const onMessageTwitch = require("./js/twitch/events/onMessage.js");
+
+clientTwitch.on("message", (channel, tags, message, self) => onMessageTwitch(clientTwitch, channel, tags, message, self, clientD.twitch));
+
+clientTwitch.on("connected", (addr, port) =>     `[Server][T]: Connected to ${addr}:${port}`.sendLog());
+clientTwitch.on("connecting", (addr, port) =>    `[Server][T]: Connecting to ${addr}:${port}`.sendLog());
+clientTwitch.on("disconnected", (reason) =>      `[Server][T]: Disconnected: ${reason}`.sendLog());
+clientTwitch.on("logon", () =>                   `[Server][T]: Connection established, sending informations to server`.sendLog());
+clientTwitch.on("reconnect", () =>               `[Server][T]: Reconnecting`.sendLog());
+clientTwitch.on("roomstate", (channel, state) => `[Server][T]: Joined channel ${channel} ID ${state["room-id"]}`.sendLog());
+
+clientTwitch.connect();
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ASYNC ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 const updates = require("./js/Updates.js");
@@ -73,9 +86,9 @@ Async.forever(
 function setUp() {
     /* COMMANDS */
     const setUpArr = [
-        ["./js/discord/commands/normal", clientDiscord.commands = new Discord.Collection()],
-        ["./js/discord/commands/admin", clientDiscord.admin = new Discord.Collection()],
-        ["./js/twitch/commands/", clientDiscord.twitch = new Discord.Collection()]
+        ["./js/discord/commands/normal", clientD.commands = new Discord.Collection()],
+        ["./js/discord/commands/admin", clientD.admin = new Discord.Collection()],
+        ["./js/twitch/commands/", clientD.twitch = new Discord.Collection()]
     ]
 
     for (set of setUpArr) {
@@ -92,7 +105,7 @@ function setUp() {
     if(customCommands) {
         for(command in customCommands) {
             let output = customCommands[command];
-            clientDiscord.commands.set(command.toUpperCase(), {
+            clientD.commands.set(command.toUpperCase(), {
                 name: command.toUpperCase(),
                 description: { "info": "Custom command" },
                 execute(client, msg, args) { 
@@ -102,5 +115,5 @@ function setUp() {
         }
     }
 
-    "[Server]: Finished Set Up".sendLog();
+    "[Server][I]: Finished Set Up".sendLog();
 }

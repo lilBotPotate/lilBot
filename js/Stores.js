@@ -9,6 +9,6 @@ module.exports = {
 }
 
 function init() {
-    "[Server]: Stores initialized".sendLog();
+    "[Server][I]: Stores initialized".sendLog();
     return new Date();
 }

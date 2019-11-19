@@ -12,6 +12,6 @@ module.exports = {
 }
 
 function init() {
-    "[Server]: Modules Imported".sendLog();
+    "[Server][I]: Modules imported".sendLog();
     return new Date();
 }

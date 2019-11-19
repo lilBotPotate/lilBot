@@ -16,7 +16,7 @@ function normalCommands(client, msg) {
 
     if(!client.commands.has(command)) return;
     try {
-        `[Discord]${msg.guild === null ? "[DM]" : "[N]"}: ${msg.author.tag} executed ${command} ${args}`.sendLog();
+        `[D]${msg.guild === null ? "[DM]" : ""}: ${msg.author.tag} executed ${global.gConfig.prefix}${command} ${args}`.sendLog();
         return client.commands.get(command).execute(msg, args);
     } catch (error) { `[Error]: ${error}`.sendLog();  }
     return;
@@ -33,14 +33,14 @@ function adminCommands(client, msg) {
     if(!isAdmin) return "You dont have ADMIN/MOD permissions".sendTemporary(msg);
     if(!client.admin.has(command)) return;
     try {
-        `[Discord][A]: ${msg.author.tag} executed ${command} ${args}`.sendLog();
+        `[D]: ${msg.author.tag} executed ${global.gConfig.prefixA}${command} ${args}`.sendLog();
         return client.admin.get(command).execute(msg, args);
     } catch (error) { console.log(error) }
     return;
 }
 
 function botMention(msg, dm) {
-    `[Discord]${msg.guild === null ? "[DM]" : ""}: ${msg.author.tag} mentioned the bot`.sendLog();
+    `[D]${msg.guild === null ? "[DM]" : ""}: ${msg.author.tag} mentioned the bot`.sendLog();
     const helpChannel = `**${global.gConfig.prefix}help:** Normal commands`
                       + `\n**${global.gConfig.prefixA}help:** Admin commands`
 

@@ -18,15 +18,7 @@ String.prototype.sendTemporary = function(msg) {
 };
 
 String.prototype.sendLog = function() {
-    const d = new Date();
-    const dateFormat = ("0" + d.getDate()).slice(-2) 
-                     + "-" + ("0" + (d.getMonth() + 1)).slice(-2) 
-                     + "-" + d.getFullYear() 
-                     + " " + ("0" + d.getHours()).slice(-2) 
-                     + ":" + ("0" + d.getMinutes()).slice(-2)
-                     + ":" + ("0" + d.getSeconds()).slice(-2);
-
-    return console.log(`[${dateFormat}]${this.toString()}`);
+    return console.log(`[${new Date().toLocaleString("en-GB").replace(",", "")}]${this.toString()}`);
 };
 
 /* Array Prototypes */
@@ -40,3 +32,5 @@ Array.prototype.shuffle = function() {
     }
     return newArr;
 };
+
+"[Server][I]: Prototypes added".sendLog();
