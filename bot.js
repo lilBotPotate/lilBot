@@ -105,7 +105,7 @@ function setUp() {
             clientD.commands.set(command.toUpperCase(), {
                 name: command.toUpperCase(),
                 description: { "info": "Custom command" },
-                execute(client, msg, args) { 
+                execute(msg, args) { 
                     return msg.channel.send(FormatCommand(msg, output)); 
                 }
             });
