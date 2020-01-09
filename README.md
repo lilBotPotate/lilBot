@@ -12,6 +12,7 @@ You have to add a `config.json` file:
     "client_id": "TWITCH API CLIENT ID",
     "steam_key": "STEAM API ID",
     "def_role": "DEFAULT SERVER ROLE ID",
+    "subscriber_role": "SUBSCRIBER DISCORD ROLE",
     "admin_roles": [ "ROLES ID", ... ],
     "twitch_admins": { "USERNAME": "ID", ... },
     "disord_admins": [ "ID", ... ]
