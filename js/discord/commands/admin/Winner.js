@@ -21,8 +21,8 @@ module.exports = {
             return (member.id !== msg.author.id) && !member.user.bot && subsCheck
         })
         .map(member => member.user);
-
-        const winner = members[members.length * Math.random() | 0];
+        
+        const winner = members[Math.floor(Math.random() * members.length)];
         const eWinner = new Discord.RichEmbed()
                         .setColor("#e5c100")
                         .setTitle(`**${winner.username}** is the **WINNER**!`)
