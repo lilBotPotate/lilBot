@@ -59,6 +59,6 @@ function botMention(msg, dm) {
 function sendToTwitch(msg) {
     `[D]: ${msg.author.tag} send to twitch ${msg.content}`.sendLog();
     for(channel of global.gConfig.twitch_channels) {
-        global.gClientTwitch.say(channel, `[${msg.author}]: ${msg.content}`);
+        global.gClientTwitch.say(channel, `[${msg.author.username}]: ${msg.content}`);
     }
 }

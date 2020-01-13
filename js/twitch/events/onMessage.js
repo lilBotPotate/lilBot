@@ -1,8 +1,10 @@
 module.exports = function(client, channel, tags, message, self, commands) {
     if(global.gConfig.twitch_chat && global.gConfig.twitch_chat !== "") {
-        const twitchMsg = `**[${tags.username}]:** ${message}`;
-        if(global.gClientDiscord.channels.has(global.gConfig.twitch_chat)) {
-            global.gClientDiscord.channels.get(global.gConfig.twitch_chat).send(twitchMsg);
+        if(tags.username.toUpperCase() !== global.gConfig.twitch_username.toUpperCase()) {
+            const twitchMsg = `**[${tags.username}]:** ${message}`;
+            if(global.gClientDiscord.channels.has(global.gConfig.twitch_chat)) {
+                global.gClientDiscord.channels.get(global.gConfig.twitch_chat).send(twitchMsg);
+            }
         }
     }
 
