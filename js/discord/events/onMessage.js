@@ -5,6 +5,7 @@ const {
 module.exports = function(msg) {
     const client = global.gClientDiscord;
     if(msg.author.bot) return;
+    else if(msg.channel.id === global.gConfig.twitch_chat) return sendToTwitch(msg);
     else if(msg.content.startsWith(global.gConfig.prefix)) return normalCommands(client, msg);
     else if(msg.content.startsWith(global.gConfig.prefixA)) return adminCommands(client, msg);
     else if(msg.isMemberMentioned(client.user)) return botMention(msg);
@@ -53,4 +54,11 @@ function botMention(msg, dm) {
 
     if(dm) return msg.author.send(eMention);
     else return msg.channel.send(eMention);
+}
+
+function sendToTwitch(msg) {
+    `[D]: ${msg.author.tag} send to twitch ${msg.content}`.sendLog();
+    for(channel of global.gConfig.twitch_channels) {
+        global.gClientTwitch.say(channel, `[${msg.author}]: ${msg.content}`);
+    }
 }
