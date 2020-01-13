@@ -14,10 +14,13 @@ module.exports = function(client, channel, tags, message, self, commands) {
 function sendToDiscord(tags, message) {
     if(tags.username.toUpperCase() !== global.gConfig.twitch_username.toUpperCase()) {
         let badges = "";
-        for(let badege in tags.badges) {
-            const badgeIcon = global.gConfig.twitch_icons[badege];
-            if(badgeIcon) badges += `${badgeIcon} `;
-        }
+        if(tags.badges != null) {
+            for(let badege in tags.badges) {
+                const badgeIcon = global.gConfig.twitch_icons[badege];
+                if(badgeIcon) badges += `${badgeIcon} `;
+            }
+        } 
+        if(badges === "") badges = `${global.gConfig.twitch_icons["no-badge"]}`;
 
         const username = tags["display-name"] ? tags["display-name"] : tags.username;
         const twitchMsg = `${badges !== "" ? badges : ""}**${username}**: ` + "`" + message + "`";
