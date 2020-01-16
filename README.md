@@ -14,8 +14,22 @@ You have to add a `config.json` file:
     "def_role": "DEFAULT SERVER ROLE ID",
     "subscriber_role": "SUBSCRIBER DISCORD ROLE",
     "twitch_chat": "CHAT ID",
+    "suggestion_sheet_id": "ID OF YOUR GOOGLE SHEETS FILE",
     "admin_roles": [ "ROLES ID", ... ],
     "twitch_admins": { "USERNAME": "ID", ... },
-    "disord_admins": [ "ID", ... ]
+    "disord_admins": [ "ID", ... ],
+    "twitch_channels": [ "CHANNEL NAME", ... ],
+    "twitch_icons": {
+        "no-badge": "<:EMOJI NAME:EMOJI ID>",
+        "sub-gifter": "<:EMOJI NAME:EMOJI ID>",
+        "moderator": "<:EMOJI NAME:EMOJI ID>",
+        "subscriber": "<:EMOJI NAME:EMOJI ID>",
+        "partner": "<:EMOJI NAME:EMOJI ID>",
+        "founder": "<:EMOJI NAME:EMOJI ID>",
+        "premium": "<:EMOJI NAME:EMOJI ID>",
+        "bits": "<:EMOJI NAME:EMOJI ID>"
+    },
+    "google_credentials": { "GOOGLE SHEETS API CREDENITALS" },
+    "google_token": { "GOOGLE SHEETS API TOKEN" }
 }
 ```

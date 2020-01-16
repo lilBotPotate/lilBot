@@ -85,6 +85,7 @@ function setUp() {
     const setUpArr = [
         ["./js/discord/commands/normal", clientD.commands = new Discord.Collection()],
         ["./js/discord/commands/admin", clientD.admin = new Discord.Collection()],
+        ["./js/discord/commands/master", clientD.master = new Discord.Collection()],
         ["./js/twitch/commands/", clientD.twitch = new Discord.Collection()]
     ]
 

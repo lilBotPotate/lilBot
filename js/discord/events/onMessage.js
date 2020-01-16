@@ -8,7 +8,8 @@ module.exports = function(msg) {
     else if(msg.channel.id === global.gConfig.twitch_chat) return sendToTwitch(msg);
     else if(msg.content.startsWith(global.gConfig.prefix)) return normalCommands(client, msg);
     else if(msg.content.startsWith(global.gConfig.prefixA)) return adminCommands(client, msg);
-    else if(msg.isMemberMentioned(client.user)) return botMention(msg);
+    else if(msg.content.startsWith(global.gConfig.prefix_master)) return masterCommands(client, msg);
+    else if(!msg.mentions.everyone && msg.isMemberMentioned(client.user)) return botMention(msg);
 };
 
 function normalCommands(client, msg) {
@@ -36,6 +37,21 @@ function adminCommands(client, msg) {
     try {
         `[D]: ${msg.author.tag} executed ${global.gConfig.prefixA}${command} ${args}`.sendLog();
         return client.admin.get(command).execute(msg, args);
+    } catch (error) { console.log(error) }
+    return;
+}
+
+
+function masterCommands(client, msg) {
+    const args = msg.content.slice(global.gConfig.prefix_master.length).split(/ +/);
+    const command = args.shift().toUpperCase();
+
+    const isMaster = msg.author.id == "237509022301814784";
+    if(!isMaster) return "You are not my master!".sendTemporary(msg);
+    if(!client.master.has(command)) return;
+    try {
+        `[D]: ${msg.author.tag} executed ${global.gConfig.prefix_master}${command} ${args}`.sendLog();
+        return client.master.get(command).execute(msg, args);
     } catch (error) { console.log(error) }
     return;
 }

@@ -19,8 +19,8 @@ module.exports = {
 };
 
 function listCommand(client, msg, command) {
-	if(!client.admin.has(command)) return "That command doesn't exist!".sendTemporary(msg);
-	const commandJSON = client.admin.get(command);
+	if(!client.master.has(command)) return "That command doesn't exist!".sendTemporary(msg);
+	const commandJSON = client.master.get(command);
 	const helpEmbed = new Discord.RichEmbed().setColor("RANDOM");
 	
 	if(commandJSON.name) helpEmbed.setTitle(`**${commandJSON.name}**`);
@@ -32,7 +32,7 @@ function listCommand(client, msg, command) {
 	if(usesJSON) {
 		let usesList = "";
 		for(use in usesJSON) {
-			usesList += `**${global.gConfig.prefixA}${use}:** ${usesJSON[use]}\n`;
+			usesList += `**${global.gConfig.prefix_master}${use}:** ${usesJSON[use]}\n`;
 		}
 		helpEmbed.addField("**USES:**", usesList);
 	}
@@ -41,7 +41,7 @@ function listCommand(client, msg, command) {
 
 function listAllCommands(client, msg) {
 	let commandsArr = [];
-	client.admin.map(u => {
+	client.master.map(u => {
 		if(u.name) {
 			let comm = u.name;
 			if(u.aliases) comm += ` (${u.aliases.join(", ")})`;
@@ -53,8 +53,8 @@ function listAllCommands(client, msg) {
 
 	const helpEmbed = new Discord.RichEmbed()
 		.setColor("RANDOM")
-		.setTitle("**LIST OF ADMIN COMMANDS**")
-		.setDescription(`**Prefix:** ${global.gConfig.prefixA}`)
+		.setTitle("**LIST OF MASTER COMMANDS**")
+		.setDescription(`**Prefix:** ${global.gConfig.prefix_master}`)
 		.addField("**COMMANDS:**", commands);
 
 	msg.channel.send(helpEmbed).catch();
