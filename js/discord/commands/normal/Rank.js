@@ -9,7 +9,7 @@ module.exports = {
         "info": "Im a GC stuck in Plat",
         "uses": {
             "rank": "get lilPotate's rank",
-            "rank {steam ID}": "get rank based on the steam ID"
+            "rank {steam ID / URL name}": "get rank based on the steam ID"
         }
     },
     execute(msg, args) {

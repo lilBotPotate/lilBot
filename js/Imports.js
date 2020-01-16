@@ -8,6 +8,7 @@ module.exports = {
     Async: require("async"),
     Prototypes: require("./Prototypes.js"),
     GFun: require("./GlobalFunctions.js"),
+    google: require("googleapis").google,
     init: init()
 }
 
