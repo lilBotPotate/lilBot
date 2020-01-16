@@ -2,6 +2,10 @@ const {
     Discord
 } = require("../../Imports.js");
 
+const {
+    jEnemys
+} = require("../../Stores.js");
+
 module.exports = function(msg) {
     const client = global.gClientDiscord;
     if(msg.author.bot) return;
@@ -17,6 +21,7 @@ function normalCommands(client, msg) {
     const command = args.shift().toUpperCase();
 
     if(!client.commands.has(command)) return;
+    if(!canUseBot(msg)) return msg.channel.send("You are not allowed to use this bot!");
     try {
         `[D]${msg.guild === null ? "[DM]" : ""}: ${msg.author.tag} executed ${global.gConfig.prefix}${command} ${args}`.sendLog();
         return client.commands.get(command).execute(msg, args);
@@ -28,12 +33,12 @@ function adminCommands(client, msg) {
     const args = msg.content.slice(global.gConfig.prefixA.length).split(/ +/);
     const command = args.shift().toUpperCase();
 
+    if(!client.admin.has(command)) return;
+    if(!canUseBot(msg)) return msg.channel.send("You are not allowed to use this bot!");
     let isAdmin = false;
     if(msg.member.hasPermission("ADMINISTRATOR")) isAdmin = true;
-    if(!isAdmin) for(i of admin_roles) if(msg.member.roles.has(i)) isAdmin = true;
-    
-    if(!isAdmin) return "You dont have ADMIN/MOD permissions".sendTemporary(msg);
-    if(!client.admin.has(command)) return;
+    if(!isAdmin) for(i of global.gConfig.admin_roles) if(msg.member.roles.has(i)) isAdmin = true;
+    if(!isAdmin) return "You dont have **ADMIN/MOD** permissions".sendTemporary(msg);
     try {
         `[D]: ${msg.author.tag} executed ${global.gConfig.prefixA}${command} ${args}`.sendLog();
         return client.admin.get(command).execute(msg, args);
@@ -77,4 +82,11 @@ function sendToTwitch(msg) {
     for(channel of global.gConfig.twitch_channels) {
         global.gClientTwitch.say(channel, `[${msg.author.username}]: ${msg.content}`);
     }
+}
+
+/* --------------- METHODS --------------- */
+function canUseBot(msg) {
+    const enemies = jEnemys.get("enemies");
+    if(!enemies || enemies.length < 1) return true; 
+    return !enemies.includes(msg.author.id);
 }
