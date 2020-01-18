@@ -3,6 +3,7 @@ config.json
 package-lock.json
 logs/*.log
 json/commands.json
+json/mods.json
 json/queue.json
 json/pokemon/*.json
 json/credentials.json

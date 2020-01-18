@@ -6,6 +6,7 @@ module.exports = {
     jQueue: new Store({ path: "./json/queue.json", indent: null }),
     jCommands: new Store({ path: "./json/commands.json", indent: null }),
     jEnemys: new Store({ path: "./json/enemies.json", indent: null }),
+    jMods: new Store({ path: "./json/mods.json", indent: null }),
     init: init()
 }
 
