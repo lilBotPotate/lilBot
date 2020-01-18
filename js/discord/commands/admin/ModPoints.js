@@ -14,16 +14,16 @@ module.exports = {
             "modpoints {tag} {+,-,*,/}{points}": "modify points of the mod"
         }
     },
-    execute(msg, args) {
+    async execute(msg, args) {
         if(
             msg.author.id !== "237509022301814784" &&
-            !msg.guild.fetchMember(msg.author).roles.has(global.gConfig.owner_role)
-        ) { return msg.channel.send("You don't have permission to use this command!"); }
-        if(args && args.length < 1) return msg.channel.send("Missing arguments");
-        const command = args.shift().toUpperCase();
+            !(await (await msg.guild.fetchMember(msg.author)).roles.has(global.gConfig.owner_role))
+        ) { return await msg.channel.send("You don't have permission to use this command!"); }
+        if(args && args.length < 1) return await msg.channel.send("Missing arguments");
+        const command = await args.shift().toUpperCase();
         switch(command) {
-            case "LIST": return listMods({msg});
-            default: return modifyPoints({msg, args});
+            case "LIST": return await listMods({msg});
+            default: return await modifyPoints({msg, args});
         }
     }
 };
