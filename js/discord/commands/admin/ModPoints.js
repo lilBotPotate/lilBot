@@ -16,9 +16,6 @@ module.exports = {
         }
     },
     execute(msg, args) {
-        if(!global.gConfig.disord_admins.find(id => id == msg.author.id)) {
-            return msg.channel.send("You don't have permission to use this command!");
-        }
         switch(args.length) {
             case 2: return modifyPoints({msg, args});
             default: return listMods({msg});
@@ -27,6 +24,9 @@ module.exports = {
 };
 
 function modifyPoints({msg, args}) {
+    if(!global.gConfig.disord_admins.find(id => id == msg.author.id)) {
+        return msg.channel.send("You don't have permission to use this command!");
+    }
     const mentionedUser = msg.mentions.users.first();
     if(!mentionedUser) return msg.channel.send("You have to mention a user!");
     const rawPoints = args[1];

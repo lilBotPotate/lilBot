@@ -28,7 +28,6 @@ const onGuildMemberAdd = require("./js/discord/events/onGuildMemberAdd.js");
 clientD.on("message", onMessageDiscord);
 clientD.on("guildMemberAdd", onGuildMemberAdd);
 
-// clientD.on("debug", (info) =>            `[Server][D]: ${info}`.sendLog());
 clientD.on("disconnect", (event) =>      `[Server][D]: Disconnected: ${event}`.sendLog());
 clientD.on("error", (error) =>           `[Server][D]: Error: ${error}`.sendLog());
 clientD.on("ready", () =>                `[Server][D]: Logged in as ${clientD.user.tag} (${clientD.users.size} users, ${clientD.channels.size} channels, ${clientD.guilds.size} guilds)`.sendLog());
