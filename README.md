@@ -13,7 +13,6 @@ You have to add a `config.json` file:
     "steam_key": "STEAM API ID",
     "def_role": "DEFAULT SERVER ROLE ID",
     "subscriber_role": "SUBSCRIBER DISCORD ROLE",
-    "owner_role": "OWNER DISCORD ROLE",
     "twitch_chat": "CHAT ID",
     "suggestion_sheet_id": "ID OF YOUR GOOGLE SHEETS FILE",
     "admin_roles": [ "ROLES ID", ... ],

@@ -11,28 +11,25 @@ module.exports = {
     description: {
         "info": "Give some points to the good mods!",
         "uses": {
+            "modpoints": "list all mods with their points",
             "modpoints {tag} {+,-,*,/}{points}": "modify points of the mod"
         }
     },
-    async execute(msg, args) {
-        if(
-            msg.author.id !== "237509022301814784" &&
-            !(await (await msg.guild.fetchMember(msg.author)).roles.has(global.gConfig.owner_role))
-        ) { return await msg.channel.send("You don't have permission to use this command!"); }
-        if(args && args.length < 1) return await msg.channel.send("Missing arguments");
-        const command = await args.shift().toUpperCase();
-        switch(command) {
-            case "LIST": return await listMods({msg});
-            default: return await modifyPoints({msg, args});
+    execute(msg, args) {
+        if(!global.gConfig.disord_admins.find(id => id == msg.author.id)) {
+            return msg.channel.send("You don't have permission to use this command!");
+        }
+        switch(args.length) {
+            case 2: return modifyPoints({msg, args});
+            default: return listMods({msg});
         }
     }
 };
 
 function modifyPoints({msg, args}) {
-    if(args && args.length < 1) return msg.channel.send("Missing arguments");
     const mentionedUser = msg.mentions.users.first();
     if(!mentionedUser) return msg.channel.send("You have to mention a user!");
-    const rawPoints = args.shift();
+    const rawPoints = args[1];
     const pointsOperator = rawPoints.charAt(0);
     const pointsString = rawPoints.substring(1);
     for(const i of pointsString) {
