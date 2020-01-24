@@ -2,7 +2,7 @@ const {
     request
 } = require("./Imports.js");
 
-let twitchLive = false;
+let twitchLive = true;
 
 module.exports = function() {
     return checkTwitch();

@@ -21,7 +21,7 @@ function normalCommands(client, msg) {
     const command = args.shift().toUpperCase();
 
     if(!client.commands.has(command)) return;
-    if(!canUseBot(msg)) return msg.channel.send("You are not allowed to use this bot!");
+    if(!canUseBot(msg)) return msg.author.send("You are not allowed to use this bot!");
     try {
         `[D]${msg.guild === null ? "[DM]" : ""}: ${msg.author.tag} executed ${global.gConfig.prefix}${command} ${args}`.sendLog();
         return client.commands.get(command).execute(msg, args);
@@ -51,7 +51,7 @@ function masterCommands(client, msg) {
     const args = msg.content.slice(global.gConfig.prefix_master.length).split(/ +/);
     const command = args.shift().toUpperCase();
 
-    const isMaster = msg.author.id == "237509022301814784";
+    const isMaster = msg.author.id == global.gConfig.bot_master_id;
     if(!isMaster) return "You are not my master!".sendTemporary(msg);
     if(!client.master.has(command)) return;
     try {

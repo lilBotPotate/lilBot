@@ -46,18 +46,22 @@ const clientTwitch = new tmi.client({
         username: twitch_username,
         password: twitch_token
     },
-    channels: twitch_channels
+    channels: twitch_channels,
+    connection: {
+        reconnect: true
+    }
 });
 
 global.gClientTwitch = clientTwitch;
 
 const onMessageTwitch = require("./js/twitch/events/onMessage.js");
+const onDisconnect = require("./js/twitch/events/onDisconnect.js");
 
 clientTwitch.on("message", (channel, tags, message, self) => onMessageTwitch(clientTwitch, channel, tags, message, self, clientD.twitch));
+clientTwitch.on("disconnected", onDisconnect);
 
 clientTwitch.on("connected", (addr, port) =>     `[Server][T]: Connected to ${addr}:${port}`.sendLog());
 clientTwitch.on("connecting", (addr, port) =>    `[Server][T]: Connecting to ${addr}:${port}`.sendLog());
-clientTwitch.on("disconnected", (reason) =>      `[Server][T]: Disconnected: ${reason}`.sendLog());
 clientTwitch.on("logon", () =>                   `[Server][T]: Connection established, sending informations to server`.sendLog());
 clientTwitch.on("reconnect", () =>               `[Server][T]: Reconnecting`.sendLog());
 clientTwitch.on("roomstate", (channel, state) => `[Server][T]: Joined channel ${channel} ID ${state["room-id"]}`.sendLog());
