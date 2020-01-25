@@ -1,0 +1,17 @@
+{
+    "admin_roles": [ "DISCORD ROLE ID", ... ],
+    "twitch_admins": { "TWITCH USERNAME": "TWITCH ID", ... },
+    "disord_admins": [ "DISCOR USER ID", ... ],
+    "twitch_icons": {
+        "no-badge": "<:EMOJI NAME:EMOJI ID>",
+        "sub-gifter": "<:EMOJI NAME:EMOJI ID>",
+        "moderator": "<:EMOJI NAME:EMOJI ID>",
+        "subscriber": "<:EMOJI NAME:EMOJI ID>",
+        "partner": "<:EMOJI NAME:EMOJI ID>",
+        "founder": "<:EMOJI NAME:EMOJI ID>",
+        "premium": "<:EMOJI NAME:EMOJI ID>",
+        "bits": "<:EMOJI NAME:EMOJI ID>"
+    },
+    "google_credentials": { "GOOGLE SHEETS API CREDENITALS" },
+    "google_token": { "GOOGLE SHEETS API TOKEN" }
+}

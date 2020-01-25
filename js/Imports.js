@@ -9,6 +9,7 @@ module.exports = {
     Prototypes: require("./Prototypes.js"),
     GFun: require("./GlobalFunctions.js"),
     google: require("googleapis").google,
+    Dotenv: require("dotenv").config(),
     init: init()
 }
 

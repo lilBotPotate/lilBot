@@ -1,13 +1,11 @@
 # Files
 config.json
+.env
 package-lock.json
-logs/*.log
 json/commands.json
 json/mods.json
 json/queue.json
 json/pokemon/*.json
-json/credentials.json
-json/token.json
 
 # Dirs
 node_modules/

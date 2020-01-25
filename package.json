@@ -1,19 +1,21 @@
 {
-  "name": "potatebot",
+  "name": "lilbot",
   "version": "1.0.0",
   "description": "Discord bot for lilPotate's server",
   "main": "bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bot.js",
+    "pm2": "pm2 start bot.js --name lilBot"
   },
   "author": "LittleBunnyRabbit",
   "license": "ISC",
   "dependencies": {
     "async": "^3.1.0",
     "canvas": "^2.6.0",
-    "cheerio": "^1.0.0-rc.3",
     "data-store": "^3.1.0",
     "discord.js": "^11.5.1",
+    "dotenv": "^8.2.0",
     "googleapis": "^39.2.0",
     "tmi.js": "^1.5.0"
   }

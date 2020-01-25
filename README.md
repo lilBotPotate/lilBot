@@ -1,35 +1,5 @@
 # lilBot
 Discord Bot for lilPotate's server  
-Run the bot with `./startBot.bash` or manually.  
-You have to add a `config.json` file:
-```json
-{
-    "prefix": "PREFIX",
-    "prefixA": "ADMIN PREFIX",
-    "discord_token": "YOUR DISCORD BOT TOKEN",
-    "twitch_token": "YOUR TWITCH API TOKEN",
-    "twitch_username": "YOUR BOT'S TWITCH USERNAME",
-    "client_id": "TWITCH API CLIENT ID",
-    "steam_key": "STEAM API ID",
-    "def_role": "DEFAULT SERVER ROLE ID",
-    "subscriber_role": "SUBSCRIBER DISCORD ROLE",
-    "twitch_chat": "CHAT ID",
-    "suggestion_sheet_id": "ID OF YOUR GOOGLE SHEETS FILE",
-    "admin_roles": [ "ROLES ID", ... ],
-    "twitch_admins": { "USERNAME": "ID", ... },
-    "disord_admins": [ "ID", ... ],
-    "twitch_channels": [ "CHANNEL NAME", ... ],
-    "twitch_icons": {
-        "no-badge": "<:EMOJI NAME:EMOJI ID>",
-        "sub-gifter": "<:EMOJI NAME:EMOJI ID>",
-        "moderator": "<:EMOJI NAME:EMOJI ID>",
-        "subscriber": "<:EMOJI NAME:EMOJI ID>",
-        "partner": "<:EMOJI NAME:EMOJI ID>",
-        "founder": "<:EMOJI NAME:EMOJI ID>",
-        "premium": "<:EMOJI NAME:EMOJI ID>",
-        "bits": "<:EMOJI NAME:EMOJI ID>"
-    },
-    "google_credentials": { "GOOGLE SHEETS API CREDENITALS" },
-    "google_token": { "GOOGLE SHEETS API TOKEN" }
-}
+To run the Bot you have to add `config.json` and `.env`. In the root dir you already have examples you just have to rename them and fill in the data.
+To run the bot: `npm start` or `npm pm2`
 ```
