@@ -1,13 +1,8 @@
 const {
     Discord,
     Async,
-    tmi,
-    fs
+    tmi
 } = require("./js/Imports.js");
-
-const {
-    jCommands
-} = require("./js/Stores.js");
 
 global.gConfig = require("./config.json");
 
@@ -37,7 +32,8 @@ clientD.on("warn", (info) =>             `[Server][D]: Warning: ${info}`.sendLog
 
 clientD.login(discord_token).then(() => {
     clientD.user.setActivity("mention me for help :)", { type: "WATCHING" });
-    setUp();
+    const commandSetUp = require("./js/discord/methods/CommandSetUp");
+    commandSetUp(clientD);
 });
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TWITCH ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -81,40 +77,3 @@ Async.forever(
     },
     function(err) { return console.log(err); }
 );
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-function setUp() {
-    /* COMMANDS */
-    const setUpArr = [
-        ["./js/discord/commands/normal", clientD.commands = new Discord.Collection()],
-        ["./js/discord/commands/admin", clientD.admin = new Discord.Collection()],
-        ["./js/discord/commands/master", clientD.master = new Discord.Collection()],
-        ["./js/twitch/commands/", clientD.twitch = new Discord.Collection()]
-    ]
-
-    for (set of setUpArr) {
-        const commandFiles = fs.readdirSync(`${set[0]}`).filter(file => file.endsWith(".js"));
-        for (const file of commandFiles) {
-            const command = require(`${set[0]}/${file}`);
-            set[1].set(command.name, command);
-        }
-    }
-
-    /* CUSTOM COMMANDS */
-    const FormatCommand = require("./js/FormatCommand.js");
-    const customCommands = jCommands.get("commands");
-    if(customCommands) {
-        for(command in customCommands) {
-            let output = customCommands[command];
-            clientD.commands.set(command.toUpperCase(), {
-                name: command.toUpperCase(),
-                description: { "info": "Custom command" },
-                execute(msg, args) { 
-                    return msg.channel.send(FormatCommand(msg, output)); 
-                }
-            });
-        }
-    }
-
-    "[Server][I]: Finished Set Up".sendLog();
-}
