@@ -52,7 +52,7 @@ async function sendData(msg, channel) {
 function getJSON(url) {
     return new Promise(function (resolve, reject) {
         request({
-            headers: { "Client-ID": global.gConfig.client_id },
+            headers: { "Client-ID": process.env.TWITCH_CLIENT_ID },
             uri: url,
             method: "GET",
             json: true

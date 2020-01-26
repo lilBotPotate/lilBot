@@ -49,7 +49,7 @@ function appendSuggestion(auth, msg, { username, suggestion }) {
 
     const resource = { values };
     
-    const spreadsheetId = global.gConfig.suggestion_sheet_id;
+    const spreadsheetId = process.env.GOOGLE_SUGGESTION_SHEET_ID;
     
     sheets.spreadsheets.values.append({
         spreadsheetId,

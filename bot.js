@@ -1,79 +1,21 @@
 const {
-    Discord,
-    Async,
-    tmi
-} = require("./js/Imports.js");
+    Async
+} = require("./js/Imports");
+
+const createBots = require("./js/CreateBots");
+const updates = require("./js/Updates");
 
 global.gConfig = require("./config.json");
 
-const {
-    discord_token,
-    twitch_token,
-    twitch_username,
-    twitch_channels
-} = global.gConfig;
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISCORD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-const clientD = new Discord.Client();
-global.gClientDiscord = clientD;
-
-const onMessageDiscord = require("./js/discord/events/onMessage.js");
-const onGuildMemberAdd = require("./js/discord/events/onGuildMemberAdd.js");
-
-clientD.on("message", onMessageDiscord);
-clientD.on("guildMemberAdd", onGuildMemberAdd);
-
-clientD.on("disconnect", (event) =>      `[Server][D]: Disconnected: ${event}`.sendLog());
-clientD.on("error", (error) =>           `[Server][D]: Error: ${error}`.sendLog());
-clientD.on("ready", () =>                `[Server][D]: Logged in as ${clientD.user.tag} (${clientD.users.size} users, ${clientD.channels.size} channels, ${clientD.guilds.size} guilds)`.sendLog());
-clientD.on("reconnecting", (replayed) => `[Server][D]: Reconnecting: ${replayed} replays`.sendLog());
-clientD.on("resume", (replayed) =>       `[Server][D]: Resuming: ${replayed} replays`.sendLog());
-clientD.on("warn", (info) =>             `[Server][D]: Warning: ${info}`.sendLog());
-
-clientD.login(discord_token).then(() => {
-    clientD.user.setActivity("mention me for help :)", { type: "WATCHING" });
-    const commandSetUp = require("./js/discord/methods/CommandSetUp");
-    commandSetUp(clientD);
-});
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TWITCH ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-const clientTwitch = new tmi.client({
-    identity: {
-        username: twitch_username,
-        password: twitch_token
-    },
-    channels: twitch_channels,
-    connection: {
-        reconnect: true
-    }
-});
-
-global.gClientTwitch = clientTwitch;
-
-const onMessageTwitch = require("./js/twitch/events/onMessage.js");
-const onDisconnect = require("./js/twitch/events/onDisconnect.js");
-
-clientTwitch.on("message", (channel, tags, message, self) => onMessageTwitch(clientTwitch, channel, tags, message, self, clientD.twitch));
-clientTwitch.on("disconnected", onDisconnect);
-
-clientTwitch.on("connected", (addr, port) =>     `[Server][T]: Connected to ${addr}:${port}`.sendLog());
-clientTwitch.on("connecting", (addr, port) =>    `[Server][T]: Connecting to ${addr}:${port}`.sendLog());
-clientTwitch.on("logon", () =>                   `[Server][T]: Connection established, sending informations to server`.sendLog());
-clientTwitch.on("reconnect", () =>               `[Server][T]: Reconnecting`.sendLog());
-clientTwitch.on("roomstate", (channel, state) => `[Server][T]: Joined channel ${channel} ID ${state["room-id"]}`.sendLog());
-
-clientTwitch.connect();
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ASYNC ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-const updates = require("./js/Updates.js");
+createBots();
 
 Async.forever(
     function(next) {
         setTimeout(function() {
             try { updates(); } 
-            catch (error) { console.log(error) }
+            catch (error) { `[Error]: ${error}`.sendLog(); }
             next();
         }, (Math.floor(Math.random() * 60) + 15) * 1000);
     },
-    function(err) { return console.log(err); }
+    function(err) { return `[Error]: ${err}`.sendLog(); }
 );

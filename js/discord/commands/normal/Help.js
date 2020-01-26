@@ -32,7 +32,7 @@ function listCommand(client, msg, command) {
 	if(usesJSON) {
 		let usesList = "";
 		for(use in usesJSON) {
-			usesList += `**${global.gConfig.prefix}${use}:** ${usesJSON[use]}\n`;
+			usesList += `**${process.env.PREFIX}${use}:** ${usesJSON[use]}\n`;
 		}
 		helpEmbed.addField("**USES:**", usesList);
 	}
@@ -54,7 +54,7 @@ function listAllCommands(client, msg) {
 	const helpEmbed = new Discord.RichEmbed()
 		.setColor("RANDOM")
 		.setTitle("**LIST OF COMMANDS**")
-		.setDescription(`**Prefix:** ${global.gConfig.prefix}`)
+		.setDescription(`**Prefix:** ${process.env.PREFIX}`)
 		.addField("**COMMANDS:**", commands);
 
 	msg.channel.send(helpEmbed).catch();

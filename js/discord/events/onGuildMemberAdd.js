@@ -15,5 +15,5 @@ module.exports = function(member) {
         .addField("**SOCIALS**", socials);
 
     member.user.send(eWellcome);
-    member.addRole(global.gConfig.def_role);
+    member.addRole(process.env.DEFAULT_DISCORD_ROLE);
 };

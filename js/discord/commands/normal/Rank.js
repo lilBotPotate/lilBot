@@ -23,7 +23,7 @@ module.exports = {
 };
 
 async function checkName(client, msg, name) {
-    const url = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${global.gConfig.steam_key}&vanityurl=${name}`;
+    const url = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${process.env.STEAM_KEY}&vanityurl=${name}`;
     const jID = await getJSON(url);
     if(jID.response.success != 1) return await msg.channel.send("That user doesn't exist!");
     return await sendRank(client, msg, jID.response.steamid);

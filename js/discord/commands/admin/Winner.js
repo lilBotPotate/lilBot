@@ -16,7 +16,7 @@ module.exports = {
         const members = msg.guild.members
         .filter(member => {
             const subsCheck = onlySubs
-                            ? member.roles.has(global.gConfig.subscriber_role)
+                            ? member.roles.has(process.env.SUBSCRIBER_DISCORD_ROLE)
                             : true;
             return (member.id !== msg.author.id) && !member.user.bot && subsCheck
         })

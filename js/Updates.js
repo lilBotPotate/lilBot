@@ -16,7 +16,7 @@ async function checkTwitch() {
         twitchLive = true;
         const message = "@everyone **lilPotate** is now live! Come join us! <:lilpotHypebot:642086734774927363>";
         try {
-            return await global.gClientDiscord.channels.get(global.gConfig.live_channel).send(message).then(m => {
+            return await global.gClientDiscord.channels.get(process.env.LILPOTATE_LIVE_CHANNEL).send(message).then(m => {
                 return global.gClientDiscord.commands.get("TWITCH").execute(m, []);
             }); 
         } catch (error) { `[Error]: ${error}`}
@@ -26,7 +26,7 @@ async function checkTwitch() {
     function getJSON(url) {
         return new Promise(function (resolve, reject) {
             request({
-                headers: { "Client-ID": global.gConfig.client_id },
+                headers: { "Client-ID": process.env.TWITCH_CLIENT_ID },
                 uri: url,
                 method: "GET",
                 json: true
