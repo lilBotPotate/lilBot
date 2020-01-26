@@ -24,7 +24,6 @@ module.exports = async function() {
         `[Error][T]: ${error}`.sendLog();
         return false;
     }
-
     return true;
 };
 
@@ -102,7 +101,7 @@ async function createTwitchBot() {
     const onMessageTwitch = require("./twitch/events/onMessage.js");
     const onDisconnect = require("./twitch/events/onDisconnect.js");
     
-    await clientTwitch.on("message", (channel, tags, message, self) => onMessageTwitch(clientTwitch, channel, tags, message, self));
+    await clientTwitch.on("message", onMessageTwitch);
     await clientTwitch.on("disconnected", onDisconnect);
     
     await clientTwitch.on("connected", (addr, port) =>     `[Server][T]: Connected to ${addr}:${port}`.sendLog());

@@ -1,14 +1,4 @@
 /* String Prototypes */ 
-String.prototype.distance = function(char) {
-    var index = this.indexOf(char);
-
-    if (index === -1) {
-        console.log(char + " does not appear in " + this);
-    } else {
-        console.log(char + " is " + (this.length - index) + " characters from the end of the string!");
-    }
-};
-
 String.prototype.sendTemporary = function(msg) {
     msg.channel.send(this.toString()).then((m) => {
         setTimeout(function () {

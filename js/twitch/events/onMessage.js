@@ -1,13 +1,13 @@
-module.exports = function(client, channel, tags, message, self) {
+module.exports = function(channel, tags, message, self) {
     sendToDiscord(tags, message);
 
     if(!message.startsWith(process.env.PREFIX)) return;
     const args = message.slice(process.env.PREFIX.length).split(/ +/);
     const command = args.shift().toUpperCase();
-    if(!client.commands.has(command)) return;
+    if(!this.commands.has(command)) return;
     try {
         `[T]: ${tags.username} executed ${process.env.PREFIX}${command} ${args}`.sendLog();
-        return client.commands.get(command).execute(client, channel, tags, args, self);
+        return this.commands.get(command).execute(this, channel, tags, args, self);
     } catch (error) { error.sendLog(); }
 };
 

@@ -5,10 +5,13 @@ const {
 const createBots = require("./js/CreateBots");
 const updates = require("./js/Updates");
 
+/* Adds congifgs from congig.json to a global variable */
 global.gConfig = require("./config.json");
 
+/* Creates the discord bots */
 createBots();
 
+/* Executes updates every once in a while */
 Async.forever(
     function(next) {
         setTimeout(function() {

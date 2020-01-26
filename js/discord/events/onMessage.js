@@ -7,13 +7,12 @@ const {
 } = require("../../Stores.js");
 
 module.exports = function(msg) {
-    const client = global.gClientDiscord;
     if(msg.author.bot) return;
     else if(msg.channel.id === process.env.TWITCH_DISCORD_CHAT) return sendToTwitch(msg);
-    else if(msg.content.startsWith(process.env.PREFIX)) return normalCommands(client, msg);
-    else if(msg.content.startsWith(process.env.PREFIX_ADMIN)) return adminCommands(client, msg);
-    else if(msg.content.startsWith(process.env.PREFIX_MASTER)) return masterCommands(client, msg);
-    else if(!msg.mentions.everyone && msg.isMemberMentioned(client.user)) return botMention(msg);
+    else if(msg.content.startsWith(process.env.PREFIX)) return normalCommands(this, msg);
+    else if(msg.content.startsWith(process.env.PREFIX_ADMIN)) return adminCommands(this, msg);
+    else if(msg.content.startsWith(process.env.PREFIX_MASTER)) return masterCommands(this, msg);
+    else if(!msg.mentions.everyone && msg.isMemberMentioned(this.user)) return botMention(msg);
 };
 
 function normalCommands(client, msg) {
