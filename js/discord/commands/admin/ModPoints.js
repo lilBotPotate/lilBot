@@ -77,16 +77,17 @@ function modifyPoints({msg, args}) {
 function listMods({msg}) {
     const modArr = jMods.get("mods");
     if(!modArr || modArr.length < 1) return msg.channel.send("No data has been stored yet!");
-    const pointsArr = modArr.sort((a, b) => b.points - a.points)
-                            .map((mod, i) => {
-                                const placeEmojis = {
-                                    1: ":first_place:",
-                                    2: ":second_place:",
-                                    3: ":third_place:"
-                                }
-                                const emoji = placeEmojis[i + 1];
-                                return `**${emoji ? emoji : `${i + 1}.`} ${mod.name}:** ${mod.points} points`;
-                            });
+    const pointsArr = modArr
+                    .sort((a, b) => b.points - a.points)
+                    .map((mod, i) => {
+                        const placeEmojis = {
+                            1: ":first_place:",
+                            2: ":second_place:",
+                            3: ":third_place:"
+                        };
+                        const emoji = placeEmojis[i + 1];
+                        return `**${emoji ? emoji : `${i + 1}.`} ${mod.name}:** ${mod.points} points`;
+                    });
     
     const eMods = new Discord.RichEmbed()
         .setColor("RANDOM")

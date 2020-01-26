@@ -16,15 +16,13 @@ module.exports = {
         args.shift();
         const reason = args.join(" ");
         if(!reason) return "You need to give a reason".sendTemporary(msg);
-        
-
         const eKick = new Discord.RichEmbed()
             .setColor("#f5a742")
             .setThumbnail(kickedMember.user.avatarURL)
             .setTitle(`**${kickedMember.user.tag}** was **KICKED**`)
             .setDescription(reason)
             .setFooter(msg.author.username, msg.author.avatarURL);
-
+            
         msg.channel.send(eKick).then(m => {
             msg.delete();
             kickedMember.kick();

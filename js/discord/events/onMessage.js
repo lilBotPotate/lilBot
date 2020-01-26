@@ -18,7 +18,6 @@ module.exports = function(msg) {
 function normalCommands(client, msg) {
     const args = msg.content.slice(process.env.PREFIX.length).split(/ +/);
     const command = args.shift().toUpperCase();
-
     if(!client.commands.has(command)) return;
     if(!canUseBot(msg)) return msg.author.send("You are not allowed to use this bot!");
     try {
@@ -31,7 +30,6 @@ function normalCommands(client, msg) {
 function adminCommands(client, msg) {
     const args = msg.content.slice(process.env.PREFIX_ADMIN.length).split(/ +/);
     const command = args.shift().toUpperCase();
-
     if(!client.admin.has(command)) return;
     if(!canUseBot(msg)) return msg.channel.send("You are not allowed to use this bot!");
     let isAdmin = false;
@@ -45,11 +43,9 @@ function adminCommands(client, msg) {
     return;
 }
 
-
 function masterCommands(client, msg) {
     const args = msg.content.slice(process.env.PREFIX_MASTER.length).split(/ +/);
     const command = args.shift().toUpperCase();
-
     const isMaster = msg.author.id == process.env.BOT_MASTER_DISCORD_ID;
     if(!isMaster) return "You are not my master!".sendTemporary(msg);
     if(!client.master.has(command)) return;
@@ -63,15 +59,13 @@ function masterCommands(client, msg) {
 function botMention(msg, dm) {
     `[D]${msg.guild === null ? "[DM]" : ""}: ${msg.author.tag} mentioned the bot`.sendLog();
     const helpChannel = `**${process.env.PREFIX}help:** Normal commands`
-                      + `\n**${process.env.PREFIX_ADMIN}help:** Admin commands`
+                      + `\n**${process.env.PREFIX_ADMIN}help:** Admin commands`;
 
     const helpDM = `**${process.env.PREFIX}help:** DM commands`
-
     const eMention = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setTitle("**HELP COMMANDS**")
-        .setDescription(dm ? helpDM : helpChannel);
-
+                   .setColor("RANDOM")
+                   .setTitle("**HELP COMMANDS**")
+                   .setDescription(dm ? helpDM : helpChannel);
     if(dm) return msg.author.send(eMention);
     else return msg.channel.send(eMention);
 }

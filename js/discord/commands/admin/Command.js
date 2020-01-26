@@ -25,20 +25,16 @@ module.exports = {
 function add(client, msg, args) {
     const name = args.shift().toUpperCase();
     const output = args.join(" ");
-
     if(client.commands.has(name)) return msg.channel.send("That command allready exists!");
     if(!output) return msg.channel.send("You need to enter the output of the command");
-
     const FormatCommand = require("../../../FormatCommand.js");
-
     jCommands.set(`commands.${name}`, output);
     client.commands.set(name, {
         name: name,
         description: { "info": "Custom command" },
         execute(msg, args) { return msg.channel.send(FormatCommand(msg, output)); }
     });
-
-    msg.channel.send(`Command **${name}** was added!`);
+    return msg.channel.send(`Command **${name}** was added!`);
 }
 
 function remove(client, msg, args) {
@@ -47,6 +43,5 @@ function remove(client, msg, args) {
     if(!jCommands.has(`commands.${name}`)) return msg.channel.send("You can't remove that command!");
     client.commands.delete(name);
     jCommands.del(`commands.${name}`);
-
-    msg.channel.send(`Command **${name}** was removed!`);
+    return msg.channel.send(`Command **${name}** was removed!`);
 }

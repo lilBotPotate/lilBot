@@ -1,6 +1,5 @@
 module.exports = function(channel, tags, message, self) {
     sendToDiscord(tags, message);
-
     if(!message.startsWith(process.env.PREFIX)) return;
     const args = message.slice(process.env.PREFIX.length).split(/ +/);
     const command = args.shift().toUpperCase();
@@ -15,13 +14,12 @@ function sendToDiscord(tags, message) {
     if(tags.username.toUpperCase() !== process.env.TWITCH_USERNAME.toUpperCase()) {
         let badges = "";
         if(tags.badges != null) {
-            for(let badege in tags.badges) {
-                const badgeIcon = global.gConfig.twitch_icons[badege];
+            for(let badge in tags.badges) {
+                const badgeIcon = global.gConfig.twitch_icons[badge];
                 if(badgeIcon) badges += `${badgeIcon} `;
             }
         } 
         if(badges === "") badges = `${global.gConfig.twitch_icons["no-badge"]}`;
-
         const username = tags["display-name"] ? tags["display-name"] : tags.username;
         const twitchMsg = `${badges !== "" ? badges : ""}**${username}**: ` + "`" + message + "`";
         if(global.gClientDiscord.channels.has(process.env.TWITCH_DISCORD_CHAT)) {

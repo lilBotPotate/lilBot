@@ -22,12 +22,9 @@ function listCommand(client, msg, command) {
 	if(!client.admin.has(command)) return "That command doesn't exist!".sendTemporary(msg);
 	const commandJSON = client.admin.get(command);
 	const helpEmbed = new Discord.RichEmbed().setColor("RANDOM");
-	
 	if(commandJSON.name) helpEmbed.setTitle(`**${commandJSON.name}**`);
 	if(commandJSON.description.info) helpEmbed.setDescription(`${commandJSON.description.info}`);
-	
 	if(commandJSON.aliases) helpEmbed.addField("**ALIASES:**", commandJSON.aliases.join(", "));
-	
 	const usesJSON = commandJSON.description.uses;
 	if(usesJSON) {
 		let usesList = "";
@@ -36,7 +33,8 @@ function listCommand(client, msg, command) {
 		}
 		helpEmbed.addField("**USES:**", usesList);
 	}
-	msg.channel.send(helpEmbed).catch();
+
+	return msg.channel.send(helpEmbed).catch();
 }
 
 function listAllCommands(client, msg) {
@@ -50,12 +48,10 @@ function listAllCommands(client, msg) {
 	});
 
 	const commands = `**${commandsArr.sort().join(", ")}**`;
-
 	const helpEmbed = new Discord.RichEmbed()
 		.setColor("RANDOM")
 		.setTitle("**LIST OF ADMIN COMMANDS**")
 		.setDescription(`**Prefix:** ${process.env.PREFIX_ADMIN}`)
 		.addField("**COMMANDS:**", commands);
-
-	msg.channel.send(helpEmbed).catch();
+	return msg.channel.send(helpEmbed).catch();
 }
