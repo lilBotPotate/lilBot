@@ -7,6 +7,7 @@ module.exports = {
     jCommands: new Store({ path: "./json/commands.json", indent: null }),
     jEnemys: new Store({ path: "./json/enemies.json", indent: null }),
     jMods: new Store({ path: "./json/mods.json", indent: null }),
+    jRocketLeague: new Store({ path: "./json/rocket_league.json", indent: null }),
     init: init()
 }
 

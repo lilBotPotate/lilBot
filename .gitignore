@@ -2,9 +2,10 @@
 config.json
 .env
 package-lock.json
-json/commands.json
-json/mods.json
 json/queue.json
+json/commands.json
+json/enemies.json
+json/mods.json
 json/pokemon/*.json
 
 # Dirs
