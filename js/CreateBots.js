@@ -47,7 +47,7 @@ async function createDiscordBot() {
     await createDiscordCommands();
     
     await clientDiscord.login(process.env.DISCORD_TOKEN);
-    await clientDiscord.user.setActivity("mention me for help :)", { type: "WATCHING" });
+    await clientDiscord.user.setActivity("If I crash DM my Master :(", { type: "WATCHING" });
 
     return clientDiscord;
 
