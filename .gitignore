@@ -6,6 +6,7 @@ json/queue.json
 json/commands.json
 json/enemies.json
 json/mods.json
+json/rocket_league.json
 json/pokemon/*.json
 
 # Dirs
