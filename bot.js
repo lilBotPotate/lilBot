@@ -36,11 +36,12 @@ clientD.on("resume", (replayed) =>       `[Server][D]: Resuming: ${replayed} rep
 clientD.on("warn", (info) =>             `[Server][D]: Warning: ${info}`.sendLog());
 
 clientD.login(discord_token).then(() => {
-    clientD.user.setActivity("mention me for help :)", { type: "WATCHING" });
+    clientD.user.setActivity("testing mode!", { type: "PLAYING" });
     setUp();
 });
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TWITCH ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 const clientTwitch = new tmi.client({
     identity: {
         username: twitch_username,
