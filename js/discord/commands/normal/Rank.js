@@ -77,9 +77,17 @@ async function getUserData({ msg, userId, platform }) {
 async function getRankData({ msg, userId, platform }) {
     const selectedAPI = ({
         "steam": async (userId) => {
-            const rankData = await calculatedAPI(userId);
-            if(rankData == null) return await kyuuAPI(userId, "steam");
-            return rankData;
+            let rankData;
+            try { rankData = await calculatedAPI(userId); } 
+            catch (error) { 
+                "[ERROR]: Calgulated.gg API failed!".sendLog(msg);
+                rankData = null; 
+            }
+            try { if(rankData == null) return await kyuuAPI(userId, "steam"); } 
+            catch (error) {
+                "[ERROR]: Both API's for rank failed!".sendLog(msg);
+                return null;
+            }
         }, 
         "ps": async (userId) => await kyuuAPI(userId, "ps"), 
         "xbox": async (userId) => await kyuuAPI(userId, "xbox") 
@@ -91,7 +99,7 @@ async function getRankData({ msg, userId, platform }) {
     };
 
     const rankData = await selectedAPI(userId);
-    if(rankData == null) return await msg.channel.send("Whoopsie something went wrong with getting the data...");
+    if(!rankData || rankData == null || rankData == {} || !rankData["1v1"]) return await msg.channel.send("Whoopsie something went wrong with getting the data...");
     return rankData;
 
     async function kyuuAPI(id, platform) {
