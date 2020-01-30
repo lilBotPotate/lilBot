@@ -76,19 +76,20 @@ async function getUserData({ msg, userId, platform }) {
 
 async function getRankData({ msg, userId, platform }) {
     const selectedAPI = ({
-        "steam": async (userId) => {
-            let rankData;
-            try { rankData = await calculatedAPI(userId); } 
-            catch (error) { 
-                "[ERROR]: Calgulated.gg API failed!".sendLog(msg);
-                rankData = null; 
-            }
-            try { if(rankData == null) return await kyuuAPI(userId, "steam"); } 
-            catch (error) {
-                "[ERROR]: Both API's for rank failed!".sendLog(msg);
-                return null;
-            }
-        }, 
+        // "steam": async (userId) => {
+        //     let rankData;
+        //     try { rankData = await calculatedAPI(userId); } 
+        //     catch (error) { 
+        //         "[ERROR]: Calgulated.gg API failed!".sendLog(msg);
+        //         rankData = null; 
+        //     }
+        //     try { if(rankData == null) return await kyuuAPI(userId, "steam"); } 
+        //     catch (error) {
+        //         "[ERROR]: Both API's for rank failed!".sendLog(msg);
+        //         return null;
+        //     }
+        // }, 
+        "steam": async (userId) => await kyuuAPI(userId, "steam"), 
         "ps": async (userId) => await kyuuAPI(userId, "ps"), 
         "xbox": async (userId) => await kyuuAPI(userId, "xbox") 
     })[platform];
@@ -158,6 +159,8 @@ async function getIdFromUrl(urlName) {
 }
 
 async function createImage({ rankData, profileData }) {
+    console.log({rankData});
+    
     const iCard = await Canvas.loadImage("./files/rocket_league/card.png");
     const iRingShadow = await Canvas.loadImage("./files/rocket_league/rank_rings/shadow.png");
 
