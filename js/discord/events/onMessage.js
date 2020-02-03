@@ -24,7 +24,9 @@ function normalCommands(client, msg) {
     if(!canUseBot(msg)) return msg.author.send("You are not allowed to use this bot!");
     try {
         `[D]${msg.guild === null ? "[DM]" : ""}: ${msg.author.tag} executed ${global.gConfig.prefix}${command} ${args}`.sendLog();
-        return client.commands.get(command).execute(msg, args);
+        msg.channel.startTyping();
+        client.commands.get(command).execute(msg, args);
+        return msg.channel.stopTyping();
     } catch (error) { `[Error]: ${error}`.sendLog();  }
     return;
 }
@@ -41,7 +43,9 @@ function adminCommands(client, msg) {
     if(!isAdmin) return "You dont have **ADMIN/MOD** permissions".sendTemporary(msg);
     try {
         `[D]: ${msg.author.tag} executed ${global.gConfig.prefixA}${command} ${args}`.sendLog();
-        return client.admin.get(command).execute(msg, args);
+        msg.channel.startTyping();
+        client.admin.get(command).execute(msg, args);
+        return msg.channel.stopTyping();
     } catch (error) { console.log(error) }
     return;
 }
@@ -56,13 +60,16 @@ function masterCommands(client, msg) {
     if(!client.master.has(command)) return;
     try {
         `[D]: ${msg.author.tag} executed ${global.gConfig.prefix_master}${command} ${args}`.sendLog();
-        return client.master.get(command).execute(msg, args);
+        msg.channel.startTyping();
+        client.master.get(command).execute(msg, args);
+        return msg.channel.stopTyping();
     } catch (error) { console.log(error) }
     return;
 }
 
 function botMention(msg, dm) {
     `[D]${msg.guild === null ? "[DM]" : ""}: ${msg.author.tag} mentioned the bot`.sendLog();
+    msg.channel.startTyping();
     const helpChannel = `**${global.gConfig.prefix}help:** Normal commands`
                       + `\n**${global.gConfig.prefixA}help:** Admin commands`
 
@@ -73,8 +80,9 @@ function botMention(msg, dm) {
         .setTitle("**HELP COMMANDS**")
         .setDescription(dm ? helpDM : helpChannel);
 
-    if(dm) return msg.author.send(eMention);
-    else return msg.channel.send(eMention);
+    if(dm) msg.author.send(eMention);
+    else msg.channel.send(eMention);
+    return msg.channel.stopTyping();
 }
 
 function sendToTwitch(msg) {
