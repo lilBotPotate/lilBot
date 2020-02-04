@@ -1,3 +1,10 @@
+/**
+ * Imports all the `npm` modules that are
+ * specified in the `package.json`
+ * 
+ * @module Imports
+ * @returns {Object} Object with modules
+ */
 module.exports = { 
     Discord: require("discord.js"),
     tmi: require("tmi.js"),
@@ -9,7 +16,6 @@ module.exports = {
     Prototypes: require("./Prototypes"),
     GFun: require("./GlobalFunctions"),
     google: require("googleapis").google,
-    Dotenv: require("dotenv").config(),
     init: init()
 }
 

@@ -1,4 +1,14 @@
-/* String Prototypes */ 
+/**
+ * @file All the `prototypes` are created here 
+ * @todo Make subclasses
+ */
+
+/**
+ * Introduce yourself.
+ * @method
+ * @name String#sendTemporary
+ * @returns {Void}
+ */
 String.prototype.sendTemporary = function(msg) {
     msg.channel.send(this.toString()).then((m) => {
         setTimeout(function () {

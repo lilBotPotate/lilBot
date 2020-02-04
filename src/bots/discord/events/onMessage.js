@@ -1,10 +1,10 @@
 const {
     Discord
-} = require("../../Imports.js");
+} = require("../../Imports.js.js.js");
 
 const {
     jEnemys
-} = require("../../Stores.js");
+} = require("../../Stores.js.js.js");
 
 module.exports = function(msg) {
     if(msg.author.bot) return;

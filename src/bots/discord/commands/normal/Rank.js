@@ -32,10 +32,14 @@ module.exports = {
     }
 };
 
+/** 
+ * @param {{msg: Object, args: Array<String>}}
+ * @returns {void}
+*/
 async function setProfile({ msg, args }) {
     if(!args || args.length < 2) return await msg.channel.send("Missing Arguments!");
-    let userId = await args.shift();
-    const platform = await args.shift().toLowerCase();
+    let userId = args.shift();
+    const platform = args.shift().toLowerCase();
     if(platform === "steam") userId = await await getValidId(userId);
     if(userId === null) return await msg.channel.send("That user doesn't exist!");
     if(isValidPlatform(platform)) return await msg.channel.send(`That is not a valid platform! Choose from: ${validPlatforms.join(", ")}`);

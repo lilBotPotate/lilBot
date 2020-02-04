@@ -1,7 +1,13 @@
 const {
     Store
-} = require("./Imports.js");
+} = require("./Imports.js.js.js");
 
+/**
+ * Creates `Store` objects.
+ * 
+ * @module Stores
+ * @returns {Object} Object with `Store` objects
+ */
 module.exports = { 
     jQueue: new Store({ path: "./json/queue.json", indent: null }),
     jCommands: new Store({ path: "./json/commands.json", indent: null }),

@@ -1,19 +1,23 @@
-const {
+import {
     Discord,
     fs,
     tmi
-} = require("./Imports");
+} from "./Imports";
 
-const {
-    jCommands
-} = require("./Stores");
+import { jCommands } from "./Stores";
 
-module.exports = async function() {
+/**
+ * Creates and initiates Discord and Twitch bot
+ * @module createBots
+ * @async
+ * @returns {Promise<Boolean>} `true` if both bots were created
+ */
+export default async function createBots(a) {
     try { 
         await createDiscordBot(); 
         "[Server][D]: Finished creating the bot".sendLog();
     } catch (error) {
-        `[Error][D]: ${error}`.sendLog();
+        `[Error][D]: Couldn't create Discord bot\n${error}`.sendLog();
         return false;
     }
 
@@ -21,18 +25,24 @@ module.exports = async function() {
         await createTwitchBot(); 
         "[Server][T]: Finished creating the bot".sendLog();
     } catch (error) {
-        `[Error][T]: ${error}`.sendLog();
+        `[Error][T]: Coundn't create Twitch bot\n${error}`.sendLog();
         return false;
     }
     return true;
 };
 
+/**
+ * Creates and initiates Discord bot
+ * 
+ * @async
+ * @returns {Promise<Object>} Discord client
+ */
 async function createDiscordBot() {
     const clientDiscord = new Discord.Client();
     global.gClientDiscord = clientDiscord;
 
-    const onMessageDiscord = require("./discord/events/onMessage.js");
-    const onGuildMemberAdd = require("./discord/events/onGuildMemberAdd.js");
+    const onMessageDiscord = require("../bots/discord/events/onMessage.js.js");
+    const onGuildMemberAdd = require("../bots/discord/events/onGuildMemberAdd.js.js");
 
     clientDiscord.on("message", onMessageDiscord);
     clientDiscord.on("guildMemberAdd", onGuildMemberAdd);
@@ -51,11 +61,18 @@ async function createDiscordBot() {
 
     return clientDiscord;
 
+    /**
+     * Adds the command modules from `./js/discord/commands/*` to **Discord.Collection**
+     * and inserts it into **Discord.Client**
+     * 
+     * @async
+     * @returns {*}
+     */
     async function createDiscordCommands() {
         const commandCollections = [
-            ["discord/commands/normal", clientDiscord.commands = new Discord.Collection()],
-            ["discord/commands/admin", clientDiscord.admin = new Discord.Collection()],
-            ["discord/commands/master", clientDiscord.master = new Discord.Collection()]
+            ["bots/discord/commands/normal", clientDiscord.commands = new Discord.Collection()],
+            ["bots/discord/commands/admin", clientDiscord.admin = new Discord.Collection()],
+            ["bots/discord/commands/master", clientDiscord.master = new Discord.Collection()]
         ]
     
         for(set of commandCollections) {
@@ -65,7 +82,11 @@ async function createDiscordBot() {
                 await set[1].set(command.name, command);
             }
         }
-    
+        
+        /**
+         * @description Reads stored custom functions to the **Discord.Client** and
+         * adds functionality to them based on the inserted parameters
+         */
         const FormatCommand = require("./FormatCommand");
         const customCommands = await jCommands.get("commands");
         if(customCommands) {
@@ -84,6 +105,12 @@ async function createDiscordBot() {
     }
 }
 
+/**
+ * Creates and initiates Twitch bot
+ * 
+ * @async
+ * @returns {Promise<Object>} Twitch client
+ */
 async function createTwitchBot() {
     const clientTwitch = await new tmi.client({
         identity: {
@@ -98,8 +125,8 @@ async function createTwitchBot() {
     
     global.gClientTwitch = clientTwitch;
     
-    const onMessageTwitch = require("./twitch/events/onMessage.js");
-    const onDisconnect = require("./twitch/events/onDisconnect.js");
+    const onMessageTwitch = require("../bots/twitch/events/onMessage.js.js");
+    const onDisconnect = require("../bots/twitch/events/onDisconnect.js.js");
     
     await clientTwitch.on("message", onMessageTwitch);
     await clientTwitch.on("disconnected", onDisconnect);
@@ -116,9 +143,16 @@ async function createTwitchBot() {
 
     return clientTwitch;
 
+    /**
+     * Adds the command modules from `./js/twitch/commands/*` to **Map**
+     * and inserts it into **tmi.client**
+     * 
+     * @async
+     * @returns {*}
+     */
     async function createTwitchCommands() {
         clientTwitch.commands = new Map();
-        const twitchCommandsPath = "twitch/commands/";
+        const twitchCommandsPath = "bots/twitch/commands/";
         const commandFiles = fs.readdirSync(`./js/${twitchCommandsPath}`).filter(file => file.endsWith(".js"));
         for(const file of commandFiles) {
             const command = require(`./${twitchCommandsPath}/${file}`);

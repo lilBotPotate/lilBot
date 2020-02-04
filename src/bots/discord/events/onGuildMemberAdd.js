@@ -1,6 +1,6 @@
 const {
     Discord
-} = require("../../Imports.js");
+} = require("../../../../modules/Imports.js/index.js.js.js");
 
 module.exports = function(member) {
     const socials = "**Twitch:** https://www.twitch.tv/lilpotate/"
