@@ -24,7 +24,7 @@ function normalCommands(client, msg) {
     msg.channel.startTyping();
     try {
         Universal.sendLog(
-            "info", 
+            "command", 
             `DISCORD >>> ${msg.guild === null ? "DM " : "NORMAL"} >> ${msg.author.tag} > ${command} ${args}`
         );
         client.commands.get(command).execute(msg, args);
@@ -44,7 +44,7 @@ function adminCommands(client, msg) {
     msg.channel.startTyping();
     try {
         Universal.sendLog(
-            "info", 
+            "command", 
             `DISCORD >>> ADMIN >> ${msg.author.tag} > ${command} ${args}`
         );
         client.admin.get(command).execute(msg, args);
@@ -60,7 +60,7 @@ function masterCommands(client, msg) {
     msg.channel.startTyping();
     try {
         Universal.sendLog(
-            "info", 
+            "command", 
             `DISCORD >>> MASTER >> ${msg.author.tag} > ${command} ${args}`
         );
         client.master.get(command).execute(msg, args);
@@ -71,7 +71,7 @@ function masterCommands(client, msg) {
 function botMention(msg, dm) {
     msg.channel.startTyping();
     Universal.sendLog(
-        "info", 
+        "command", 
         `DISCORD >> ${msg.guild === null ? "DM" : "SERVER"} > ${msg.author.tag} mentioned the bot`
     );
     const helpChannel = `**${global.gConfig.prefixes.normal}help:** Normal commands\n`
@@ -91,7 +91,7 @@ function botMention(msg, dm) {
 
 function sendToTwitch(msg) {
     Universal.sendLog(
-        "info", 
+        "command", 
         `DISCORD >>> ${msg.author.tag} send a message to twitch >> ${msg.content.length} characters > ${msg.content}`
     );
 

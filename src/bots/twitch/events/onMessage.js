@@ -10,7 +10,7 @@ module.exports = function(channel, tags, message, self) {
     if(!this.commands.has(command)) return;
     try {
         Universal.sendLog(
-            "info", 
+            "command", 
             `Twitch >> ${tags.username} > ${command} ${args}`
         );
         return this.commands.get(command).execute(this, channel, tags, args, self);
