@@ -1,10 +1,10 @@
 const {
     Discord
-} = require("../../../Imports.js");
+} = require("../../../../modules/Imports");
 
 const {
     jEnemys
-} = require("../../../Stores.js");
+} = require("../../../../modules/Stores");
 
 
 module.exports = {

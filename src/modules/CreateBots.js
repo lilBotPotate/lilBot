@@ -1,31 +1,32 @@
-import {
+const {
     Discord,
     fs,
-    tmi
-} from "./Imports";
+    tmi,
+    Universal
+} = require("./Imports");
 
-import { jCommands } from "./Stores";
+const { jCommands } = require("./Stores");
 
 /**
  * Creates and initiates Discord and Twitch bot
  * @module createBots
  * @async
- * @returns {Promise<Boolean>} `true` if both bots were created
+ * @returns {Boolean} `true` if both bots were created
  */
-export default async function createBots(a) {
+module.exports = async function() {
     try { 
-        await createDiscordBot(); 
-        "[Server][D]: Finished creating the bot".sendLog();
+        await createDiscordBot();
+        Universal.sendLog("info", "Finished creating Discord bot"); 
     } catch (error) {
-        `[Error][D]: Couldn't create Discord bot\n${error}`.sendLog();
+        Universal.sendLog("error", `Couldn't create Discord bot\n${error}`); 
         return false;
     }
 
     try { 
         await createTwitchBot(); 
-        "[Server][T]: Finished creating the bot".sendLog();
+        Universal.sendLog("info", "Finished creating Twitch bot"); 
     } catch (error) {
-        `[Error][T]: Coundn't create Twitch bot\n${error}`.sendLog();
+        Universal.sendLog("error", `Couldn't create Twitch bot\n${error}`); 
         return false;
     }
     return true;
@@ -39,20 +40,28 @@ export default async function createBots(a) {
  */
 async function createDiscordBot() {
     const clientDiscord = new Discord.Client();
+
+    /** 
+     * Binds **Discord.Client** to 
+     * **NodeJs.Global** object @var gClientDiscord
+     * 
+     * @type {Object}
+     */
     global.gClientDiscord = clientDiscord;
 
-    const onMessageDiscord = require("../bots/discord/events/onMessage.js.js");
-    const onGuildMemberAdd = require("../bots/discord/events/onGuildMemberAdd.js.js");
+    const onMessage = require("../bots/discord/events/onMessage");
+    const onGuildMemberAdd = require("../bots/discord/events/onGuildMemberAdd");
+    const onReady = require("../bots/discord/events/onReady");
 
-    clientDiscord.on("message", onMessageDiscord);
+    clientDiscord.on("message", onMessage);
     clientDiscord.on("guildMemberAdd", onGuildMemberAdd);
+    clientDiscord.on("ready", onReady);
 
-    clientDiscord.on("disconnect", (event) =>      `[Server][D]: Disconnected: ${event}`.sendLog());
-    clientDiscord.on("error", (error) =>           `[Server][D]: Error: ${error}`.sendLog());
-    clientDiscord.on("ready", () =>                `[Server][D]: Logged in as ${clientDiscord.user.tag} (${clientDiscord.users.size} users, ${clientDiscord.channels.size} channels, ${clientDiscord.guilds.size} guilds)`.sendLog());
-    clientDiscord.on("reconnecting", (replayed) => `[Server][D]: Reconnecting: ${replayed} replays`.sendLog());
-    clientDiscord.on("resume", (replayed) =>       `[Server][D]: Resuming: ${replayed} replays`.sendLog());
-    clientDiscord.on("warn", (info) =>             `[Server][D]: Warning: ${info}`.sendLog());
+    clientDiscord.on("disconnect", (event) => Universal.sendLog("warn", `Discord client disconnected: ${event}`));
+    clientDiscord.on("error", (error) => Universal.sendLog("error", `Discord client error: ${error}`));
+    clientDiscord.on("reconnecting", (replayed) => Universal.sendLog("warn", `Reconnecting: ${replayed} replays`));
+    clientDiscord.on("resume", (replayed) => Universal.sendLog("info", `Resuming: ${replayed} replays`));
+    clientDiscord.on("warn", (info) => Universal.sendLog("warn", ` Warning: ${info}`));
     
     await createDiscordCommands();
     
@@ -70,15 +79,15 @@ async function createDiscordBot() {
      */
     async function createDiscordCommands() {
         const commandCollections = [
-            ["bots/discord/commands/normal", clientDiscord.commands = new Discord.Collection()],
-            ["bots/discord/commands/admin", clientDiscord.admin = new Discord.Collection()],
-            ["bots/discord/commands/master", clientDiscord.master = new Discord.Collection()]
+            ["normal", clientDiscord.commands = new Discord.Collection()],
+            ["admin", clientDiscord.admin = new Discord.Collection()],
+            ["master", clientDiscord.master = new Discord.Collection()]
         ]
     
         for(set of commandCollections) {
-            const commandFiles = fs.readdirSync(`./js/${set[0]}`).filter(file => file.endsWith(".js"));
+            const commandFiles = fs.readdirSync(`./src/bots/discord/commands/${set[0]}`).filter(file => file.endsWith(".js"));
             for(const file of commandFiles) {
-                const command = require(`./${set[0]}/${file}`);
+                const command = require(`../bots/discord/commands/${set[0]}/${file}`);
                 await set[1].set(command.name, command);
             }
         }
@@ -101,7 +110,7 @@ async function createDiscordBot() {
                 });
             }
         }
-        return await "[Server][D]: Finished Discord Commands Set Up".sendLog();
+        return Universal.sendLog("info", "Finished Discord commands setup");
     }
 }
 
@@ -114,28 +123,34 @@ async function createDiscordBot() {
 async function createTwitchBot() {
     const clientTwitch = await new tmi.client({
         identity: {
-            username: process.env.TWITCH_USERNAME,
+            username: global.gConfig.twitch.username,
             password: process.env.TWITCH_TOKEN
         },
-        channels: [ process.env.TWITCH_CHANNEL ],
+        channels: global.gConfig.twitch.channels,
         connection: {
             reconnect: true
         }
     });
     
+    /** 
+     * Binds **Discord.Client** to 
+     * **NodeJs.Global** object @var gClientTwitch
+     * 
+     * @type {Object}
+     */
     global.gClientTwitch = clientTwitch;
     
-    const onMessageTwitch = require("../bots/twitch/events/onMessage.js.js");
-    const onDisconnect = require("../bots/twitch/events/onDisconnect.js.js");
+    const onMessage = require("../bots/twitch/events/onMessage");
+    const onDisconnect = require("../bots/twitch/events/onDisconnect");
     
-    await clientTwitch.on("message", onMessageTwitch);
+    await clientTwitch.on("message", onMessage);
     await clientTwitch.on("disconnected", onDisconnect);
     
-    await clientTwitch.on("connected", (addr, port) =>     `[Server][T]: Connected to ${addr}:${port}`.sendLog());
-    await clientTwitch.on("connecting", (addr, port) =>    `[Server][T]: Connecting to ${addr}:${port}`.sendLog());
-    await clientTwitch.on("logon", () =>                   `[Server][T]: Connection established, sending informations to server`.sendLog());
-    await clientTwitch.on("reconnect", () =>               `[Server][T]: Reconnecting`.sendLog());
-    await clientTwitch.on("roomstate", (channel, state) => `[Server][T]: Joined channel ${channel} ID ${state["room-id"]}`.sendLog());
+    await clientTwitch.on("connected", (addr, port) => Universal.sendLog("info", `Twitch client connected to ${addr}:${port}`));
+    await clientTwitch.on("connecting", (addr, port) => Universal.sendLog("info", `Twitch client connecting to ${addr}:${port}`));
+    await clientTwitch.on("logon", () => Universal.sendLog("info", `Twitch clients connection established, sending informations to server`));
+    await clientTwitch.on("reconnect", () => Universal.sendLog("warn", `Twitch client reconnecting`));
+    await clientTwitch.on("roomstate", (channel, state) => Universal.sendLog("info", `Twitch client joined channel ${channel} ID ${state["room-id"]}`));
 
     await createTwitchCommands();
     
@@ -152,12 +167,11 @@ async function createTwitchBot() {
      */
     async function createTwitchCommands() {
         clientTwitch.commands = new Map();
-        const twitchCommandsPath = "bots/twitch/commands/";
-        const commandFiles = fs.readdirSync(`./js/${twitchCommandsPath}`).filter(file => file.endsWith(".js"));
+        const commandFiles = fs.readdirSync("./src/bots/twitch/commands").filter(file => file.endsWith(".js"));
         for(const file of commandFiles) {
-            const command = require(`./${twitchCommandsPath}/${file}`);
+            const command = require(`../bots/twitch/commands/${file}`);
             await clientTwitch.commands.set(command.name, command);
         }
-        return await "[Server][T]: Finished Twitch Commands Set Up".sendLog();
+        return Universal.sendLog("info", "Finished Twitch commands setup");
     }
 }

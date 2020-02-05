@@ -1,6 +1,7 @@
 const {
-    Store
-} = require("./Imports.js.js.js");
+    Store,
+    Universal
+} = require("./Imports");
 
 /**
  * Creates `Store` objects.
@@ -9,15 +10,13 @@ const {
  * @returns {Object} Object with `Store` objects
  */
 module.exports = { 
-    jQueue: new Store({ path: "./json/queue.json", indent: null }),
-    jCommands: new Store({ path: "./json/commands.json", indent: null }),
-    jEnemys: new Store({ path: "./json/enemies.json", indent: null }),
-    jMods: new Store({ path: "./json/mods.json", indent: null }),
-    jRocketLeague: new Store({ path: "./json/rocket_league.json", indent: null }),
-    init: init()
-}
-
-function init() {
-    "[Server][I]: Stores initialized".sendLog();
-    return new Date();
+    jQueue: new Store({ path: "./src/db/queue.json", indent: null }),
+    jCommands: new Store({ path: "./src/db/commands.json", indent: null }),
+    jEnemys: new Store({ path: "./src/db/enemies.json", indent: null }),
+    jMods: new Store({ path: "./src/db/mods.json", indent: null }),
+    jRocketLeague: new Store({ path: "./src/db/rocket_league.json", indent: null }),
+    init: () => {
+        Universal.sendLog("info", "Stores initialized");
+        return new Date();
+    }
 }

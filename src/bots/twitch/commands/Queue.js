@@ -1,10 +1,10 @@
 const {
-    GFun
-} = require("../../Imports.js");
+    Universal
+} = require("../../../modules/Imports");
 
 const {
     jQueue
-} = require("../../Stores.js");
+} = require("../../../modules/Stores.js");
 
 module.exports = {
     name: "QUEUE",
@@ -32,7 +32,7 @@ module.exports = {
 function join(client, tags, channel) {
     if(!jQueue.get("up")) return client.say(channel, `@${tags.username} queue is closed...`);
 
-    const password = GFun.generatePassword(5);
+    const password = Universal.generatePassword(5);
     const queueArr = jQueue.get("queue");
     const queueLen = queueArr && queueArr.length != 0 ? queueArr.length + 1: 1;
 
@@ -90,8 +90,8 @@ function next(client, tags, channel) {
 
     const userInfo = `${user.subscriber ? "🥔" : ""} ${user.username.toUpperCase()}: ${user.password}`;
 
-    for(a in global.gConfig.twitch_admins) {
-        client.whisper(a, userInfo);
+    for(const admin of global.gConfig.twitch.admins) {
+        client.whisper(admin.name, userInfo);
     }
     
     if(user.discordID) global.gClientDiscord.users.get(user.discordID).send("You are **UP**");
@@ -124,6 +124,8 @@ function list(client, tags, channel) {
 }
 
 function hasPermission(tags) {
-    for(i in global.gConfig.twitch_admins) if(global.gConfig.twitch_admins[i] == tags["user-id"]) return true;
+    for(const admin of global.gConfig.twitch.admins) {
+        if(admin.id == tags["user-id"]) return true;
+    }
     return false;
 }

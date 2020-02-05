@@ -1,6 +1,6 @@
 const {
     request
-} = require("./Imports.js");
+} = require("./Imports");
 
 let twitchLive = true;
 
@@ -16,7 +16,7 @@ async function checkTwitch() {
         twitchLive = true;
         const message = "@everyone **lilPotate** is now live! Come join us! <:lilpotHypebot:642086734774927363>";
         try {
-            return await global.gClientDiscord.channels.get(process.env.LILPOTATE_LIVE_CHANNEL).send(message).then(m => {
+            return await global.gClientDiscord.channels.get(global.gConfig.discord.twitch_updates_chat).send(message).then(m => {
                 return global.gClientDiscord.commands.get("TWITCH").execute(m, []);
             }); 
         } catch (error) { `[Error]: ${error}`}

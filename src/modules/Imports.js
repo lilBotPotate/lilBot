@@ -6,6 +6,7 @@
  * @returns {Object} Object with modules
  */
 module.exports = { 
+    Universal: require("./Universal"),
     Discord: require("discord.js"),
     tmi: require("tmi.js"),
     request: require("request"),
@@ -13,13 +14,10 @@ module.exports = {
     Store: require("data-store"),
     fs: require("fs"),
     Async: require("async"),
-    Prototypes: require("./Prototypes"),
-    GFun: require("./GlobalFunctions"),
     google: require("googleapis").google,
-    init: init()
-}
-
-function init() {
-    "[Server][I]: Modules imported".sendLog();
-    return new Date();
+    YAML: require("yaml"),
+    init: () => {
+        this.Universal.sendLog("info", "Modules imported");
+        return new Date();
+    }
 }

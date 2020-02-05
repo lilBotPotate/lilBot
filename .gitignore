@@ -1,13 +1,12 @@
 # Files
-config.json
-.env
-package-lock.json
-json/queue.json
-json/commands.json
-json/enemies.json
-json/mods.json
-json/rocket_league.json
-json/pokemon/*.json
+src/config/config.yaml
+src/config/.env
+src/db/queue.json
+src/db/commands.json
+src/db/enemies.json
+src/db/mods.json
+src/db/rocket_league.json
+src/db/pokemon/*.json
 
 # Dirs
 node_modules/

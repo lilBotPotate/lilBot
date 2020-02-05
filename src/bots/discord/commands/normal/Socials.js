@@ -1,6 +1,8 @@
 const {
     Discord
-} = require("../../../Imports.js");
+} = require("../../../../modules/Imports");
+
+const jInfo = require("../../../../files/json/info.json");
 
 module.exports = {
     name: "SOCIALS",
@@ -11,8 +13,6 @@ module.exports = {
         }
     },
     execute(msg, args) {
-        const jInfo = require("../../../../json/info.json");
-
         let socialsList = "";
         for(i in jInfo.socials) socialsList += `**${i.toUpperCase()}:** ${jInfo.socials[i]}\n`
         let teamList = "";

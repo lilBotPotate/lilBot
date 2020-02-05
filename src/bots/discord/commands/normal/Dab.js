@@ -1,7 +1,7 @@
 const {
     Discord,
     Canvas
-} = require("../../../Imports.js");
+} = require("../../../../modules/Imports");
 
 module.exports = {
     name: "DAB",

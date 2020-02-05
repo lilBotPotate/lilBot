@@ -3,7 +3,7 @@
  * @param {('error'|'warn'|'info'|'debug'|'command')} [type=info] Type of the output
  * @param {String} message Message that you want to send to the console
  */
-export function sendLog(type = "info", message) {
+exports.sendLog = (type = "info", message) => {
     const isLinux = process.platform === "linux";
     const today = new Date();
     const date = ("0" + today.getDate()).slice(-2) + "/" 
@@ -37,7 +37,7 @@ export function sendLog(type = "info", message) {
  * @param {Array} array
  * @returns {Array} Randomized array
  */
-export function randomizeArray(array) {
+exports.randomizeArray = (array) => {
     let oArray = [...array];
     let newArray = [];
     while (oArray.length > 0) {
@@ -56,7 +56,7 @@ export function randomizeArray(array) {
  * @param {Discord.Message} msg `Discord.Message` object
  * @param {String} message Message that you want to send
  */
-export function temporaryMSG(msg, message) {
+exports.temporaryMSG = (msg, message) => {
     msg.channel.send(message).then((m) => {
         setTimeout(function () {
             m.delete().catch();
@@ -74,7 +74,7 @@ export function temporaryMSG(msg, message) {
  * @param {Number} length The length that you want for the password
  * @returns {String} Generated password
  */
-export function generatePassword(length) {
+exports.generatePassword = (length) => {
     let chars = "abcdefghijklmnpqrstuvwxyz123456789";
     let password = "";
     for (let i = 0; i < length; i++) password += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -89,7 +89,7 @@ export function generatePassword(length) {
  * 
  * @returns {String} Generated hex value
  */
-export function randomHexColor() {
+exports.randomHexColor = () => {
     const r = Math.floor(Math.random() * 256);
     const g = Math.floor(Math.random() * 256);
     const b = Math.floor(Math.random() * 256);
@@ -103,4 +103,16 @@ export function randomHexColor() {
         let hexNum = num.toString(16);
         return hexNum.length == 1 ? "0" + hexNum : hexNum;
     }
+}
+
+/** 
+ * Send a message to the bot owner on **Discord**
+ * 
+ * @param {String} message
+ * @returns {void}
+ */
+exports.sendToOwner = (message) => {
+    const clientD = global.gClientDiscord;
+    const userId = global.gConfig.discord.bot_owner_id;
+    return clientD.fetchUser(userId).send(message);
 }

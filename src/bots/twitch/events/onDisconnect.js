@@ -1,6 +1,8 @@
+const {
+    Universal
+} = require("../../../modules/Imports");
+
 module.exports = function(reason) {
-    const clientD = global.gClientDiscord;
-    const botMaster = clientD.fetchUser(process.env.BOT_MASTER_DISCORD_ID);
-    `[Server][T]: Disconnected: ${reason}`.sendLog();
-    return botMaster.send(`[Server][T]: Disconnected: ${reason}`);
+    Universal.sendLog("error", `Twitch client disconnected: ${reason}`);
+    return Universal.sendToOwner(`Twitch client dissconected! ${reason}`);
 };

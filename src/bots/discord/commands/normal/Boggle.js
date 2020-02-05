@@ -2,10 +2,10 @@ const {
     Discord,
     Canvas,
     request,
-    GFun
-} = require("../../../Imports.js");
+    Universal   
+} = require("../../../../modules/Imports");
 
-const { dices } = require("../../../../json/boggle.json");
+const { dices } = require("../../../../files/json/boggle.json");
 
 let boggleGrid = [];
 let gameAuthor = 0;
@@ -38,7 +38,7 @@ module.exports = {
 async function sendNewGrid(msg) {
     gameAuthor = msg.author.id;
     gameAuthorName = msg.author.username;
-    color = await GFun.randomHexColor();
+    color = Universal.randomHexColor();
 
     await createBoggleGrid();
     const boggleImage = await createImage();

@@ -1,7 +1,7 @@
 /**
  * Module to replace defined tags with whatever they represent
  * 
- * @module FormatCommands
+ * @module FormatCommand
  * @returns {String} Formatted custom command
  */
 module.exports = function(msg, output) {

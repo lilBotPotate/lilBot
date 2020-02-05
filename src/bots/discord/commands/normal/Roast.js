@@ -1,4 +1,4 @@
-const roastsArr = require("../../../../json/roasts.json");
+const roastsArr = require("../../../../files/json/roasts.json");
 
 module.exports = {
     name: "ROAST",

@@ -1,11 +1,11 @@
 const {
     Discord,
-    GFun
-} = require("../../../Imports.js");
+    Universal
+} = require("../../../../modules/Imports");
 
 const {
     jQueue
-} = require("../../../Stores.js");
+} = require("../../../../modules/Stores");
 
 module.exports = {
     name: "QUEUE",
@@ -42,7 +42,7 @@ module.exports = {
 function join(msg) {
     if(!jQueue.get("up")) return msg.channel.send("Queue is closed...");
 
-    const password = GFun.generatePassword(5);
+    const password = Universal.generatePassword(5);
     const queueArr = jQueue.get("queue");
     const queueLen = queueArr && queueArr.length != 0 ? queueArr.length + 1: 1;
 

@@ -1,7 +1,7 @@
 const {
     Discord,
     fs
-} = require("../../../Imports.js");
+} = require("../../../../modules/Imports");
 
 module.exports = {
     name: "EDITS",

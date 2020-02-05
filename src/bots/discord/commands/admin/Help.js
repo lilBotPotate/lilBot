@@ -1,6 +1,6 @@
 const {
     Discord
-} = require("../../../Imports.js");
+} = require("../../../../modules/Imports");
 
 module.exports = {
 	name: "HELP",
@@ -29,7 +29,7 @@ function listCommand(client, msg, command) {
 	if(usesJSON) {
 		let usesList = "";
 		for(use in usesJSON) {
-			usesList += `**${process.env.PREFIX_ADMIN}${use}:** ${usesJSON[use]}\n`;
+			usesList += `**${global.gConfig.prefixes.admin}${use}:** ${usesJSON[use]}\n`;
 		}
 		helpEmbed.addField("**USES:**", usesList);
 	}
@@ -51,7 +51,7 @@ function listAllCommands(client, msg) {
 	const helpEmbed = new Discord.RichEmbed()
 		.setColor("RANDOM")
 		.setTitle("**LIST OF ADMIN COMMANDS**")
-		.setDescription(`**Prefix:** ${process.env.PREFIX_ADMIN}`)
+		.setDescription(`**Prefix:** ${global.gConfig.prefixes.admin}`)
 		.addField("**COMMANDS:**", commands);
 	return msg.channel.send(helpEmbed).catch();
 }

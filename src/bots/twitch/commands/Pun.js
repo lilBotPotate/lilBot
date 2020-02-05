@@ -1,4 +1,4 @@
-const punArr = require("../../../json/puns.json");
+const punArr = require("../../../files/json/puns.json");
 
 module.exports = {
     name: "PUN",

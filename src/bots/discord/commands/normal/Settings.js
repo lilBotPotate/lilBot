@@ -1,8 +1,8 @@
 const {
     Discord
-} = require("../../../Imports.js");
+} = require("../../../../modules/Imports");
 
-const jInfo = require("../../../../json/info.json");
+const jInfo = require("../../../../files/json/info.json");
 
 module.exports = {
     name: "SETTINGS",

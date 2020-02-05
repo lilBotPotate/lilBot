@@ -1,7 +1,7 @@
 const {
     Discord,
     google
-} = require("../../../Imports.js");
+} = require("../../../../modules/Imports");
 
 module.exports = {
     name: "SUGGESTION",
@@ -15,9 +15,7 @@ module.exports = {
         if(!args || args.length < 1) return msg.channel.send("You need to insert your suggestion!");
         const username = msg.author.tag;
         const suggestion = args.join(" ");
-
-        if(!global.gConfig.google_credentials) return console.log('Error loading client secret file:');
-        return authorize(global.gConfig.google_credentials, (auth) => appendSuggestion(auth, msg, { username, suggestion }));
+        return authorize(JSON.parse(process.env.GOOGLE_CREDENTIALS), (auth) => appendSuggestion(auth, msg, { username, suggestion }));
     }
 };
 
@@ -31,9 +29,8 @@ function authorize(credentials, callback) {
     const oAuth2Client = new google.auth.OAuth2(
         client_id, client_secret, redirect_uris[0]
     );
-    
-    if(!global.gConfig.google_token) return console.log("No token");
-    oAuth2Client.setCredentials(global.gConfig.google_token);
+
+    oAuth2Client.setCredentials(JSON.parse(process.env.GOOGLE_TOKEN));
     callback(oAuth2Client);
 }
 

@@ -2,17 +2,17 @@ const {
     Discord,
     request,
     Canvas
-} = require("../../../Imports");
+} = require("../../../../modules/Imports");
 
 const {
     jRocketLeague
-} = require("../../../Stores");
+} = require("../../../../modules/Stores");
 
 const { 
     ranks, 
     changeName, 
     validPlatforms 
-} = require("../../../../json/rl_rank.json");
+} = require("../../../../files/json/rl_rank.json");
 
 module.exports = {
     name: "RANK",
@@ -61,7 +61,7 @@ async function getProfile({ msg, args}) {
 async function getId({ msg, args, userId }) {
     const platform = args && args.length > 0 ? await args.shift().toLowerCase() : "steam";
     if(isValidPlatform(platform)) return await msg.channel.send(`That is not a valid platform! Choose from: ${validPlatforms.join(", ")}`);
-    userId = ! userId ? process.env.DEFAULT_STEAM_ID 
+    userId = ! userId ? global.gConfig.extra.default_steam_id
              : platform === "steam" ? await getValidId(userId)
              : userId;
     if(userId === null) return await msg.channel.send("That user doesn't exist!");

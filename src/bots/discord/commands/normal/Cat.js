@@ -1,7 +1,7 @@
 const {
     Discord,
     request
-} = require("../../../Imports.js");
+} = require("../../../../modules/Imports");
 
 module.exports = {
     name: "CAT",

@@ -1,6 +1,6 @@
 const {
     Discord
-} = require("../../../Imports.js");
+} = require("../../../../modules/Imports");
 
 module.exports = {
     name: "WINNER",
@@ -16,7 +16,7 @@ module.exports = {
         const members = msg.guild.members
         .filter(member => {
             const subsCheck = onlySubs
-                            ? member.roles.has(process.env.SUBSCRIBER_DISCORD_ROLE)
+                            ? member.roles.has(global.gConfig.discord.subscriber_role)
                             : true;
             return (member.id !== msg.author.id) && !member.user.bot && subsCheck
         })

@@ -1,6 +1,6 @@
 const {
     jCommands
-} = require("../../../Stores.js");
+} = require("../../../../modules/Stores");
 
 module.exports = {
     name: "COMMAND",
