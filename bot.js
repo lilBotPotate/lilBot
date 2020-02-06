@@ -2,7 +2,7 @@ const {
     Async,
     fs,
     YAML
-} = require("./modules/Imports");
+} = require("./src/modules/Imports");
 
 /** 
  * Inserts configs from `./config/.env` into `process.env`
@@ -19,11 +19,11 @@ global.gConfig = YAML.parse(fs.readFileSync("./src/config/config.yaml", "utf8"))
 
 // const createBots = require("./modules/CreateBots");
 
-require("./modules/CreateBots")().then((areBotsCreated) => {
+require("./src/modules/CreateBots")().then((areBotsCreated) => {
     if(!areBotsCreated) throw "Failed to create the bots";
 });
 
-const updates = require("./modules/Updates");
+const updates = require("./src/modules/Updates");
 Async.forever(
     function(next) {
         setTimeout(function() {

@@ -5,8 +5,8 @@
   "main": "bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/bot.js",
-    "pm2": "pm2 start ./src/bot.js --name lilBot"
+    "start": "node bot.js",
+    "pm2": "pm2 start bot.js --name lilBot"
   },
   "author": "LittleBunnyRabbit",
   "license": "ISC",
