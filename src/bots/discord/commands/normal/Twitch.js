@@ -1,24 +1,18 @@
 const {
     Discord,
-    request
-} = require("../../../../modules/Imports");
+    request,
+    Command 
+} = require("../../../../imports/Imports");
 
-module.exports = {
-    name: "TWITCH",
-    description: {
-        "info": "Twitch > Mixer",
-        "uses": {
-            "twitch": "get lilPotate's status",
-            "twitch {username}": "get defined users status"
-        }
-    },
-    execute(msg, args) {
-        const channel = args[0] ? args[0] : "lilpotate";
-        sendData(msg, channel);
-    }
-};
+module.exports = new Command.Normal()
+      .setName("TWITCH")
+      .setInfo("Twitch > Mixer")
+      .addUsage("twitch", "get lilPotate's status")
+      .addUsage("twitch {username}", "get defined users status")
+      .setCommand(sendData);
 
-async function sendData(msg, channel) {
+async function sendData(msg, args) {
+    const channel = args[0] ? args[0] : "lilpotate";
     let jUser = await getJSON(`https://api.twitch.tv/helix/users?login=${channel}`);
     if(jUser.data.length < 1) return msg.channel.send("That channel doesn't exist!");
     jUser = jUser.data[0];

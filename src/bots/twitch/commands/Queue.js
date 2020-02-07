@@ -1,10 +1,10 @@
 const {
     Universal
-} = require("../../../modules/Imports");
+} = require("../../../imports/Imports");
 
 const {
     jQueue
-} = require("../../../modules/Stores.js");
+} = require("../../../imports/functions/Stores.js");
 
 module.exports = {
     name: "QUEUE",

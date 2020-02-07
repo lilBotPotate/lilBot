@@ -1,26 +1,24 @@
 const {
-    Discord
-} = require("../../../../modules/Imports");
+    Discord,
+    Command 
+} = require("../../../../imports/Imports");
 
 const jInfo = require("../../../../files/json/info.json");
 
-module.exports = {
-    name: "SETTINGS",
-    description: {
-        "info": "Pro rocket league settings",
-        "uses": {
-            "settings": "get the potato settings"
-        }
-    },
-    execute(msg, args) {
-        let settingsList = "";
-        for(i in jInfo.settings) settingsList += `**${i.toUpperCase()}:** ${jInfo.settings[i]}\n`
+module.exports = new Command.Normal()
+      .setName("SETTINGS")
+      .setInfo("Pro rocket league settings")
+      .addUsage("settings", "get the potato settings")
+      .setCommand(sendSettings);
 
-        const eSettings = new Discord.RichEmbed()
-            .setColor("RANDOM")
-            .setTitle("**SETTINGS**")
-            .setDescription(settingsList);
+function sendSettings(msg) {
+    let settingsList = "";
+    for(i in jInfo.settings) settingsList += `**${i.toUpperCase()}:** ${jInfo.settings[i]}\n`
 
-        msg.channel.send(eSettings);
-    }
-};
+    const eSettings = new Discord.RichEmbed()
+        .setColor("RANDOM")
+        .setTitle("**SETTINGS**")
+        .setDescription(settingsList);
+
+    msg.channel.send(eSettings);
+}

@@ -1,43 +1,30 @@
 const {
     Discord,
-    Universal
-} = require("../../../../modules/Imports");
+    Universal,
+    Command
+} = require("../../../../imports/Imports");
 
 const {
     jQueue
-} = require("../../../../modules/Stores");
+} = require("../../../../imports/functions/Stores");
 
-module.exports = {
-    name: "QUEUE",
-    description: {
-        "info": "We want more 1v1s with lilPotate!",
-        "uses": {
-            "queue": "list all people in the queue",
-            "queue join": "join the queue",
-            "queue leave": "leave the queue",
-            "queue clear": "clear queue",
-            "queue next": "returns the next person in queue",
-            "queue start": "opens the queue",
-            "queue stop": "closes the queue"
-        }
-    },
-    execute(msg, args) {
-        const command = args[0] ? args.shift().toUpperCase() : "LIST";
-        switch (command) {
-            case "JOIN": return join(msg);
-            case "LEAVE": return leave(msg);
-            case "EMPTY":
-            case "CLEAR": return clear(msg);
-            case "NEXT": return next(msg);
-            case "OPEN":
-            case "START": return start(msg);
-            case "CLOSE":
-            case "STOP": return stop(msg);
-            case "LIST":
-            default: return list(msg);
-        }
-    }
-};
+module.exports = new Command.Normal()
+      .setName("QUEUE")
+      .setInfo("We want more 1v1s with lilPotate!")
+      .addUsage("queue", "list all people in the queue")
+      .addUsage("queue join", "join the queue")
+      .addUsage("queue leave", "leave the queue")
+      .addUsage("queue clear", "clear queue")
+      .addUsage("queue next", "returns the next person in queue")
+      .addUsage("queue start", "opens the queue")
+      .addUsage("queue stop", "closes the queue")
+      .addSubCommand("JOIN", join)
+      .addSubCommand("LEAVE", leave)
+      .addSubCommand("CLEAR", clear)
+      .addSubCommand("NEXT", next)
+      .addSubCommand("START", start)
+      .addSubCommand("STOP", stop)
+      .setCommand(list);
 
 function join(msg) {
     if(!jQueue.get("up")) return msg.channel.send("Queue is closed...");

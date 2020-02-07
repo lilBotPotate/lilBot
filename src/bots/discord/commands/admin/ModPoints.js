@@ -1,27 +1,25 @@
 const {
-    Discord
-} = require("../../../../modules/Imports");
+    Discord,
+    Command
+} = require("../../../../imports/Imports");
 
 const {
     jMods
-} = require("../../../../modules/Stores");
+} = require("../../../../imports/functions/Stores");
 
-module.exports = {
-    name: "MODPOINTS",
-    description: {
-        "info": "Give some points to the good mods!",
-        "uses": {
-            "modpoints": "list all mods with their points",
-            "modpoints {tag} {+,-,*,/}{points}": "modify points of the mod"
-        }
-    },
-    execute(msg, args) {
-        switch(args.length) {
-            case 2: return modifyPoints({msg, args});
-            default: return listMods({msg});
-        }
+module.exports = new Command.Admin()
+      .setName("MODPOINTS")
+      .setInfo("Give some points to the good mods!")
+      .addUsage("modpoints", "list all mods with their points")
+      .addUsage("modpoints {tag} {+,-,*,/}{points}", "modify points of the mod")
+      .setCommand(modPoints);
+
+function modPoints(msg, args) {
+    switch(args.length) {
+        case 2: return modifyPoints({msg, args});
+        default: return listMods({msg});
     }
-};
+}
 
 function modifyPoints({msg, args}) {
     if(!global.gConfig.disord_admins.find(id => id == msg.author.id)) {

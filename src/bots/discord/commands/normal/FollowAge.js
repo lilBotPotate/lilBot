@@ -1,23 +1,19 @@
 const {
-    request
-} = require("../../../../modules/Imports");
+    request,
+    Command,
+    Universal
+} = require("../../../../imports/Imports");
 
-module.exports = {
-    name: "FOLLOWAGE",
-    description: {
-        "info": "UwU how long have I been following lilPotate",
-        "uses": {
-            "followage {twitch username}": "get how long you have been following lilPotate"
-        }
-    },
-    execute(msg, args) {
-        if(args.length < 1) return "Missing arguments!".sendTemporary(msg);
-        const username = args[0];
-        return getFollowAge(msg, username);
-    }
-};
+module.exports = new Command.Normal()
+      .setName("FOLLOWAGE")
+      .setInfo("UwU how long have I been following lilPotate")
+      .addUsage("followage {twitch username}", "get how long you have been following lilPotate")
+      .setCommand(getFollowAge);
 
-function getFollowAge(msg, username) {
+function getFollowAge(msg, args) {
+    if(args.length < 1) return Universal.sendTemporary(msg, "Missing arguments!");
+    const username = args[0];
+
     const options = {
         url: `https://api.2g.be/twitch/followage/lilPotate/${username}?format=mwdhms`,
         headers: {

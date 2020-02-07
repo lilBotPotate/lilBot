@@ -2,7 +2,7 @@ const {
     Async,
     fs,
     YAML
-} = require("./src/modules/Imports");
+} = require("./src/imports/Imports");
 
 /** 
  * Inserts configs from `./config/.env` into `process.env`
@@ -17,13 +17,11 @@ require("dotenv").config({ path: `./src/config/.env` });
  */
 global.gConfig = YAML.parse(fs.readFileSync("./src/config/config.yaml", "utf8"));
 
-// const createBots = require("./modules/CreateBots");
-
-require("./src/modules/CreateBots")().then((areBotsCreated) => {
+require("./src/imports/functions/CreateBots")().then((areBotsCreated) => {
     if(!areBotsCreated) throw "Failed to create the bots";
 });
 
-const updates = require("./src/modules/Updates");
+const updates = require("./src/imports/functions/Updates");
 Async.forever(
     function(next) {
         setTimeout(function() {

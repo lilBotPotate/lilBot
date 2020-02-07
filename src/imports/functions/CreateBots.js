@@ -3,7 +3,7 @@ const {
     fs,
     tmi,
     Universal
-} = require("./Imports");
+} = require("../Imports");
 
 const { jCommands } = require("./Stores");
 
@@ -49,9 +49,9 @@ async function createDiscordBot() {
      */
     global.gClientDiscord = clientDiscord;
 
-    const onMessage = require("../bots/discord/events/onMessage");
-    const onGuildMemberAdd = require("../bots/discord/events/onGuildMemberAdd");
-    const onReady = require("../bots/discord/events/onReady");
+    const onMessage = require("../../bots/discord/events/onMessage");
+    const onGuildMemberAdd = require("../../bots/discord/events/onGuildMemberAdd");
+    const onReady = require("../../bots/discord/events/onReady");
 
     clientDiscord.on("message", onMessage);
     clientDiscord.on("guildMemberAdd", onGuildMemberAdd);
@@ -71,7 +71,7 @@ async function createDiscordBot() {
     return clientDiscord;
 
     /**
-     * Adds the command modules from `./js/discord/commands/*` to **Discord.Collection**
+     * Adds the command imports from `./js/discord/commands/*` to **Discord.Collection**
      * and inserts it into **Discord.Client**
      * 
      * @async
@@ -83,12 +83,16 @@ async function createDiscordBot() {
             ["admin", clientDiscord.admin = new Discord.Collection()],
             ["master", clientDiscord.master = new Discord.Collection()]
         ]
-    
+
         for(set of commandCollections) {
             const commandFiles = fs.readdirSync(`./src/bots/discord/commands/${set[0]}`).filter(file => file.endsWith(".js"));
             for(const file of commandFiles) {
-                const command = require(`../bots/discord/commands/${set[0]}/${file}`);
-                await set[1].set(command.name, command);
+                try { 
+                    const command = require(`../../bots/discord/commands/${set[0]}/${file}`);
+                    await set[1].set(command.name, command);
+                } catch (error) {
+                    throw Universal.sendLog("error", `Failed to add ${file} to ${set[0]} Discord collection\n${error}`); 
+                }
             }
         }
         
@@ -140,8 +144,8 @@ async function createTwitchBot() {
      */
     global.gClientTwitch = clientTwitch;
     
-    const onMessage = require("../bots/twitch/events/onMessage");
-    const onDisconnect = require("../bots/twitch/events/onDisconnect");
+    const onMessage = require("../../bots/twitch/events/onMessage");
+    const onDisconnect = require("../../bots/twitch/events/onDisconnect");
     
     await clientTwitch.on("message", onMessage);
     await clientTwitch.on("disconnected", onDisconnect);
@@ -159,7 +163,7 @@ async function createTwitchBot() {
     return clientTwitch;
 
     /**
-     * Adds the command modules from `./js/twitch/commands/*` to **Map**
+     * Adds the command imports from `./js/twitch/commands/*` to **Map**
      * and inserts it into **tmi.client**
      * 
      * @async
@@ -169,8 +173,12 @@ async function createTwitchBot() {
         clientTwitch.commands = new Map();
         const commandFiles = fs.readdirSync("./src/bots/twitch/commands").filter(file => file.endsWith(".js"));
         for(const file of commandFiles) {
-            const command = require(`../bots/twitch/commands/${file}`);
-            await clientTwitch.commands.set(command.name, command);
+            try { 
+                const command = require(`../../bots/twitch/commands/${file}`);
+                await clientTwitch.commands.set(command.name, command);
+            } catch (error) {
+                throw Universal.sendLog("error", `Failed to add ${file} to ${set[0]} Twitch command Map\n${error}`); 
+            }
         }
         return Universal.sendLog("info", "Finished Twitch commands setup");
     }

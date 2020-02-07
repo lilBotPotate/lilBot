@@ -1,12 +1,13 @@
 /**
- * Imports all the `npm` modules that are
+ * Imports all the `npm` imports that are
  * specified in the `package.json`
  * 
  * @module Imports
- * @returns {Object} Object with modules
+ * @returns {Object} Object with imports
  */
 module.exports = { 
-    Universal: require("./Universal"),
+    Universal: require("./functions/Universal"),
+    Command: require("./classes/Command"),
     Discord: require("discord.js"),
     tmi: require("tmi.js"),
     request: require("request"),

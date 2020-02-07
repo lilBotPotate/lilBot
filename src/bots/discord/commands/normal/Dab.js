@@ -1,23 +1,17 @@
 const {
     Discord,
-    Canvas
-} = require("../../../../modules/Imports");
+    Canvas,
+    Command
+} = require("../../../../imports/Imports");
 
-module.exports = {
-    name: "DAB",
-    description: {
-        "info": "One dab a day keeps the doctor away",
-        "uses": {
-            "dab": "lilPotate dabbs on you",
-            "dab {tag}": "lilPotate dabbs on tagged user"
-        }
-    },
-    execute(msg, args) {
-        return createImage(msg);
-    }
-};
+module.exports = new Command.Normal()
+      .setName("DAB")
+      .setInfo("One dab a day keeps the doctor away")
+      .addUsage("dab", "lilPotate dabbs on you")
+      .addUsage("dab {tag}", "lilPotate dabbs on tagged user")
+      .setCommand(sendDabImage);
 
-async function createImage(msg) {
+async function sendDabImage(msg) {
     const user = msg.mentions.users.first() ? msg.mentions.users.first() : msg.author;
 
     const potateDab = await Canvas.loadImage("./files/dab.png");

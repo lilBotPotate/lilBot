@@ -1,6 +1,6 @@
 const {
     request
-} = require("../../../modules/Imports.js");
+} = require("../../../imports/Imports.js");
 
 module.exports = {
     name: "RANK2",

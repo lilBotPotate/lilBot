@@ -1,12 +1,13 @@
 const {
     Discord,
     request,
-    Canvas
-} = require("../../../../modules/Imports");
+    Canvas,
+    Command
+} = require("../../../../imports/Imports");
 
 const {
     jRocketLeague
-} = require("../../../../modules/Stores");
+} = require("../../../../imports/functions/Stores");
 
 const { 
     ranks, 
@@ -14,29 +15,19 @@ const {
     validPlatforms 
 } = require("../../../../files/json/rl_rank.json");
 
-module.exports = {
-    name: "RANK",
-    description: {
-        "info": "Its complicated",
-        "uses": {
-            "template": "template"
-        }
-    },
-    execute(msg, args) {
-        const command = args && args.length > 0 ? args.shift().toUpperCase() : null;
-        switch(command) {
-            case "SET": return setProfile({ msg, args });
-            case "ME": return getProfile({ msg, args });
-            default: return getId({ msg, args, userId: command });
-        }
-    }
-};
-
+module.exports = new Command.Normal()
+      .setName("RANK")
+      .setInfo("Its complicated")
+      .addUsage("template", "template")
+      .addSubCommand("SET", setProfile)
+      .addSubCommand("ME", getProfile)
+      .setCommand(getId);
+      
 /** 
  * @param {{msg: Object, args: Array<String>}}
  * @returns {void}
 */
-async function setProfile({ msg, args }) {
+async function setProfile(msg, args) {
     if(!args || args.length < 2) return await msg.channel.send("Missing Arguments!");
     let userId = args.shift();
     const platform = args.shift().toLowerCase();
@@ -47,7 +38,7 @@ async function setProfile({ msg, args }) {
     return msg.channel.send(`**${platform.toUpperCase()} ID** was set for ${msg.author}!`);
 }
 
-async function getProfile({ msg, args}) {
+async function getProfile(msg, args) {
     const platform = args && args.length > 0 ? await args.shift().toLowerCase() : "steam";
     if(isValidPlatform(platform)) return await msg.channel.send(`That is not a valid platform! Choose from: ${validPlatforms.join(", ")}`);
     const userId = await jRocketLeague.get(`users.${msg.author.id}.${platform}`);
@@ -58,7 +49,9 @@ async function getProfile({ msg, args}) {
     return await sendRankData({ msg, args, rankData, profileData });
 }
 
-async function getId({ msg, args, userId }) {
+async function getId(msg, args) {
+    if(!args || args.length < 1) return msg.channel.send("Missing arguments");
+    let userId = args.shift();
     const platform = args && args.length > 0 ? await args.shift().toLowerCase() : "steam";
     if(isValidPlatform(platform)) return await msg.channel.send(`That is not a valid platform! Choose from: ${validPlatforms.join(", ")}`);
     userId = ! userId ? global.gConfig.extra.default_steam_id

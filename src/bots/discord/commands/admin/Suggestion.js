@@ -1,23 +1,21 @@
 const {
     Discord,
-    google
-} = require("../../../../modules/Imports");
+    google,
+    Command
+} = require("../../../../imports/Imports");
 
-module.exports = {
-    name: "SUGGESTION",
-    description: {
-        "info": "Have a great idea? Share it!",
-        "uses": {
-            "suggestion {suggestion}": "send a suggestion"
-        }
-    },
-    execute(msg, args) {
-        if(!args || args.length < 1) return msg.channel.send("You need to insert your suggestion!");
-        const username = msg.author.tag;
-        const suggestion = args.join(" ");
-        return authorize(JSON.parse(process.env.GOOGLE_CREDENTIALS), (auth) => appendSuggestion(auth, msg, { username, suggestion }));
-    }
-};
+module.exports = new Command.Admin()
+      .setName("SUGGESTION")
+      .setInfo("Have a great idea? Share it!")
+      .addUsage("suggestion {suggestion}", "send a suggestion")
+      .setCommand(makeSuggestion);
+
+function makeSuggestion(msg, args) {
+    if(!args || args.length < 1) return msg.channel.send("You need to insert your suggestion!");
+    const username = msg.author.tag;
+    const suggestion = args.join(" ");
+    return authorize(JSON.parse(process.env.GOOGLE_CREDENTIALS), (auth) => appendSuggestion(auth, msg, { username, suggestion }));
+}
 
 function authorize(credentials, callback) {
     const {

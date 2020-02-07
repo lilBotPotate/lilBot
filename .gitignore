@@ -10,3 +10,4 @@ src/db/pokemon/*.json
 
 # Dirs
 node_modules/
+.idea/

@@ -1,22 +1,20 @@
 const {
-    Discord
-} = require("../../../../modules/Imports");
+	Discord,
+	Command	
+} = require("../../../../imports/Imports");
 
-module.exports = {
-	name: "HELP",
-	description: {
-		"info": "lilBot to the rescue!",
-		"uses": {
-		  "help": "list all commands",
-		  "help {command}": "get information about a specific command"
-		}
-	},
-	execute(msg, args) {
-		const client = global.gClientDiscord;
-		if(args[0]) listCommand(client, msg, args[0].toUpperCase());
-		else listAllCommands(client, msg);
-	}
-};
+module.exports = new Command.Admin()
+      .setName("HELP")
+      .setInfo("lilBot to the rescue!")
+      .addUsage("help", "list all commands")
+      .addUsage("help {command}", "get information about a specific command")
+	  .setCommand(sendHelp);
+
+function sendHelp(msg, args) {
+	const client = global.gClientDiscord;
+	if(args[0]) listCommand(client, msg, args[0].toUpperCase());
+	else listAllCommands(client, msg);
+}
 
 function listCommand(client, msg, command) {
 	if(!client.admin.has(command)) return "That command doesn't exist!".sendTemporary(msg);
@@ -38,20 +36,15 @@ function listCommand(client, msg, command) {
 }
 
 function listAllCommands(client, msg) {
-	let commandsArr = [];
-	client.admin.map(u => {
-		if(u.name) {
-			let comm = u.name;
-			if(u.aliases) comm += ` (${u.aliases.join(", ")})`;
-			return commandsArr.push(comm);
-		}
+	const commandArr = client.admin.map(cmd => {
+		if(cmd.disabled) return `~~*${cmd.name}*~~`;
+		return cmd.name;
 	});
 
-	const commands = `**${commandsArr.sort().join(", ")}**`;
 	const helpEmbed = new Discord.RichEmbed()
 		.setColor("RANDOM")
 		.setTitle("**LIST OF ADMIN COMMANDS**")
 		.setDescription(`**Prefix:** ${global.gConfig.prefixes.admin}`)
-		.addField("**COMMANDS:**", commands);
+		.addField("**COMMANDS:**", `**${commandArr.sort().join(", ")}**`);
 	return msg.channel.send(helpEmbed).catch();
 }

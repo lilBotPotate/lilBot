@@ -1,6 +1,6 @@
 const {
     Universal
-} = require("../../../modules/Imports");
+} = require("../../../imports/Imports");
 
 module.exports = function(channel, tags, message, self) {
     sendToDiscord(tags, message);

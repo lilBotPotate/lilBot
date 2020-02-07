@@ -1,6 +1,6 @@
 const {
     request
-} = require("./Imports");
+} = require("../Imports");
 
 let twitchLive = true;
 
@@ -31,7 +31,7 @@ async function checkTwitch() {
                 method: "GET",
                 json: true
             }, function (error, res, body) {
-                if (!error && res.statusCode == 200) resolve(body);
+                if (!error && res.statusCode === 200) resolve(body);
                 else reject(error);
             });
         });

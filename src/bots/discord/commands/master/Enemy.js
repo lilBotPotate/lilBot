@@ -1,30 +1,19 @@
 const {
-    Discord
-} = require("../../../../modules/Imports");
+    Discord,
+    Command 
+} = require("../../../../imports/Imports");
 
 const {
     jEnemys
-} = require("../../../../modules/Stores");
+} = require("../../../../imports/functions/Stores");
 
-
-module.exports = {
-    name: "ENEMY",
-    description: {
-        "info": "Byeee!",
-        "uses": {
-            "enemy {tag}": "ban that user from using the bot"
-        }
-    },
-    execute(msg, args) {
-        const command = args.length > 0 ? args.shift().toUpperCase() : null;
-        switch(command) {
-            case "ADD": return add(msg);
-            case "REMOVE": return remove(msg);
-            case "LIST": return list(msg);
-            default: return;
-        }        
-    }
-};
+module.exports = new Command.Master()
+      .setName("ENEMY")
+      .setInfo("Byeee!")
+      .addUsage("enemy add {tag}", "ban that user from using the bot")
+      .addSubCommand("ADD", add)
+      .addSubCommand("REMOVE", remove)
+      .addSubCommand("LIST", list);
 
 function add(msg) {
     const { 

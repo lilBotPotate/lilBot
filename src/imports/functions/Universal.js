@@ -64,6 +64,14 @@ exports.temporaryMSG = (msg, message) => {
     }).catch();
 }
 
+exports.sendTemporary = (msg, message) => {
+    msg.channel.send(message).then((m) => {
+        setTimeout(function () {
+            m.delete().catch();
+        }, 2000);
+    }).catch();
+}
+
 /** 
  * Password generator. 
  * 

@@ -1,7 +1,7 @@
 const {
     Store,
     Universal
-} = require("./Imports");
+} = require("../Imports");
 
 /**
  * Creates `Store` objects.

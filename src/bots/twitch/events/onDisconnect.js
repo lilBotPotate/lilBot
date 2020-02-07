@@ -1,6 +1,6 @@
 const {
     Universal
-} = require("../../../modules/Imports");
+} = require("../../../imports/Imports");
 
 module.exports = function(reason) {
     Universal.sendLog("error", `Twitch client disconnected: ${reason}`);

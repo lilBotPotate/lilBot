@@ -1,18 +1,14 @@
 const {
     Discord,
-    request
-} = require("../../../../modules/Imports");
+    request,
+    Command
+} = require("../../../../imports/Imports");
 
-module.exports = {
-    name: "MEME",
-    description: {
-        "info": "Just a random meme generator",
-        "uses": {
-            "meme": "sends a random meme"
-        }
-    },
-    execute(msg, args) { return sendMeme(msg); }
-};
+module.exports = new Command.Normal()
+      .setName("MEME")
+      .setInfo("Just a random meme generator")
+      .addUsage("meme", "sends a random meme")
+      .setCommand(sendMeme);
 
 async function sendMeme(msg) {
     const url = "https://meme-api.herokuapp.com/gimme";

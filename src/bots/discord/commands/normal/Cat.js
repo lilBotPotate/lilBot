@@ -1,22 +1,16 @@
 const {
     Discord,
-    request
-} = require("../../../../modules/Imports");
+    request,
+    Command
+} = require("../../../../imports/Imports");
 
-module.exports = {
-    name: "CAT",
-    description: {
-        "info": "I mean... Who doesn't love cats :heart:",
-        "uses": {
-            "cat": "sends a random cat image"
-        }
-    },
-    execute(msg, args) {
-        return sendImage(msg);
-    }
-};
+module.exports = new Command.Normal()
+      .setName("CAT")
+      .setInfo("I mean... Who doesn't love cats :heart:")
+      .addUsage("cat", "sends a random cat image")
+      .setCommand(sendCatImage);
 
-async function sendImage(msg) {
+async function sendCatImage(msg) {
     const url = "https://api.thecatapi.com/v1/images/search";
     const jImage = await getJSON(url);
 

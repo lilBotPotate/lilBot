@@ -1,25 +1,19 @@
 const {
     Discord,
-    fs
-} = require("../../../../modules/Imports");
+    fs,
+    Command
+} = require("../../../../imports/Imports");
 
-module.exports = {
-    name: "EDITS",
-    description: {
-        "info": "Get edits of a message",
-        "uses": {
-            "EDITS {msg ID}": "Get edits of a message"
-        }
-    },
-    execute(msg, args) {    
-        if(args.length < 1) return msg.channel.send("You need to insert the message ID");
-        const msgID = args[0];
-        if(isNaN(msgID)) return msg.channel.send("Message ID is invalid");
-        return sendEdits(msg, msgID);
-    }
-};
-
-async function sendEdits(msg, msgID) {
+module.exports = new Command.Admin()
+      .setName("EDITS")
+      .setInfo("Get edits of a message")
+      .addUsage("EDITS {msg ID}", "Get edits of a message")
+      .setCommand(sendEdits);
+      
+async function sendEdits(msg, args) {
+    if(args.length < 1) return msg.channel.send("You need to insert the message ID");
+    const msgID = args[0];
+    if(isNaN(msgID)) return msg.channel.send("Message ID is invalid");
     const fMsg = await msg.channel.fetchMessage(msgID);
     const edits = fMsg.edits;
     if(!edits) return await msg.channel.send("No edits!");

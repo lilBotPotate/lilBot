@@ -1,22 +1,20 @@
 const {
-    Discord
-} = require("../../../../modules/Imports");
+	Discord,
+	Command
+} = require("../../../../imports/Imports");
 
-module.exports = {
-	name: "HELP",
-	description: {
-		"info": "lilBot to the rescue!",
-		"uses": {
-		  "help": "list all commands",
-		  "help {command}": "get information about a specific command"
-		}
-	},
-	execute(msg, args) {
-		const client = global.gClientDiscord;
-		if(args[0]) listCommand(client, msg, args[0].toUpperCase());
-		else listAllCommands(client, msg);
-	}
-};
+module.exports = new Command.Normal()
+      .setName("HELP")
+      .setInfo("lilBot to the rescue!")
+      .addUsage("help", "list all commands")
+      .addUsage("help {command}", "get information about a specific command")
+	  .setCommand(sendHelp);
+
+function sendHelp(msg, args) {
+	const client = global.gClientDiscord;
+	if(args[0]) listCommand(client, msg, args[0].toUpperCase());
+	else listAllCommands(client, msg);
+}
 
 function listCommand(client, msg, command) {
 	if(!client.commands.has(command)) return "That command doesn't exist!".sendTemporary(msg);

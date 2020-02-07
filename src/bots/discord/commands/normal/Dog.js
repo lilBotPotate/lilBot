@@ -1,22 +1,16 @@
 const {
     Discord,
-    request
-} = require("../../../../modules/Imports");
+    request,
+    Command
+} = require("../../../../imports/Imports");
 
-module.exports = {
-    name: "DOG",
-    description: {
-        "info": "I mean... Who doesn't love dogs :heart:",
-        "uses": {
-            "dog": "sends a random dog image"
-        }
-    },
-    execute(msg, args) {
-        return sendImage(msg);
-    }
-};
-
-async function sendImage(msg) {
+module.exports = new Command.Normal()
+      .setName("DOG")
+      .setInfo("I mean... Who doesn't love dogs :heart:")
+      .addUsage("dog", "sends a random dog image")
+      .setCommand(sendDogImage);
+      
+async function sendDogImage(msg) {
     const url = "https://api.thedogapi.com/v1/images/search";
     const jImage = await getJSON(url);
 
