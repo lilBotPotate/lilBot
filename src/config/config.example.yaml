@@ -22,14 +22,14 @@ twitch:
     - name: TWITCH USERNAME
       id: TWITCH USER ID
   icons:
-    no_badge: <:NAME:ID>
-    sub_gifter: <:NAME:ID>
-    moderator: <:NAME:ID>
-    subscriber: <:NAME:ID>
-    partner: <:NAME:ID>
-    founder: <:NAME:ID>
-    premium: <:NAME:ID>
-    bits: <:NAME:ID>
+    no_badge: 🤖
+    sub_gifter: 🤖
+    moderator: 🤖
+    subscriber: 🤖
+    partner: 🤖
+    founder: 🤖
+    premium: 🤖
+    bits: 🤖
 
 extra:
   default_steam_id: STEAM ID 64
