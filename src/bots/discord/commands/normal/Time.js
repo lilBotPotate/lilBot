@@ -5,8 +5,8 @@ const {
 module.exports = new Command.Normal()
       .setName("TIME")
       .setInfo("Hmmm... Whats the time?")
-      .addUsage("time", "get the Texan time")
-      .addUsage("time {timezone name}", "get the specific timezone")
+      .addUse("time", "get the Texan time")
+      .addUse("time {timezone name}", "get the specific timezone")
       .setCommand(sendTime);
 
 function sendTime(msg, args) {
@@ -18,8 +18,8 @@ function sendTime(msg, args) {
     };
     try {
         const formatter = new Intl.DateTimeFormat("en-US", options);
-        msg.channel.send(`**${formatter.format(new Date())}**`)
+        return msg.channel.send(`**${formatter.format(new Date())}**`)
     } catch (error) {
-        msg.channel.send("Wrong timezone name!");
+        return msg.channel.send("Wrong timezone name!");
     }
 }

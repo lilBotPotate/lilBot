@@ -1,6 +1,7 @@
 const {
     Discord,
-    Command 
+    Command,
+    Universal
 } = require("../../../../imports/Imports");
 
 const {
@@ -10,7 +11,7 @@ const {
 module.exports = new Command.Master()
       .setName("ENEMY")
       .setInfo("Byeee!")
-      .addUsage("enemy add {tag}", "ban that user from using the bot")
+      .addUse("enemy add {tag}", "ban that user from using the bot")
       .addSubCommand("ADD", add)
       .addSubCommand("REMOVE", remove)
       .addSubCommand("LIST", list);
@@ -21,7 +22,7 @@ function add(msg) {
         enemies, 
         hasUser 
     } = getEnemiesAndUser(msg);
-    if(!mentionedUser) return "You need to tag someone!".sendTemporary(msg);
+    if(!mentionedUser) return Universal.sendTemporary(msg, "You need to tag someone!");
     if(hasUser) return msg.channel.send("That user is already on the list!");
     enemies.push(mentionedUser.id);
     jEnemys.set("enemies", enemies);
@@ -34,7 +35,7 @@ function remove(msg) {
         enemies, 
         hasUser 
     } = getEnemiesAndUser(msg);
-    if(!mentionedUser) return "You need to tag someone!".sendTemporary(msg);
+    if(!mentionedUser) return Universal.sendTemporary(msg, "You need to tag someone!");
     if(!hasUser) return msg.channel.send("That user is not on the list!");
     const newEnemies = enemies.filter(userId => userId !== mentionedUser.id);
     jEnemys.set("enemies", newEnemies);

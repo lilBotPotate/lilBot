@@ -1,8 +1,8 @@
 const {
     Discord,
-    request,
     Canvas,
-    Command
+    Command,
+    Universal
 } = require("../../../../imports/Imports");
 
 const {
@@ -18,7 +18,7 @@ const {
 module.exports = new Command.Normal()
       .setName("RANK")
       .setInfo("Its complicated")
-      .addUsage("template", "template")
+      .addUse("template", "template")
       .addSubCommand("SET", setProfile)
       .addSubCommand("ME", getProfile)
       .setCommand(getId);
@@ -84,7 +84,7 @@ async function getUserData({ msg, userId, platform }) {
         avatarUrl: "./files/rocket_league/psy.png"
     };
     if(platform === "steam") {
-        const profileJson = await getData(steamCheckUrl, true);
+        const profileJson = await Universal.getData(steamCheckUrl, { json: true });
         if(
             !profileJson || !profileJson.response || 
             !profileJson.response.players || !profileJson.response.players[0] 
@@ -124,7 +124,7 @@ async function getRankData({ msg, userId, platform }) {
     async function kyuuAPI(id, platform) {
         try {
             const url = `https://kyuu.moe/extra/rankapi.php?channel=${id}&user=${id}&plat=${platform}`;
-            const data = await getData(url, false);
+            const data = await Universal.getData(url, { json: false });
             if(!data || data === "") return null;
             const dataArray = await data.split(" | ");
             await dataArray.shift();
@@ -149,7 +149,7 @@ async function getRankData({ msg, userId, platform }) {
     async function calculatedAPI(id) {
         try {
             const url = `https://calculated.gg/api/player/${id}/ranks`;
-            const data = await getData(url, true);
+            const data = await Universal.getData(url, { json: true });
             if(!data) return null;
             dataJSON = { api: "calculated.gg" };
             for(let i in data) {
@@ -160,18 +160,9 @@ async function getRankData({ msg, userId, platform }) {
     }
 }
 
-function getData(url, json) {
-    return new Promise(function (resolve, reject) {
-        request(url, { json }, function (error, res, body) {
-            if (!error && res.statusCode == 200) resolve(body);
-            else reject(error);
-        });
-    });
-}
-
 async function getIdFromUrl(urlName) {
     const url = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${process.env.STEAM_KEY}&vanityurl=${urlName}`;
-    const jUser = await getData(url, true);
+    const jUser = await Universal.getData(url, { json: true });
     if(jUser.response.success != 1) return null;
     return jUser.response.steamid;
 }

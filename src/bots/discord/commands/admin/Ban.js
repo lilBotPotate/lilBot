@@ -1,20 +1,21 @@
 const {
     Discord,
-    Command 
+    Command,
+    Universal
 } = require("../../../../imports/Imports");
 
 module.exports = new Command.Admin()
       .setName("BAN")
       .setInfo("Someone was naughty I see :imp:")
-      .addUsage("ban {tag} {reason}", "bans the user")
+      .addUse("ban {tag} {reason}", "bans the user")
       .setCommand(banUser);
 
 function banUser(msg, args) {
-    if(!msg.mentions.members.first()) return "You need to tag the person you want to ban!".sendTemporary(msg);
+    if(!msg.mentions.members.first()) return Universal.sendTemporary(msg, "You need to mention the user you want to ban!");
     const bannedMember = msg.mentions.members.first();
     args.shift();
     const reason = args.join(" ");
-    if(!reason) return "You need to give a reason".sendTemporary(msg);
+    if(!reason) return Universal.sendTemporary(msg, "You need to give a reason why you want to ban that user");
     const eBan = new Discord.RichEmbed()
                .setColor("#ff0000")
                .setThumbnail(bannedMember.user.avatarURL)
@@ -25,5 +26,5 @@ function banUser(msg, args) {
         msg.delete();
         bannedMember.ban();
     });
-    if(!bannedMember.user.bot) bannedMember.send(eBan);
+    if(!bannedMember.user.bot) return bannedMember.send(eBan);
 }

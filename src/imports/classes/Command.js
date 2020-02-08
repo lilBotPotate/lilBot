@@ -10,7 +10,7 @@ class Command {
     constructor() {
         this.name;
         this.info;
-        this.usages = [];
+        this.uses = [];
         this.subCommands = new Map();
         this.command; 
         this.execCounter = 0;
@@ -85,10 +85,10 @@ class Command {
      * @param {String} description What happends when the command is used.
      * @returns {this}
      */
-    addUsage(format, description) {
+    addUse(format, description) {
         if(!format) this.throwSetError("Usage format");
         if(!description) this.throwSetError("Usage description");
-        this.usages.push({ format, description });
+        this.uses.push({ format, description });
         return this;
     }
 
@@ -123,16 +123,18 @@ class Command {
             "command", 
             `DISCORD >>> ${msg.guild === null ? "DM " : this.type} >> ${msg.author.tag} > ${this.name} ${args}`
         );
-        await msg.channel.startTyping();
         if(this.subCommands.size > 0 && args && args.length > 0) {
             const newArgs = [...args];
             const commandName = newArgs.shift().toUpperCase();
             if(this.subCommands.has(commandName)) {
+                await msg.channel.startTyping();
                 this.execCounter++;
-                return await this.subCommands.get(commandName)(msg, args);
+                await this.subCommands.get(commandName)(msg, args);
+                return await msg.channel.stopTyping();
             }
         }
-        if(!this.command) return await msg.channel.stopTyping();
+        if(!this.command) return;
+        await msg.channel.startTyping();
         this.execCounter++;
         await this.command(msg, args);
         return await msg.channel.stopTyping();
@@ -193,7 +195,35 @@ class Twitch extends Command {
         this.type = "TWITCH";
     }
 
-    // TODO: execute
+    /** 
+     * Executes either the main command or a sub command
+     * based on the arguments.
+     * 
+     * @param {Discord.Message} msg `Discord.Message` object
+     * @param {Array<String>} args
+     */
+    async execute() {
+        // if(this.disabled) return msg.channel.send("That command is disabled...");
+        // if(!await this.hasPermisson(msg)) return await msg.channel.send("You can't execute this command!");
+        // if(!msg) this.throwSetError("MSG in execute");
+        // Universal.sendLog(
+        //     "command", 
+        //     `DISCORD >>> ${msg.guild === null ? "DM " : this.type} >> ${msg.author.tag} > ${this.name} ${args}`
+        // );
+        // await msg.channel.startTyping();
+        // if(this.subCommands.size > 0 && args && args.length > 0) {
+        //     const newArgs = [...args];
+        //     const commandName = newArgs.shift().toUpperCase();
+        //     if(this.subCommands.has(commandName)) {
+        //         this.execCounter++;
+        //         return await this.subCommands.get(commandName)(msg, args);
+        //     }
+        // }
+        // if(!this.command) return await msg.channel.stopTyping();
+        // this.execCounter++;
+        // await this.command(msg, args);
+        // return await msg.channel.stopTyping();
+    }
     // TODO: hasPermisson
 }
 

@@ -10,8 +10,8 @@ const {
 module.exports = new Command.Admin()
       .setName("MODPOINTS")
       .setInfo("Give some points to the good mods!")
-      .addUsage("modpoints", "list all mods with their points")
-      .addUsage("modpoints {tag} {+,-,*,/}{points}", "modify points of the mod")
+      .addUse("modpoints", "list all mods with their points")
+      .addUse("modpoints {tag} {+,-,*,/}{points}", "modify points of the mod")
       .setCommand(modPoints);
 
 function modPoints(msg, args) {
@@ -88,9 +88,9 @@ function listMods({msg}) {
                     });
     
     const eMods = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setTitle("**MOD POINTS**")
-        .setDescription(pointsArr.join("\n"));
+                .setColor("RANDOM")
+                .setTitle("**MOD POINTS**")
+                .setDescription(pointsArr.join("\n"));
 
     return msg.channel.send(eMods);
 }   

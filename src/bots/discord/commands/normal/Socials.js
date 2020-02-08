@@ -8,7 +8,7 @@ const jInfo = require("../../../../files/json/info.json");
 module.exports = new Command.Normal()
       .setName("SOCIALS")
       .setInfo("Where can I find lilPotate?")
-      .addUsage("socials", "tells you where lilPotate is hiding")
+      .addUse("socials", "tells you where lilPotate is hiding")
       .setCommand(sendSocials);
 
 function sendSocials(msg) {
@@ -18,10 +18,10 @@ function sendSocials(msg) {
     for(i in jInfo.team) teamList += `**${i.toUpperCase()}:** ${jInfo.team[i]}\n`
 
     const eSocials = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setTitle("**LILPOTATE**")
-        .setDescription(socialsList)
-        .addField("**TEAM SENTINEL**", teamList);
+          .setColor("RANDOM")
+          .setTitle("**LILPOTATE**")
+          .setDescription(socialsList)
+          .addField("**TEAM SENTINEL**", teamList);
 
-    msg.channel.send(eSocials);
+    return msg.channel.send(eSocials);
 }

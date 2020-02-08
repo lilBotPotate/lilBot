@@ -7,7 +7,7 @@ const {
 module.exports = new Command.Admin()
       .setName("SUGGESTION")
       .setInfo("Have a great idea? Share it!")
-      .addUsage("suggestion {suggestion}", "send a suggestion")
+      .addUse("suggestion {suggestion}", "send a suggestion")
       .setCommand(makeSuggestion);
 
 function makeSuggestion(msg, args) {
@@ -63,10 +63,10 @@ function appendSuggestion(auth, msg, { username, suggestion }) {
 
 function sendSuggestionToChat({ msg, suggestion }) {
     const eSuggestion = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setTitle(`Suggestion from **${msg.author.tag}**`)
-        .setDescription(suggestion)
-        .setThumbnail(msg.author.avatarURL);
+          .setColor("RANDOM")
+          .setTitle(`Suggestion from **${msg.author.tag}**`)
+          .setDescription(suggestion)
+          .setThumbnail(msg.author.avatarURL);
 
     try {
         msg.channel.send(eSuggestion).then(async function(message) {

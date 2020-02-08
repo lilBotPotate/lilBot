@@ -5,11 +5,11 @@ const {
 module.exports = new Command.Normal()
       .setName("RR")
       .setInfo("PG friendly Russian Roulette")
-      .addUsage("rr {number}", "well you know how this goes")
+      .addUse("rr {number}", "well you know how this goes")
       .setCommand(russianRulette);
 
 function russianRulette(msg, args) {
-    if(args.length < 1) return msg.channel.send("Define the amount of potatoes");
+    if(!args || args.length < 1) return msg.channel.send("Define the amount of potatoes");
     if(isNaN(args[0])) return msg.channel.send("Argument has to be a number!");
 
     const numPotatoes = args[0];

@@ -10,22 +10,30 @@ const {
 module.exports = function(msg) {
     if(msg.author.bot) return;
     if(msg.channel.id === global.gConfig.discord.twitch_discord_chat) return sendToTwitch(msg);
-    if(canUseBot(msg)) return executeCommand(this, msg);
     if(!msg.mentions.everyone && msg.isMemberMentioned(this.user)) return botMention(msg);
+    if(canUseBot(msg)) return executeCommand(this, msg);
 };
 
 function executeCommand(client, msg) {
-    const args = msg.content.slice(global.gConfig.prefixes.normal.length).split(/ +/);
+    const commandTypes = {
+        normal: { prefix: global.gConfig.prefixes.normal, collection: "commands" },
+        admin:  { prefix: global.gConfig.prefixes.admin,  collection: "admin" },
+        master: { prefix: global.gConfig.prefixes.master, collection: "master" }
+    };
+
+    let commandType;
+    if(msg.content.startsWith(global.gConfig.prefixes.normal)) commandType = commandTypes.normal;
+    else if(msg.content.startsWith(global.gConfig.prefixes.admin)) commandType = commandTypes.admin;
+    else if(msg.content.startsWith(global.gConfig.prefixes.master)) commandType = commandTypes.master;
+    else return;
+
+    const args = msg.content.slice(commandType.prefix.length).split(/ +/);
     const command = args.shift().toUpperCase();
+    const commandCollection = client[commandType.collection];
 
-    let commandCollection;
-    if(msg.content.startsWith(global.gConfig.prefixes.normal)) commandCollection = client.commands;
-    else if(msg.content.startsWith(global.gConfig.prefixes.admin)) commandCollection = client.admin;
-    else if(msg.content.startsWith(global.gConfig.prefixes.master)) commandCollection = client.master;
-
-    
     if(!commandCollection) return Universal.sendLog("error", "Command collection doesn't exist!");
     if(!commandCollection.has(command)) return;
+
     return commandCollection.get(command).execute(msg, args);
 }
 
@@ -36,7 +44,8 @@ function botMention(msg, dm) {
         `DISCORD >> ${msg.guild === null ? "DM" : "SERVER"} > ${msg.author.tag} mentioned the bot`
     );
     const helpChannel = `**${global.gConfig.prefixes.normal}help:** Normal commands\n`
-                      + `**${global.gConfig.prefixes.admin}help:** Admin commands`;
+                      + `**${global.gConfig.prefixes.admin}help:** Admin commands\n`
+                      + `**${global.gConfig.prefixes.master}help:** Master commands`;
 
     const helpDM = `**${global.gConfig.prefixes.normal}help:** DM commands`
     const eMention = new Discord.RichEmbed()

@@ -11,13 +11,13 @@ const {
 module.exports = new Command.Normal()
       .setName("QUEUE")
       .setInfo("We want more 1v1s with lilPotate!")
-      .addUsage("queue", "list all people in the queue")
-      .addUsage("queue join", "join the queue")
-      .addUsage("queue leave", "leave the queue")
-      .addUsage("queue clear", "clear queue")
-      .addUsage("queue next", "returns the next person in queue")
-      .addUsage("queue start", "opens the queue")
-      .addUsage("queue stop", "closes the queue")
+      .addUse("queue", "list all people in the queue")
+      .addUse("queue join", "join the queue")
+      .addUse("queue leave", "leave the queue")
+      .addUse("queue clear", "clear queue")
+      .addUse("queue next", "returns the next person in queue")
+      .addUse("queue start", "opens the queue")
+      .addUse("queue stop", "closes the queue")
       .addSubCommand("JOIN", join)
       .addSubCommand("LEAVE", leave)
       .addSubCommand("CLEAR", clear)
@@ -35,9 +35,7 @@ function join(msg) {
 
     if(queueArr) {
         for(q of queueArr) {
-            if(q.discordID == msg.author.id) {
-                return msg.channel.send("You are already in the queue!");
-            }
+            if(q.discordID == msg.author.id) return msg.channel.send("You are already in the queue!");
         }
     }
 
@@ -49,18 +47,16 @@ function join(msg) {
     });
 
     const queueEmbed = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setTitle(`You are **${queueLen}.** in the queue!`)
-        .setDescription(`When its your turn, you will get notified in the chat. Join the private match with the following information:\n**USERNAME: lilpotate**\n**PASSWORD: ${password}**`);
+          .setColor("RANDOM")
+          .setTitle(`You are **${queueLen}.** in the queue!`)
+          .setDescription(`When its your turn, you will get notified in the chat. Join the private match with the following information:\n**USERNAME: lilpotate**\n**PASSWORD: ${password}**`);
 
-    msg.author.send(queueEmbed);
-
-    `[Discord][N][Queue] ${msg.author.username} joined the queue. Password: ${password}`.sendLog();
+    Universal.sendLog("info", `DISCORD >> NORMAL > ${msg.author.username} joined the queue. Password: ${password}`);
+    return msg.author.send(queueEmbed);
 }
 
 function leave(msg) {
     const queueArr = jQueue.get("queue");
-
     for (let q = 0; q < queueArr.length; q++) {
         const userQ = queueArr[q];
         if(userQ.discordID == msg.author.id) {
@@ -80,39 +76,38 @@ function clear(msg) {
 
 function next(msg) {
     if(!hasPermission(msg)) return msg.channel.send("You don't have permission to use that command!");
-    
     const queueArr = jQueue.get("queue");
     if(!queueArr || queueArr.length < 1) return msg.channel.send("Queue is empty");
     const user = queueArr.shift();
     jQueue.set("queue", queueArr);
 
     const playerEmbed = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setTitle(`**${user.username.toUpperCase()} ${user.subscriber ? ":star:" : ""}**`)
-        .setDescription(`**${user.password}**`);
+          .setColor("RANDOM")
+          .setTitle(`**${user.username.toUpperCase()} ${user.subscriber ? ":star:" : ""}**`)
+          .setDescription(`**${user.password}**`);
 
     msg.author.send(playerEmbed);
 
     if(user.discordID) global.gClientDiscord.users.get(user.discordID).send("You are **UP**!");
-    global.gClientTwitch.say("lilpotate", `@${user.username} is next!`);
+    return global.gClientTwitch.say("lilpotate", `@${user.username} is next!`);
 }
 
 function start(msg) {
     if(!hasPermission(msg)) return msg.channel.send("You don't have permission to use that command!");
     jQueue.set("up", true);
-    msg.channel.send("Queue is open!");
+    return msg.channel.send("Queue is open!");
 }
 
 function stop(msg) {
     if(!hasPermission(msg)) return msg.channel.send("You don't have permission to use that command!");
     jQueue.set("up", false);
-    msg.channel.send("Queue is closed!");
+    return msg.channel.send("Queue is closed!");
 }
 
 function list(msg) {
     const queueArr = jQueue.get("queue");
     if(!queueArr || queueArr.length <= 0) return msg.channel.send("Queue is empty");
-    msg.channel.send(`**QUEUE (${queueArr.length}):** ${queueArr.map(u => u.username).join(", ")}`);
+    return msg.channel.send(`**QUEUE (${queueArr.length}):** ${queueArr.map(u => u.username).join(", ")}`);
 }
 
 function hasPermission(msg) {

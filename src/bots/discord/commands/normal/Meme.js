@@ -1,36 +1,23 @@
 const {
     Discord,
-    request,
-    Command
+    Command,
+    Universal
 } = require("../../../../imports/Imports");
 
 module.exports = new Command.Normal()
       .setName("MEME")
       .setInfo("Just a random meme generator")
-      .addUsage("meme", "sends a random meme")
+      .addUse("meme", "sends a random meme")
       .setCommand(sendMeme);
 
 async function sendMeme(msg) {
-    const url = "https://meme-api.herokuapp.com/gimme";
-    const jMeme = await getJSON(url);
-
-    if(!jMeme) return "Something went wrong...".sendTemporary(msg);
-    
+    const jMeme = await Universal.getData("https://meme-api.herokuapp.com/gimme", { json: true });
+    if(!jMeme) return Universal.sendTemporary(msg, "Something went wrong...");
     const exampleEmbed = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setTitle(`**${jMeme.title}**`)
-        .setURL(jMeme.postLink)
-        .setImage(jMeme.url)
-        .setFooter("Powered by meme-api.herokuapp.com");
-
-    msg.channel.send(exampleEmbed);
-}
-
-function getJSON(url) {
-    return new Promise(function (resolve, reject) {
-        request(url, { json: true }, function (error, res, body) {
-            if (!error && res.statusCode == 200) resolve(body);
-            else reject(error);
-        });
-    });
+          .setColor("RANDOM")
+          .setTitle(`**${jMeme.title}**`)
+          .setURL(jMeme.postLink)
+          .setImage(jMeme.url)
+          .setFooter("Powered by meme-api.herokuapp.com");
+    return msg.channel.send(exampleEmbed);
 }

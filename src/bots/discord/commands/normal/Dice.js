@@ -5,7 +5,7 @@ const {
 module.exports = new Command.Normal()
       .setName("DICE")
       .setInfo("Dice that dice")
-      .addUsage("dice", "returns a random value from 1 - 6")
+      .addUse("dice", "returns a random value from 1 - 6")
       .setCommand(rollDice);
 
 function rollDice(msg) {
@@ -21,7 +21,7 @@ function rollDice(msg) {
                 if(counter == 0) return m.edit(`You rolled a **${number}**`);
                 rolling(counter - 1, m);
             }); 
-        }, 500);
+        }, 400);
     }
 }
 

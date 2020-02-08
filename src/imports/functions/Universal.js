@@ -1,3 +1,5 @@
+const request = require("request");
+
 /**
  * Logger.
  * @param {('error'|'warn'|'info'|'debug'|'command')} [type=info] Type of the output
@@ -56,14 +58,6 @@ exports.randomizeArray = (array) => {
  * @param {Discord.Message} msg `Discord.Message` object
  * @param {String} message Message that you want to send
  */
-exports.temporaryMSG = (msg, message) => {
-    msg.channel.send(message).then((m) => {
-        setTimeout(function () {
-            m.delete().catch();
-        }, 2000);
-    }).catch();
-}
-
 exports.sendTemporary = (msg, message) => {
     msg.channel.send(message).then((m) => {
         setTimeout(function () {
@@ -123,4 +117,26 @@ exports.sendToOwner = (message) => {
     const clientD = global.gClientDiscord;
     const userId = global.gConfig.discord.bot_owner_id;
     return clientD.fetchUser(userId).send(message);
+}
+
+/** 
+ * Fetches the data from the url.
+ * 
+ * @param {String} url
+ * @param {{json:Boolean, headers:JSON}} json
+ * 
+ * @returns {Promise<JSON | String>}
+ */
+exports.getData = (url, {json, headers}) => {
+    return new Promise(function (resolve, reject) {
+        request({
+            headers: headers ? headers : {},
+            uri: url,
+            method: "GET",
+            json: json ? json : true
+        }, function (error, res, body) {
+            if (!error && res.statusCode === 200) resolve(body);
+            else reject(error);
+        });
+    });
 }

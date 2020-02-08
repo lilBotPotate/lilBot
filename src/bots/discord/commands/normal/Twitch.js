@@ -1,23 +1,25 @@
 const {
     Discord,
-    request,
-    Command 
+    Command,
+    Universal
 } = require("../../../../imports/Imports");
+
+const headers = { "Client-ID": process.env.TWITCH_CLIENT_ID };
 
 module.exports = new Command.Normal()
       .setName("TWITCH")
       .setInfo("Twitch > Mixer")
-      .addUsage("twitch", "get lilPotate's status")
-      .addUsage("twitch {username}", "get defined users status")
+      .addUse("twitch", "get lilPotate's status")
+      .addUse("twitch {username}", "get defined users status")
       .setCommand(sendData);
 
 async function sendData(msg, args) {
     const channel = args[0] ? args[0] : "lilpotate";
-    let jUser = await getJSON(`https://api.twitch.tv/helix/users?login=${channel}`);
+    let jUser = await Universal.getData(`https://api.twitch.tv/helix/users?login=${channel}`, { json: true, headers });
     if(jUser.data.length < 1) return msg.channel.send("That channel doesn't exist!");
     jUser = jUser.data[0];
 
-    let jStream = await getJSON(`https://api.twitch.tv/helix/streams?user_login=${channel}`);
+    let jStream = await Universal.getData(`https://api.twitch.tv/helix/streams?user_login=${channel}`, { json: true, headers });
 
     const eStream = new Discord.RichEmbed();
     let isOnline = false;
@@ -34,25 +36,11 @@ async function sendData(msg, args) {
            .setImage(`${isOnline ? jStream.thumbnail_url.replace("{width}x{height}", "1920x1080") : jUser.offline_image_url}`);
 
     if(isOnline) {
-        let jGame = await getJSON(`https://api.twitch.tv/helix/games?id=${jStream.game_id}`);
+        let jGame = await Universal.getData(`https://api.twitch.tv/helix/games?id=${jStream.game_id}`, { json: true, headers });
         jGame = jGame.data[0];
         eStream.addField("**GAME**", jGame.name, true)
                .addField("**Viewers**", jStream.viewer_count, true);
     }
 
-    await msg.channel.send(eStream);
-}
-
-function getJSON(url) {
-    return new Promise(function (resolve, reject) {
-        request({
-            headers: { "Client-ID": process.env.TWITCH_CLIENT_ID },
-            uri: url,
-            method: "GET",
-            json: true
-        }, function (error, res, body) {
-            if (!error && res.statusCode == 200) resolve(body);
-            else reject(error);
-        });
-    });
+    return await msg.channel.send(eStream);
 }

@@ -9,8 +9,8 @@ const {
 module.exports = new Command.Admin()
       .setName("COMMAND")
       .setInfo("Are my default commands not good enough for you :cry:")
-      .addUsage("command add {name} {output}", "adds the command. Parameters:\n**-m**: mention\n**-u**: user who used the command")
-      .addUsage("command remove {name}", "removes the command")
+      .addUse("command add {name} {output}", "adds the command. Parameters:\n**-m**: mention\n**-u**: user who used the command")
+      .addUse("command remove {name}", "removes the command")
       .addSubCommand("ADD", add)
       .addSubCommand("REMOVE", remove);
 
