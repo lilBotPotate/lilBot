@@ -17,9 +17,14 @@ require("dotenv").config({ path: `./src/config/.env` });
  */
 global.gConfig = YAML.parse(fs.readFileSync("./src/config/config.yaml", "utf8"));
 
+/** 
+ * Creates Discord and Twitch bot
+ */
 require("./src/imports/functions/CreateBots")().then((areBotsCreated) => {
     if(!areBotsCreated) throw "Failed to create the bots";
 });
+
+require("./src/api/api")();
 
 const updates = require("./src/imports/functions/Updates");
 Async.forever(

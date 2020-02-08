@@ -1,3 +1,6 @@
+const Universal = require("./functions/Universal");
+const Command = require("./classes/Command");
+
 /**
  * Imports all the `npm` imports that are
  * specified in the `package.json`
@@ -6,8 +9,7 @@
  * @returns {Object} Object with imports
  */
 module.exports = { 
-    Universal: require("./functions/Universal"),
-    Command: require("./classes/Command"),
+    Universal, Command,
     Discord: require("discord.js"),
     tmi: require("tmi.js"),
     request: require("request"),
@@ -17,8 +19,13 @@ module.exports = {
     Async: require("async"),
     google: require("googleapis").google,
     YAML: require("yaml"),
-    init: () => {
-        this.Universal.sendLog("info", "Modules imported");
-        return new Date();
-    }
+    bcrypt: require("bcrypt"),
+    glob: require("glob"),
+    express: require("express"),
+    init: init()
+}
+
+function init() {
+    Universal.sendLog("info", "Modules imported");
+    return new Date();
 }

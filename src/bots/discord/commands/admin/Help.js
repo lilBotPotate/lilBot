@@ -21,9 +21,12 @@ function listCommand(client, msg, commandName) {
 	if(!client.admin.has(commandName)) return Universal.sendTemporary(msg, "That command doesn't exist!");
 	const command = client.admin.get(commandName);
 	const helpEmbed = new Discord.RichEmbed().setColor("RANDOM");
-	if(command.name) helpEmbed.setTitle(`**${command.name}**`);
-	if(command.info) helpEmbed.setDescription(`${command.info}`);
-	if(command.uses) {
+	if(command.name) helpEmbed.setTitle(`**${command.disabled ? `~~${command.name}~~` : command.name}**`);
+	const description = command.disabled
+					  ? `This command is disabled. Reason: **${command.reason}**\n`
+					  : command.info;
+	if(description) helpEmbed.setDescription(description);
+	if(command.uses && command.uses.length > 1) {
 		const usageText = command.uses
 						.map(u => `**${global.gConfig.prefixes.admin}${u.format}:** ${u.description}`)
 						.join("\n");

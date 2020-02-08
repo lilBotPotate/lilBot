@@ -16,7 +16,13 @@ const { jCommands } = require("./Stores");
  */
 module.exports = async function() {
     try { 
-        await createDiscordBot();
+        /** 
+         * Binds **Discord.Client** to 
+         * **NodeJs.Global** object @var gClientDiscord
+         * 
+         * @type {Discord<Client>}
+         */
+        global.gClientDiscord = await createDiscordBot();
         Universal.sendLog("info", "Finished creating Discord bot"); 
     } catch (error) {
         Universal.sendLog("error", `Couldn't create Discord bot\n${error}`); 
@@ -24,7 +30,13 @@ module.exports = async function() {
     }
 
     try { 
-        await createTwitchBot(); 
+        /** 
+         * Binds **Discord.Client** to 
+         * **NodeJs.Global** object @var gClientTwitch
+         * 
+         * @type {Object}
+         */
+        global.gClientTwitch = await createTwitchBot();
         Universal.sendLog("info", "Finished creating Twitch bot"); 
     } catch (error) {
         Universal.sendLog("error", `Couldn't create Twitch bot\n${error}`); 
@@ -41,14 +53,6 @@ module.exports = async function() {
  */
 async function createDiscordBot() {
     const clientDiscord = new Discord.Client();
-
-    /** 
-     * Binds **Discord.Client** to 
-     * **NodeJs.Global** object @var gClientDiscord
-     * 
-     * @type {Object}
-     */
-    global.gClientDiscord = clientDiscord;
 
     const onMessage = require("../../bots/discord/events/onMessage");
     const onGuildMemberAdd = require("../../bots/discord/events/onGuildMemberAdd");
@@ -144,14 +148,6 @@ async function createTwitchBot() {
             reconnect: true
         }
     });
-    
-    /** 
-     * Binds **Discord.Client** to 
-     * **NodeJs.Global** object @var gClientTwitch
-     * 
-     * @type {Object}
-     */
-    global.gClientTwitch = clientTwitch;
     
     const onMessage = require("../../bots/twitch/events/onMessage");
     const onDisconnect = require("../../bots/twitch/events/onDisconnect");

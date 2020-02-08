@@ -94,9 +94,12 @@ class Command {
 
     /** 
      * Disable this command.
+     * 
+     * @param {String} [reason]
      */
-    disable() {
+    disable(reason) {
         this.disabled = true;
+        if(reason) this.reason = reason;
         return this;
     }
     
@@ -118,25 +121,24 @@ class Command {
      * @returns {Promise<void>}
      */
     async execute(msg, args) {
-        if(this.disabled) return msg.channel.send("That command is disabled...");
+        if(this.disabled) return msg.channel.send(`This command is disabled. ${this.reason ? `Reason: **${this.reason}**` : ""}`);
         if(!await this.hasPermisson(msg)) return await msg.channel.send("You can't execute this command!");
         if(!msg) this.throwSetError("MSG in execute");
         Universal.sendLog(
             "command", 
             `DISCORD >>> ${msg.guild === null ? "DM " : this.type} >> ${msg.author.tag} > ${this.name} ${args}`
         );
+        await msg.channel.startTyping();
         if(this.subCommands.size > 0 && args && args.length > 0) {
             const newArgs = [...args];
             const commandName = newArgs.shift().toUpperCase();
             if(this.subCommands.has(commandName)) {
-                await msg.channel.startTyping();
                 this.execCounter++;
                 await this.subCommands.get(commandName)(msg, newArgs);
                 return await msg.channel.stopTyping();
             }
         }
-        if(!this.command) return;
-        await msg.channel.startTyping();
+        if(!this.command) return await msg.channel.stopTyping();
         this.execCounter++;
         await this.command(msg, args);
         return await msg.channel.stopTyping();

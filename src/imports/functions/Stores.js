@@ -15,8 +15,10 @@ module.exports = {
     jEnemys: new Store({ path: "./src/db/enemies.json", indent: null }),
     jMods: new Store({ path: "./src/db/mods.json", indent: null }),
     jRocketLeague: new Store({ path: "./src/db/rocket_league.json", indent: null }),
-    init: () => {
-        Universal.sendLog("info", "Stores initialized");
-        return new Date();
-    }
+    init: init()
+}
+
+function init() {
+    Universal.sendLog("info", "Stores initialized");
+    return new Date();
 }

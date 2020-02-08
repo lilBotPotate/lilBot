@@ -1,4 +1,5 @@
 const request = require("request");
+const bcrypt = require('bcrypt');
 
 /**
  * Logger.
@@ -139,4 +140,16 @@ exports.getData = (url, {json, headers}) => {
             else reject(error);
         });
     });
+}
+
+/** 
+ * Compares the password with API_PASSWORD
+ * 
+ * @param {String} password
+ * 
+ * @returns {Boolean}
+ */
+exports.checkPassword = async (password) => {
+    if(!password) return false;
+    return await bcrypt.compare(process.env.API_PASSWORD, password);
 }

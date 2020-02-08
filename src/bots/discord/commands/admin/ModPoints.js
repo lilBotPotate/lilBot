@@ -22,7 +22,7 @@ function modPoints(msg, args) {
 }
 
 function modifyPoints({msg, args}) {
-    if(!global.gConfig.disord_admins.find(id => id == msg.author.id)) {
+    if(!global.gConfig.discord.admins.find(id => id == msg.author.id)) {
         return msg.channel.send("You don't have permission to use this command!");
     }
     const mentionedUser = msg.mentions.users.first();

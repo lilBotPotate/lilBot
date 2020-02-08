@@ -21,9 +21,12 @@ function listCommand(client, msg, commandName) {
 	if(!client.commands.has(commandName)) return Universal.sendTemporary(msg, "That command doesn't exist!");
 	const command = client.commands.get(commandName);
 	const helpEmbed = new Discord.RichEmbed().setColor("RANDOM");
-	if(command.name) helpEmbed.setTitle(`**${command.name}**`);
-	if(command.info) helpEmbed.setDescription(`${command.info}`);
-	if(command.uses) {
+	if(command.name) helpEmbed.setTitle(`**${command.disabled ? `~~${command.name}~~` : command.name}**`);
+	const description = command.disabled
+					  ? `This command is disabled. Reason: **${command.reason}**\n`
+					  : command.info;
+	if(description) helpEmbed.setDescription(description);
+	if(command.uses && command.uses.length > 1) {
 		const usageText = command.uses
 						.map(u => `**${global.gConfig.prefixes.normal}${u.format}:** ${u.description}`)
 						.join("\n");
@@ -34,9 +37,9 @@ function listCommand(client, msg, commandName) {
 }
 
 function listAllCommands(client, msg) {
-	const commandArr = client
+	const commandArr = client.commands
 	.sort((a, b) => b.name - a.name)
-	.commands.map(cmd => {
+	.map(cmd => {
 		if(cmd.disabled) return `~~*${cmd.name}*~~`;
 		return cmd.name;
 	});
@@ -45,6 +48,6 @@ function listAllCommands(client, msg) {
 		.setColor("RANDOM")
 		.setTitle("**LIST OF COMMANDS**")
 		.setDescription(`**Prefix:** ${global.gConfig.prefixes.normal}`)
-		.addField("**COMMANDS:**", `**${commandArr.sort().join(", ")}**`);
+		.addField("**COMMANDS:**", `**${commandArr.join(", ")}**`);
 	return msg.channel.send(helpEmbed).catch();
 }

@@ -10,7 +10,7 @@ module.exports = new Command.Admin()
       .addUse("purge {amount}", "deletes the amount of messages that you specify. Max = 100")
       .addUse("purge {mention user} {amount}", "deletes the amount of messages from the user that you specify. Max = 100")
       .setCommand(purgeMessages)
-      .disable();
+      .disable("Broken");
       
 function purgeMessages(msg, args) {
     const mentionedUser = msg.mentions.users.first();

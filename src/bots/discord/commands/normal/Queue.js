@@ -111,6 +111,6 @@ function list(msg) {
 }
 
 function hasPermission(msg) {
-    for(i in global.gConfig.disord_admins) if(global.gConfig.disord_admins[i] == msg.author.id) return true;
+    for(i in global.gConfig.discord.admins) if(global.gConfig.discord.admins[i] == msg.author.id) return true;
     return false;
 }
