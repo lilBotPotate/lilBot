@@ -15,18 +15,18 @@ module.exports = new Command.Admin()
       .addSubCommand("REMOVE", remove);
 
 function add(msg, args) {
-    const client = global.gClientDiscord;
     const name = args.shift().toUpperCase();
     const output = args.join(" ");
-    if(client.commands.has(name)) return msg.channel.send("That command allready exists!");
+    if(global.gClientDiscord.commands.has(name)) return msg.channel.send("That command already exists!");
     if(!output) return msg.channel.send("You need to enter the output of the command");
-    const FormatCommand = require("../../../FormatCommand.js");
+    const FormatCommand = require("../../../../imports/functions/FormatCommand");
     jCommands.set(`commands.${name}`, output);
-    client.commands.set(name, {
-        name: name,
-        description: { "info": "Custom command" },
-        execute(msg, args) { return msg.channel.send(FormatCommand(msg, output)); }
-    });
+    global.gClientDiscord.commands.set(name, new Command.Normal()
+          .setName(name)
+          .setInfo("This is a custom command")
+          .addUse(name.toLowerCase(), output)
+          .setCommand((msg) => msg.channel.send(FormatCommand(msg, output)))
+    );
     return msg.channel.send(`Command **${name}** was added!`);
 }
 

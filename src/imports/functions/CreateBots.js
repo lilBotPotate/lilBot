@@ -2,7 +2,8 @@ const {
     Discord,
     fs,
     tmi,
-    Universal
+    Universal,
+    Command
 } = require("../Imports");
 
 const { jCommands } = require("./Stores");
@@ -85,13 +86,21 @@ async function createDiscordBot() {
         ]
 
         for(set of commandCollections) {
-            const commandFiles = fs.readdirSync(`./src/bots/discord/commands/${set[0]}`).filter(file => file.endsWith(".js"));
+            const commandFiles = fs.readdirSync(`./src/bots/discord/commands/${set[0]}`)
+                                   .filter(file => file.endsWith(".js"));
+
             for(const file of commandFiles) {
                 try { 
                     const command = require(`../../bots/discord/commands/${set[0]}/${file}`);
+                    if(set[0].toUpperCase() !== command.type.toUpperCase()) {
+                        throw new Error(`Wrong command type! ${command.type.toUpperCase()} instead of ${set[0].toUpperCase()}`)
+                    }
                     await set[1].set(command.name, command);
                 } catch (error) {
-                    throw Universal.sendLog("error", `Failed to add ${file} to ${set[0]} Discord collection\n${error}`); 
+                    throw Universal.sendLog(
+                        "error", 
+                        `Failed to add ${file} to ${set[0]} Discord collection\n${error}`
+                    ); 
                 }
             }
         }
@@ -104,14 +113,14 @@ async function createDiscordBot() {
         const customCommands = await jCommands.get("commands");
         if(customCommands) {
             for(command in customCommands) {
-                let output = await customCommands[command];
-                await clientDiscord.commands.set(command.toUpperCase(), {
-                    name: await command.toUpperCase(),
-                    description: { "info": "Custom command" },
-                    execute(msg, args) { 
-                        return msg.channel.send(FormatCommand(msg, output)); 
-                    }
-                });
+                const output = await customCommands[command];
+                const commandName = command.toUpperCase();
+                await clientDiscord.commands.set(commandName, new Command.Normal()
+                      .setName(commandName)
+                      .setInfo("This is a custom command")
+                      .addUse(commandName.toLowerCase(), output)
+                      .setCommand((msg) => msg.channel.send(FormatCommand(msg, output)))
+                );
             }
         }
         return Universal.sendLog("info", "Finished Discord commands setup");

@@ -1,6 +1,5 @@
 const {
     Discord,
-    request,
     Command,
     Universal
 } = require("../../../../imports/Imports");

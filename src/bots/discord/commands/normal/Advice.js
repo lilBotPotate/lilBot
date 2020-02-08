@@ -1,5 +1,4 @@
 const {
-    request,
     Command,
     Universal
 } = require("../../../../imports/Imports");
@@ -12,7 +11,7 @@ module.exports = new Command.Normal()
       .setCommand(sendAdvice);
 
 async function sendAdvice(msg) {
-    const jAdvice = await JSON.parse(await Universal.getData("https://api.adviceslip.com/advice", { json: false }));
+    const jAdvice = await Universal.getData("https://api.adviceslip.com/advice", { json: true });
     const mention = msg.mentions.users.first();
-    return msg.channel.send(`${mention ? `${mention} ` : ""}${jAdvice.slip.advice}`);
+    return msg.channel.send(`${mention ? mention : msg.author}, ${jAdvice.slip.advice}`);
 }

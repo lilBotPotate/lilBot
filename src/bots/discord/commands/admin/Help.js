@@ -22,7 +22,7 @@ function listCommand(client, msg, commandName) {
 	const command = client.admin.get(commandName);
 	const helpEmbed = new Discord.RichEmbed().setColor("RANDOM");
 	if(command.name) helpEmbed.setTitle(`**${command.name}**`);
-	if(command.info) helpEmbed.setDescription(`${command.description.info}`);
+	if(command.info) helpEmbed.setDescription(`${command.info}`);
 	if(command.uses) {
 		const usageText = command.uses
 						.map(u => `**${global.gConfig.prefixes.admin}${u.format}:** ${u.description}`)
@@ -34,7 +34,9 @@ function listCommand(client, msg, commandName) {
 }
 
 function listAllCommands(client, msg) {
-	const commandArr = client.admin.map(cmd => {
+	const commandArr = client.admin
+	.sort((a, b) => b.name - a.name)
+	.map(cmd => {
 		if(cmd.disabled) return `~~*${cmd.name}*~~`;
 		return cmd.name;
 	});
@@ -43,6 +45,6 @@ function listAllCommands(client, msg) {
 		.setColor("RANDOM")
 		.setTitle("**LIST OF ADMIN COMMANDS**")
 		.setDescription(`**Prefix:** ${global.gConfig.prefixes.admin}`)
-		.addField("**COMMANDS:**", `**${commandArr.sort().join(", ")}**`);
+		.addField("**COMMANDS:**", `**${commandArr.join(", ")}**`);
 	return msg.channel.send(helpEmbed).catch();
 }

@@ -131,7 +131,7 @@ class Command {
             if(this.subCommands.has(commandName)) {
                 await msg.channel.startTyping();
                 this.execCounter++;
-                await this.subCommands.get(commandName)(msg, args);
+                await this.subCommands.get(commandName)(msg, newArgs);
                 return await msg.channel.stopTyping();
             }
         }

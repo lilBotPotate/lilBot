@@ -10,8 +10,8 @@ module.exports = new Command.Normal()
 
 function rollDice(msg) {
     const text = "**ROLLING!**";
-    msg.channel.send(text).then(m => {
-        rolling(5, m);
+    return msg.channel.send(text).then(m => {
+        rolling(4, m);
     });
 
     function rolling(counter, m) {

@@ -14,7 +14,7 @@ module.exports = new Command.Normal()
 async function sendDabImage(msg) {
     const user = msg.mentions.users.first() ? msg.mentions.users.first() : msg.author;
 
-    const potateDab = await Canvas.loadImage("../../../../files/images/dab.png");
+    const potateDab = await Canvas.loadImage("./src/files/images/dab.png");
     const avatarImage = await Canvas.loadImage(user.displayAvatarURL);
 
     const canvas = Canvas.createCanvas(avatarImage.width, avatarImage.height);
