@@ -11,3 +11,5 @@ src/db/pokemon/*.json
 # Dirs
 node_modules/
 .idea/
+
+.vscode/launch.json

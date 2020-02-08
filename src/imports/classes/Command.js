@@ -210,6 +210,7 @@ class Twitch extends Command {
      * @returns {Promise<void>}
      */
     async execute(client, channel, tags, args, self) {
+        if(tags["message-type"] != "chat") return;
         if(this.disabled) return client.say(channel, "That command is disabled...");
         Universal.sendLog(
             "command", 

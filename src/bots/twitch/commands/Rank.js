@@ -1,26 +1,25 @@
 const {
-    request
+    Command,
+    Universal
 } = require("../../../imports/Imports.js");
 
+module.exports = new Command.Twitch()
+      .setName("RANK2")
+      .setInfo("Ranks for days boii")
+      .addUse("rank2", "get lilPotate's ranks")
+      .setCommand(sendRand);
+
 module.exports = {
-    name: "RANK2",
+    name: "",
     execute(client, channel, tags, args, self) {
-        const name = args.length < 1 ? "76561198205508836" : args[0];
+
         return sendRand(client, channel, name);
     }
 };
 
-async function sendRand(client, channel, name) {
+async function sendRand(client, channel) {
+    const name = !args || args.length < 1 ? "76561198205508836" : args.shift();
     const url = `http://kyuu.moe/extra/rankapi.php?channel=lilPotate&user=${name}&plat=steam`;
-    const data = await getData(url);
+    const data = await Universal.getData(url, { json: false });
     await client.say(channel, data);
-}
-
-function getData(url) {
-    return new Promise(function (resolve, reject) {
-        request(url, function (error, res, body) {
-            if (!error && res.statusCode == 200) resolve(body);
-            else reject(error);
-        });
-    });
 }

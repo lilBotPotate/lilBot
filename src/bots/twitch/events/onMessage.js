@@ -1,20 +1,10 @@
-const {
-    Universal
-} = require("../../../imports/Imports");
-
 module.exports = function(channel, tags, message, self) {
     sendToDiscord(tags, message);
     if(!message.startsWith(global.gConfig.prefixes.normal)) return;
     const args = message.slice(global.gConfig.prefixes.normal.length).split(/ +/);
     const command = args.shift().toUpperCase();
     if(!this.commands.has(command)) return;
-    try {
-        Universal.sendLog(
-            "command", 
-            `Twitch >> ${tags.username} > ${command} ${args}`
-        );
-        return this.commands.get(command).execute(this, channel, tags, args, self);
-    } catch (error) { Universal.sendLog("error", `Failed executing Twitch command\n${error}`); }
+    return this.commands.get(command).execute(this, channel, tags, args, self);
 };
 
 function sendToDiscord(tags, message) {

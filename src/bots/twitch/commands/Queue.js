@@ -1,35 +1,26 @@
 const {
-    Universal
+    Universal,
+    Command
 } = require("../../../imports/Imports");
 
 const {
     jQueue
 } = require("../../../imports/functions/Stores.js");
 
-module.exports = {
-    name: "QUEUE",
-    execute(client, channel, tags, args, self) {
-        if(tags["message-type"] != "chat") return client.whisper(tags.username, "I don't do DM's...");
+module.exports = new Command.Twitch()
+      .setName("QUEUE")
+      .setInfo("We want more 1v1s with lilPotate")
+      .addUse("queue", "sends the message")
+      .addSubCommand("JOIN", join)
+      .addSubCommand("LEAVE", leave)
+      .addSubCommand("CLEAR", clear)
+      .addSubCommand("NEXT", next)
+      .addSubCommand("START", start)
+      .addSubCommand("STOP", stop)
+      .addSubCommand("HELP", help)
+      .setCommand(list);
 
-        const command = args[0] ? args.shift().toUpperCase() : "LIST";
-        switch(command) {
-            case "JOIN": return join(client, tags, channel);
-            case "LEAVE": return leave(client, tags, channel);
-            case "EMPTY":
-            case "CLEAR": return clear(client, tags, channel);
-            case "NEXT": return next(client, tags, channel);
-            case "OPEN":
-            case "START": return start(client, tags, channel);
-            case "CLOSE":
-            case "STOP": return stop(client, tags, channel);
-            case "HELP": return help(client, tags, channel);
-            case "LIST":
-            default: return list(client, tags, channel);
-        }
-    }
-};
-
-function join(client, tags, channel) {
+function join(client, channel, tags) {
     if(!jQueue.get("up")) return client.say(channel, `@${tags.username} queue is closed...`);
 
     const password = Universal.generatePassword(5);
@@ -60,7 +51,7 @@ function join(client, tags, channel) {
     `[Twitch][Queue] ${tags["display-name"]} joined the queue. Password: ${password}`.sendLog();
 }
 
-function leave(client, tags, channel) {
+function leave(client, channel, tags) {
     const queueArr = jQueue.get("queue");
 
     for (let q = 0; q < queueArr.length; q++) {
@@ -74,13 +65,13 @@ function leave(client, tags, channel) {
     return client.say(channel, `@${tags.username} you are not in the queue!`);
 }
 
-function clear(client, tags, channel) {
+function clear(client, channel, tags) {
     if(!hasPermission(tags)) return;
     jQueue.set("queue", []);
     return client.say(channel, `@${tags.username} queue was cleared!`);
 }
 
-function next(client, tags, channel) {
+function next(client, channel, tags) {
     if(!hasPermission(tags)) return;
 
     const queueArr = jQueue.get("queue");
@@ -98,26 +89,26 @@ function next(client, tags, channel) {
     client.say(channel, `@${user.username} is next!`);
 }
 
-function start(client, tags, channel) {  
+function start(client, channel, tags) {  
     if(!hasPermission(tags)) return;
     jQueue.set("up", true);
     client.say(channel, "Queue is open!");
 }
 
-function stop(client, tags, channel) {
+function stop(client, channel, tags) {
     if(!hasPermission(tags)) return;
     jQueue.set("up", false);
     client.say(channel, "Queue is closed!");
 }
 
-function help(client, tags, channel) {
+function help(client, channel, tags) {
     client.say(
         channel, 
         `@${tags.username} commands: "!queue join", "!queue leave" and "!queue list"`
     );
 }
 
-function list(client, tags, channel) {
+function list(client, channel, tags) {
     const queueArr = jQueue.get("queue");
     if(!queueArr || queueArr.length <= 0) return client.say(channel, `@${tags.username} queue is empty`);
     client.say(channel, `QUEUE (${queueArr.length}): ${queueArr.map(u => u.username).join(", ")}`);
