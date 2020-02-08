@@ -114,6 +114,8 @@ class Command {
      * 
      * @param {Discord.Message} msg `Discord.Message` object
      * @param {Array<String>} args
+     * 
+     * @returns {Promise<void>}
      */
     async execute(msg, args) {
         if(this.disabled) return msg.channel.send("That command is disabled...");
@@ -199,32 +201,33 @@ class Twitch extends Command {
      * Executes either the main command or a sub command
      * based on the arguments.
      * 
-     * @param {Discord.Message} msg `Discord.Message` object
+     * @param {tmi.client} client `tmi.client` object
+     * @param {String} channel
+     * @param {JSON} tags
      * @param {Array<String>} args
+     * @param {*} self
+     * 
+     * @returns {Promise<void>}
      */
-    async execute() {
-        // if(this.disabled) return msg.channel.send("That command is disabled...");
-        // if(!await this.hasPermisson(msg)) return await msg.channel.send("You can't execute this command!");
-        // if(!msg) this.throwSetError("MSG in execute");
-        // Universal.sendLog(
-        //     "command", 
-        //     `DISCORD >>> ${msg.guild === null ? "DM " : this.type} >> ${msg.author.tag} > ${this.name} ${args}`
-        // );
-        // await msg.channel.startTyping();
-        // if(this.subCommands.size > 0 && args && args.length > 0) {
-        //     const newArgs = [...args];
-        //     const commandName = newArgs.shift().toUpperCase();
-        //     if(this.subCommands.has(commandName)) {
-        //         this.execCounter++;
-        //         return await this.subCommands.get(commandName)(msg, args);
-        //     }
-        // }
-        // if(!this.command) return await msg.channel.stopTyping();
-        // this.execCounter++;
-        // await this.command(msg, args);
-        // return await msg.channel.stopTyping();
+    async execute(client, channel, tags, args, self) {
+        if(this.disabled) return client.say(channel, "That command is disabled...");
+        Universal.sendLog(
+            "command", 
+            `TWITCH >> ${tags.username} > ${this.name} ${args}`
+        );
+
+        if(this.subCommands.size > 0 && args && args.length > 0) {
+            const newArgs = [...args];
+            const commandName = newArgs.shift().toUpperCase();
+            if(this.subCommands.has(commandName)) {
+                this.execCounter++;
+                return await this.subCommands.get(commandName)(client, channel, tags, args, self);
+            }
+        }
+        if(!this.command) return;
+        this.execCounter++;
+        return await this.command(client, channel, tags, args, self);
     }
-    // TODO: hasPermisson
 }
 
 /** 
