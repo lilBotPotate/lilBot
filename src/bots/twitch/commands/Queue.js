@@ -24,7 +24,8 @@ module.exports = new Command.Twitch()
       .addSubCommand("START", start)
       .addSubCommand("STOP", stop)
       .addSubCommand("HELP", help)
-      .setCommand(list);
+      .setCommand(list)
+      .disable("Rebasing it into a new command");
 
 function join(client, channel, tags) {
     if(!jQueue.get("up")) return client.say(channel, `@${tags.username} queue is closed...`);

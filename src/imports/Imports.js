@@ -1,5 +1,7 @@
 const Universal = require("./functions/Universal");
 const Command = require("./classes/Command");
+const Route = require("./functions/Route");
+const Database = require("./database/Database");
 
 /**
  * Imports all the `npm` imports that are
@@ -9,7 +11,7 @@ const Command = require("./classes/Command");
  * @returns {Object} Object with imports
  */
 module.exports = { 
-    Universal, Command,
+    Universal, Command, Route, Database,
     Discord: require("discord.js"),
     tmi: require("tmi.js"),
     request: require("request"),

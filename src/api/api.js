@@ -6,6 +6,10 @@ const {
 
 module.exports = function() {
     const app = express();
+    const cors = require('cors');
+    app.use(cors());
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
     app.listen(process.env.API_PORT, () => {
         Universal.sendLog("info", `API listening on port ${process.env.API_PORT}!`)
     });

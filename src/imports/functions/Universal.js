@@ -78,7 +78,7 @@ exports.sendTemporary = (msg, message) => {
  * @returns {String} Generated password
  */
 exports.generatePassword = (length) => {
-    let chars = "abcdefghijklmnpqrstuvwxyz123456789";
+    let chars = "abcdefghijkmnpqrstuvwxyz123456789";
     let password = "";
     for (let i = 0; i < length; i++) password += chars.charAt(Math.floor(Math.random() * chars.length));
     return password;
@@ -140,16 +140,4 @@ exports.getData = (url, {json, headers}) => {
             else reject(error);
         });
     });
-}
-
-/** 
- * Compares the password with API_PASSWORD
- * 
- * @param {String} password
- * 
- * @returns {Boolean}
- */
-exports.checkPassword = async (password) => {
-    if(!password) return false;
-    return await bcrypt.compare(process.env.API_PASSWORD, password);
 }

@@ -24,7 +24,8 @@ module.exports = new Command.Normal()
       .addSubCommand("NEXT", next)
       .addSubCommand("START", start)
       .addSubCommand("STOP", stop)
-      .setCommand(list);
+      .setCommand(list)
+      .disable("Rebasing it into a new command");
 
 function join(msg) {
     if(!jQueue.get("up")) return msg.channel.send("Queue is closed...");

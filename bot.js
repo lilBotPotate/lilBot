@@ -1,7 +1,8 @@
 const {
     Async,
     fs,
-    YAML
+    YAML,
+    Universal
 } = require("./src/imports/Imports");
 
 /** 
@@ -24,16 +25,31 @@ require("./src/imports/functions/CreateBots")().then((areBotsCreated) => {
     if(!areBotsCreated) throw "Failed to create the bots";
 });
 
+/** 
+ * Initializes the bot API
+ */
 require("./src/api/api")();
 
-const updates = require("./src/imports/functions/Updates");
+const Updates = require("./src/imports/functions/Updates");
 Async.forever(
     function(next) {
         setTimeout(function() {
-            try { updates(); } 
-            catch (error) { `[Error]: ${error}`.sendLog(); }
+            try { Updates(); } 
+            catch (error) { Universal.sendLog("error", `Failed to run updates:\n${error}`); }
             next();
         }, (Math.floor(Math.random() * 60) + 15) * 1000);
     },
-    function(err) { return `[Error]: ${err}`.sendLog(); }
+    function(error) { return Universal.sendLog("error", `Failed to run Async.forever (updates):\n${error}`); }
+);
+
+const UpdateAvatar = require("./src/imports/functions/UpdateAvatar");
+Async.forever(
+    function(next) {
+        setTimeout(function() {
+            try { UpdateAvatar(); } 
+            catch (error) { Universal.sendLog("error", `Failed to run UpdateAvatar:\n${error}`); }
+            next();
+        }, (Math.floor(Math.random() * 2) + 1) * 3600000);
+    },
+    function(error) { Universal.sendLog("error", `Failed to run Async.forever (UpdateAvatar):\n${error}`); }
 );
