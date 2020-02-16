@@ -18,10 +18,11 @@ const {
 module.exports = new Command.Normal()
       .setName("RANK")
       .setInfo("Its complicated")
-      .addUse("template", "template")
-      .addSubCommand("SET", setProfile)
-      .addSubCommand("ME", getProfile)
-      .setCommand(getId);
+      .addUse("ugh", "ugh")
+      // .addSubCommand("SET", setProfile)
+      // .addSubCommand("ME", getProfile)
+      .setCommand(getId)
+      .disable();
       
 /** 
  * @param {{msg: Object, args: Array<String>}}
@@ -50,7 +51,6 @@ async function getProfile(msg, args) {
 }
 
 async function getId(msg, args) {
-    if(!args || args.length < 1) return msg.channel.send("Missing arguments");
     let userId = args.shift();
     const platform = args && args.length > 0 ? await args.shift().toLowerCase() : "steam";
     if(isValidPlatform(platform)) return await msg.channel.send(`That is not a valid platform! Choose from: ${validPlatforms.join(", ")}`);
@@ -81,7 +81,7 @@ async function getUserData({ msg, userId, platform }) {
     const rankData = await getRankData({ msg, userId, platform });
     let profileData = {
         name: userId,
-        avatarUrl: "./files/rocket_league/psy.png"
+        avatarUrl: "./src/files/images/rocket_league/psy.png"
     };
     if(platform === "steam") {
         const profileJson = await Universal.getData(steamCheckUrl, { json: true });
@@ -103,11 +103,12 @@ async function getUserData({ msg, userId, platform }) {
 
 async function getRankData({ msg, userId, platform }) {
     const selectedAPI = ({
-        "steam": async (userId) => {
-            const rankData = await calculatedAPI(userId);
-            if(rankData == null) return await kyuuAPI(userId, "steam");
-            return rankData;
-        }, 
+        // "steam": async (userId) => {
+        //     const rankData = await calculatedAPI(userId);
+        //     if(rankData == null) return await kyuuAPI(userId, "steam");
+        //     return rankData;
+        // }, 
+        "steam": async (userId) => await kyuuAPI(userId, "steam"),
         "ps": async (userId) => await kyuuAPI(userId, "ps"), 
         "xbox": async (userId) => await kyuuAPI(userId, "xbox") 
     })[platform];
@@ -168,8 +169,8 @@ async function getIdFromUrl(urlName) {
 }
 
 async function createImage({ rankData, profileData }) {
-    const iCard = await Canvas.loadImage("./files/rocket_league/card.png");
-    const iRingShadow = await Canvas.loadImage("./files/rocket_league/rank_rings/shadow.png");
+    const iCard = await Canvas.loadImage("./src/files/images/rocket_league/card.png");
+    const iRingShadow = await Canvas.loadImage("./src/files/images/rocket_league/rank_rings/shadow.png");
 
     const canvas = Canvas.createCanvas(iCard.width, iCard.height);
     const ctx = canvas.getContext("2d");
@@ -197,7 +198,7 @@ async function createImage({ rankData, profileData }) {
             const element = selectedRow[j];
             const elementData = rankData[element];
             if(!rankImages[elementData.rank]) {
-                rankImages[elementData.rank] = await Canvas.loadImage(`./files/rocket_league/rank_icons/${elementData.rank}.png`);
+                rankImages[elementData.rank] = await Canvas.loadImage(`./src/files/images/rocket_league/rank_icons/${elementData.rank}.png`);
             }
             ctx.drawImage(rankImages[elementData.rank], 458 + 224*j, 114 + 257*i, 160, 136);
             ctx.fillText(elementData.mmr, 458 + 80 + 224*j, 114 + 161 + 257*i);
@@ -206,7 +207,7 @@ async function createImage({ rankData, profileData }) {
     }
     
     const ringName = ranks[maxRank].ring_name ? ranks[maxRank].ring_name : "unranked";
-    const iRing = await Canvas.loadImage(`./files/rocket_league/rank_rings/${ringName}.png`);
+    const iRing = await Canvas.loadImage(`./src/files/images/rocket_league/rank_rings/${ringName}.png`);
     ctx.drawImage(iRing, 0, 0);
 
     const today = new Date();
@@ -241,7 +242,7 @@ function sendRankData({ msg, args, rankData, profileData }) {
         case "PHOTO":
         case "CARD":
         case "IMAGE": return sendImage({ msg, rankData, profileData });
-        default: return sendEmbed({ msg, rankData, profileData });
+        default: return sendImage({ msg, rankData, profileData });
     }
 }
 

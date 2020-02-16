@@ -5,10 +5,17 @@ const {
     Universal
 } = require("./src/imports/Imports");
 
+const {
+    envTest,
+    configTest
+} = require("./src/test/Config_Test");
+
 /** 
  * Inserts configs from `./config/.env` into `process.env`
 */
 require("dotenv").config({ path: `./src/config/.env` });
+
+envTest();
 
 /** 
  * Inserts configs from `./config/config.yaml` into 
@@ -17,6 +24,8 @@ require("dotenv").config({ path: `./src/config/.env` });
  * @type {Object}
  */
 global.gConfig = YAML.parse(fs.readFileSync("./src/config/config.yaml", "utf8"));
+
+configTest()
 
 /** 
  * Creates Discord and Twitch bot

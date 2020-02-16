@@ -1,9 +1,12 @@
-exports.checkEnv = () => {
+const {
+    Universal
+} = require("../imports/Imports");
+
+exports.envTest = () => {
     const envPar = [
-        "DISCORD_TOKEN", "TWITCH_TOKEN", "TWITCH_CLIENT_ID", "STEAM_KEY", "GOOGLE_SUGGESTION_SHEET_ID", 
-        "PREFIX", "PREFIX_ADMIN", "PREFIX_MASTER", "TWITCH_USERNAME", "DEFAULT_DISCORD_ROLE", 
-        "SUBSCRIBER_DISCORD_ROLE", "LILPOTATE_LIVE_CHANNEL", "TWITCH_DISCORD_CHAT", "BOT_MASTER_DISCORD_ID", 
-        "TWITCH_CHANNEL", "DEFAULT_STEAM_ID"
+        "DISCORD_TOKEN", "TWITCH_TOKEN", "TWITCH_CLIENT_ID", 
+        "STEAM_KEY", "GOOGLE_SUGGESTION_SHEET_ID", "GOOGLE_CREDENTIALS", 
+        "GOOGLE_TOKEN", "API_PORT", "API_PASSWORD"
     ];
 
     for(par of envPar) {
@@ -16,8 +19,39 @@ exports.checkEnv = () => {
             throw new Error(error);
         }
     }
-
-    console.log("ENV tests passed!");
+    Universal.sendLog("info", "ENV tests passed!");
 }
 
-// lilBunane
+exports.configTest = () => {
+    const confParam = [
+        "prefixes.normal", "prefixes.admin", "prefixes.master",
+        "discord.default_role", "discord.subscriber_role", "discord.twitch_updates_chat", "discord.twitch_discord_chat", "discord.bot_owner_id", 
+        "discord.admin_roles", "discord.admins",
+        "twitch.username", "extra.default_steam_id", 
+        "twitch.icons.no_badge", "twitch.icons.subscriber", "twitch.icons.moderator", "twitch.icons.sub_gifter", 
+        "twitch.icons.partner", "twitch.icons.bits", "twitch.icons.premium", "twitch.icons.founder",
+        "twitch.channels", "twitch.admins"
+    ];
+
+    for(let par of confParam) {
+        const paramArr = par.split(".");
+        let configVar = global.gConfig;
+        for (let i = 0; i < paramArr.length; i++) {
+            configVar = configVar[paramArr[i]]
+            if(!configVar) {
+                const error = `${par} is not defined in config.yaml`;
+                throw new Error(error);
+            }
+            else if((typeof configVar === "string") && configVar.trim() === "") {
+                const error = `${par} is empty inconfig.yaml`;
+                throw new Error(error);
+            }   
+            else if((typeof configVar === "object") && configVar === {}) {
+                const error = `${par} is empty inconfig.yaml`;
+                throw new Error(error);
+            }  
+        }
+    }
+
+    Universal.sendLog("info", "ENV tests passed!");
+}
