@@ -2,6 +2,13 @@ const {
     Command,
 } = require("../../../../imports/Imports");
 
-module.exports = new Command.Normal()
-      .setName("PRIVATE")
-      .disable("Not finished");
+const {
+    wsPrivateMatch
+} = require("../../../../imports/functions/WebSockets");
+
+module.exports = new Command.Normal("PM")
+      .setInfo("Command For private matches!")
+      .setCommand(() => console.log("haha"))
+      .disable();
+
+

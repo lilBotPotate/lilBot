@@ -1,7 +1,6 @@
 const Universal = require("./functions/Universal");
 const Command = require("./classes/Command");
-const Route = require("./functions/Route");
-const Database = require("./database/Database");
+const ServerSocket = require("./classes/ServerSocket");
 
 /**
  * Imports all the `npm` imports that are
@@ -11,7 +10,7 @@ const Database = require("./database/Database");
  * @returns {Object} Object with imports
  */
 module.exports = { 
-    Universal, Command, Route, Database,
+    Universal, Command, ServerSocket,
     Discord: require("discord.js"),
     tmi: require("tmi.js"),
     request: require("request"),
@@ -24,6 +23,7 @@ module.exports = {
     bcrypt: require("bcrypt"),
     glob: require("glob"),
     express: require("express"),
+    WebSocket: require("ws"),
     init: init()
 }
 

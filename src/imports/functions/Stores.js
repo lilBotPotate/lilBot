@@ -13,8 +13,6 @@ module.exports = {
     jEnemys: new Store({ path: "./src/db/enemies.json", indent: null }),
     jMods: new Store({ path: "./src/db/mods.json", indent: null }),
     jRocketLeague: new Store({ path: "./src/db/rocket_league.json", indent: null }),
-    jTournaments: new Store({ path: "./src/db/tournaments.json", indent: null }),
-    jPrivateMatches: new Store({ path: "./src/db/private-matches.json", indent: null }),
     init: init()
 }
 

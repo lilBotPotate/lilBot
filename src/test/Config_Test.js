@@ -53,5 +53,5 @@ exports.configTest = () => {
         }
     }
 
-    Universal.sendLog("info", "ENV tests passed!");
+    Universal.sendLog("info", "CONFIG tests passed!");
 }

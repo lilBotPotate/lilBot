@@ -7,9 +7,9 @@ class Command {
     /** 
      * Create a `Command` object.
     */
-    constructor() {
-        this.name;
-        this.info;
+    constructor(name, info) {
+        this.name = name;
+        this.info = info;
         this.uses = [];
         this.subCommands = new Map();
         this.command; 
