@@ -27,9 +27,6 @@ global.gConfig = YAML.parse(fs.readFileSync("./src/config/config.yaml", "utf8"))
 
 configTest();
 
-
-// require("./src/websocket/websocket")();
-
 /**
  * Creates Discord and Twitch bot
  */
@@ -37,11 +34,6 @@ require("./src/imports/functions/CreateBots")().then((areBotsCreated) => {
     if(!areBotsCreated) throw "Failed to create the bots";
 });
 
-// /**
-//  * Initializes the bot API
-//  */
-// require("./src/api/api")();
-//
 // const Updates = require("./src/imports/functions/Updates");
 // Async.forever(
 //     function(next) {
