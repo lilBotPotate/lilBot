@@ -122,7 +122,7 @@ class Command {
      */
     async execute(msg, args) {
         if(this.disabled) return msg.channel.send(`This command is disabled. ${this.reason ? `Reason: **${this.reason}**` : ""}`);
-        if(!await this.hasPermisson(msg)) return await msg.channel.send("You can't execute this command!");
+        if(!await this.hasPermisson(msg)) return;
         if(!msg) this.throwSetError("MSG in execute");
         Universal.sendLog(
             "command", 
@@ -166,10 +166,8 @@ class Admin extends Command {
 
     hasPermisson(msg) {
         if(msg.member.hasPermission("ADMINISTRATOR")) return true;
-        if(!isAdmin) {
-            for(const role of global.gConfig.discord.admin_roles) {
-                if(msg.member.roles.has(role)) return true;
-            }
+        for(const role of global.gConfig.discord.admin_roles) {
+            if(msg.member.roles.has(role)) return true;
         }
         return false;
     }

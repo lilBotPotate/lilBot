@@ -21,8 +21,7 @@ module.exports = new Command.Normal()
       .addUse("ugh", "ugh")
       // .addSubCommand("SET", setProfile)
       // .addSubCommand("ME", getProfile)
-      .setCommand(getId)
-      .disable();
+      .setCommand(getId);
       
 /** 
  * @param {{msg: Object, args: Array<String>}}
@@ -51,12 +50,14 @@ async function getProfile(msg, args) {
 }
 
 async function getId(msg, args) {
-    let userId = args.shift();
     const platform = args && args.length > 0 ? await args.shift().toLowerCase() : "steam";
     if(isValidPlatform(platform)) return await msg.channel.send(`That is not a valid platform! Choose from: ${validPlatforms.join(", ")}`);
-    userId = ! userId ? global.gConfig.extra.default_steam_id
-             : platform === "steam" ? await getValidId(userId)
-             : userId;
+    let userId = await args.shift();
+    console.log(global.gConfig.extra.default_steam_id);
+    
+    userId = !userId ? global.gConfig.extra.default_steam_id
+           : platform === "steam" ? await getValidId(userId)
+           : userId;
     if(userId === null) return await msg.channel.send("That user doesn't exist!");
     const userData = await getUserData({ msg, userId, platform });
     if(userData === null) return await msg.channel.send("Something went wrong with getting the data... Sorry :(");
@@ -104,11 +105,19 @@ async function getUserData({ msg, userId, platform }) {
 async function getRankData({ msg, userId, platform }) {
     const selectedAPI = ({
         // "steam": async (userId) => {
-        //     const rankData = await calculatedAPI(userId);
-        //     if(rankData == null) return await kyuuAPI(userId, "steam");
-        //     return rankData;
+        //     let rankData;
+        //     try { rankData = await calculatedAPI(userId); } 
+        //     catch (error) { 
+        //         "[ERROR]: Calgulated.gg API failed!".sendLog(msg);
+        //         rankData = null; 
+        //     }
+        //     try { if(rankData == null) return await kyuuAPI(userId, "steam"); } 
+        //     catch (error) {
+        //         "[ERROR]: Both API's for rank failed!".sendLog(msg);
+        //         return null;
+        //     }
         // }, 
-        "steam": async (userId) => await kyuuAPI(userId, "steam"),
+        "steam": async (userId) => await kyuuAPI(userId, "steam"), 
         "ps": async (userId) => await kyuuAPI(userId, "ps"), 
         "xbox": async (userId) => await kyuuAPI(userId, "xbox") 
     })[platform];
@@ -119,7 +128,7 @@ async function getRankData({ msg, userId, platform }) {
     };
 
     const rankData = await selectedAPI(userId);
-    if(rankData == null) return await msg.channel.send("Whoopsie something went wrong with getting the data...");
+    if(!rankData || rankData == null || rankData == {} || !rankData["1v1"]) return await msg.channel.send("Whoopsie something went wrong with getting the data...");
     return rankData;
 
     async function kyuuAPI(id, platform) {
@@ -226,8 +235,6 @@ async function createImage({ rankData, profileData }) {
 }
 
 function sendRankData({ msg, args, rankData, profileData }) {
-    console.log({args});
-    
     if(!rankData) return msg.channel.send("Whoops something went wrong... Missing rank data... :(");
     if(!profileData) return msg.channel.send("Whoops something went wrong... Missing profile data... :(");
     const sendType = args && args.length > 0 ? args.shift().toUpperCase() : "embed";

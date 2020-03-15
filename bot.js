@@ -34,6 +34,10 @@ require("./src/imports/functions/CreateBots")().then((areBotsCreated) => {
     if(!areBotsCreated) throw "Failed to create the bots";
 });
 
+const {
+    ioPrivateMatch
+} = require("./src/websockets/WebSockets");
+
 // const Updates = require("./src/imports/functions/Updates");
 // Async.forever(
 //     function(next) {

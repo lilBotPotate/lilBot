@@ -1,80 +1,62 @@
 const Store = require("data-store");
-const WebSocket = require("ws");
 const Universal = require("../functions/Universal");
+const express = require("express");
 
 module.exports = class {
-    constructor(name, port) {
-        if(!name) throw new Error("Missing name!");
-        if(!port) throw new Error("Missing port!");
+    constructor(io, app, path) {
+        if(!io) throw new Error("Missing io");
+        if(!app) throw new Error("Missing app");
+        if(!path) throw new Error("Missing path");
 
-        this.name = name;
-        this.port = port;
-        this.db = new Store({ path: `${process.env.DB_STORAGE_PATH}${name}.json`, indent: null });
-        this.server = new WebSocket.Server({ port });
-        this.requests = new Map();
+        this.path = path;
+        this.io = io.of(path);
+
+        this.ioRequests = new Map();
+        this.db = new Store({ path: `${process.env.DB_STORAGE_PATH}/${path}.json`, indent: null });
+
+        this.app = express.Router();
+        app.use(`/${path}`, this.app);
 
         this.onConnection = this.onConnection.bind(this);
-        this.onMessage = this.onMessage.bind(this);
+        this.addIORequest = this.addIORequest.bind(this);
+        this.addAPIRequest = this.addAPIRequest.bind(this);
 
-        this.server.on("connection", this.onConnection);
+        this.io.on("connection", this.onConnection);
+
+        this.request = {
+            IO: this.addIORequest,
+            API: {
+                ALL: (name, fun) => this.addAPIRequest("all", name, fun),
+                GET: (name, fun) => this.addAPIRequest("get", name, fun),
+                POST: (name, fun) => this.addAPIRequest("post", name, fun),
+                PUT: (name, fun) => this.addAPIRequest("put", name, fun),
+                DELETE: (name, fun) => this.addAPIRequest("delete", name, fun)
+            }
+        };
     }
 
-    onConnection(ws) {
-        Universal.sendLog("info", `${this.name} >> ${ws._socket.remoteAddress} > CONNECTED`);
-
-        ws.on("close", () => Universal.sendLog("info", `${this.name} >> ${ws._socket.remoteAddress} > DISCONNECTED`));
-        ws.on("message", (data) => this.onMessage(ws, data));
+    onConnection(socket) {
+        Universal.sendLog("info", `${this.path} >> ${socket.handshake.address} > CONNECTED`);
+        const binder = { 
+            ...this, 
+            socket,
+            sendError: (error) => socket.emit("reqError", { error })
+        };
+        this.ioRequests.forEach((value, key) => socket.on(key, value.bind(binder)));
     }
 
-    onMessage(ws, data) {
-        try { data = JSON.parse(data); }
-        catch (error) { return Universal.sendLog("warn", `${this.name} >> ${ws._socket.remoteAddress} > DATA IS NOT JSON`); }
-
-        if(!data.request) return Universal.sendLog("warn", `${this.name} >> ${ws._socket.remoteAddress} > MISSING REQUEST NAME`);
-
-        const requestName = data.request.toUpperCase();
-        if(!this.requests.has(requestName)) return Universal.sendLog("warn", `${this.name} >> ${ws._socket.remoteAddress} > REQUEST DOESN'T EXIST: ${requestName}`);
-
-        const binder = this;
-        binder.client = ws;
-        binder.respond = (d) => ws.send(JSON.stringify({ [this.name]: d }));
-        binder.sendError = (d) => ws.send(JSON.stringify({ error: d }));
-
-        const reqFun = this.requests.get(requestName).bind(binder);
-        return reqFun(data);
-    }
-
-    broadcast(data) {
-        return this.server.clients.forEach((client) => client.send(JSON.stringify(data)));
-    }
-
-    setRequest(name, fun) {
-        if(typeof fun !== "function") throw new Error("Request function is not a function!");
-        this.requests.set(name.toUpperCase(), fun);
+    addIORequest(name, fun) {
+        if(!name) throw new Error("Missing name");
+        if(!fun) throw new Error("Missing fun");
+        this.ioRequests.set(name, fun);
         return this;
     }
 
-    async getData(path) {
-        if(!this.db.has(`${this.name}.${path}`)) return null;
-        return this.db.get(`${this.name}.${path}`);
-    }
-
-    hasData(path) {
-        return this.db.has(`${this.name}.${path}`);
-    }
-
-    async setData(path, data) {
-        await this.db.set(`${this.name}.${path}`, data);
-        const updatedData = await this.db.get(`${this.name}.${await path.split(".")[0]}`);
-        if(!updatedData) return Universal.sendLog("warn", `${this.name} > Failed to update data`);
-        this.broadcast(updatedData);
-        return updatedData;
-    }
-
-    async deleteData(path) {
-        this.db.del(`${this.name}.${path}`);
-        const response = { [this.name]: {} };
-        response[this.name][await path.split(".")[0]] = {};
-        return this.broadcast(response);
+    addAPIRequest(type, path, fun) {
+        if(!type) throw new Error("Missing type");
+        if(!path) throw new Error("Missing path");
+        if(!fun) throw new Error("Missing fun");
+        this.app[type](path, fun.bind(this));
+        return this;
     }
 }

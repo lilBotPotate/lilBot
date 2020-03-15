@@ -24,7 +24,9 @@ function banUser(msg, args) {
                .setFooter(msg.author.username, msg.author.avatarURL);
     msg.channel.send(eBan).then(m => {
         msg.delete();
+    });
+    if(!bannedMember.user.bot) return bannedMember.send(eBan).then(() => {
         bannedMember.ban();
     });
-    if(!bannedMember.user.bot) return bannedMember.send(eBan);
+    else return bannedMember.ban();
 }

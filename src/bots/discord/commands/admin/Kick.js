@@ -23,10 +23,13 @@ function kickUser(msg, args) {
                 .setDescription(reason)
                 .setFooter(msg.author.username, msg.author.avatarURL);
         
+    
     msg.channel.send(eKick).then(m => {
         msg.delete();
-        kickedMember.kick();
     });
 
-    if(!kickedMember.user.bot) return kickedMember.send(eKick);
+    if(!kickedMember.user.bot) return kickedMember.send(eKick).then(m => {
+        kickedMember.kick();
+    });
+    else return kickedMember.kick();
 }

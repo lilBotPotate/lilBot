@@ -1,4 +1,9 @@
+const {
+    ioContest   
+} = require("../../../websockets/WebSockets");
+
 module.exports = function(channel, tags, message, self) {
+    sendToWebsite(tags, message);
     sendToDiscord(tags, message);
     if(!message.startsWith(global.gConfig.prefixes.normal)) return;
     const args = message.slice(global.gConfig.prefixes.normal.length).split(/ +/);
@@ -23,4 +28,17 @@ function sendToDiscord(tags, message) {
             global.gClientDiscord.channels.get(global.gConfig.discord.twitch_discord_chat).send(twitchMsg);
         }
     }
+}
+
+async function sendToWebsite(tags, message) {
+    const winner = await ioContest.db.get("winner");
+    if(!winner || !winner.id) return;
+    if(tags["user-id"] != winner.id) return;
+
+    const messages = await ioContest.db.get("messages") || [];
+    if(messages.length >= 20) messages.shift();
+    messages.push(message);
+
+    ioContest.db.set("messages", messages);
+    ioContest.io.emit("messages", messages);
 }

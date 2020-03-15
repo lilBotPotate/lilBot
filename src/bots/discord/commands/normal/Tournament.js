@@ -5,3 +5,4 @@ const {
 module.exports = new Command.Normal()
       .setName("TOURNAMENT")
       .disable("Not finished");
+      

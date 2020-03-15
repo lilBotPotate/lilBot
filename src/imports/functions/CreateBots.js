@@ -36,8 +36,8 @@ module.exports = async function() {
          * 
          * @type {Object}
          */
-        // global.gClientTwitch = await createTwitchBot();
-        // Universal.sendLog("info", "Finished creating Twitch bot"); 
+        global.gClientTwitch = await createTwitchBot();
+        Universal.sendLog("info", "Finished creating Twitch bot"); 
     } catch (error) {
         Universal.sendLog("error", `Couldn't create Twitch bot\n${error}`); 
         return false;
@@ -49,7 +49,7 @@ module.exports = async function() {
  * Creates and initiates Discord bot
  * 
  * @async
- * @returns {Promise<Object>} Discord client
+ * @returns {import('discord.js').Client}
  */
 async function createDiscordBot() {
     const clientDiscord = new Discord.Client();
