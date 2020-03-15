@@ -13,7 +13,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 
-server.listen(7777);
+server.listen(process.env.WEBSOCKET_PORT);
 
 io.use((socket, next) => {
     Universal.sendLog("info", `MAIN SOCKET >> ${socket.handshake.address} > CONNECTED`);

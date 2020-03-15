@@ -11,7 +11,7 @@ module.exports = {
     jQueue: new Store({ path: "./src/db/general/queue.json", indent: null }),
     jCommands: new Store({ path: "./src/db/general/commands.json", indent: null }),
     jEnemys: new Store({ path: "./src/db/general/enemies.json", indent: null }),
-    jMods: new Store({ path: "./src/dbgeneral//mods.json", indent: null }),
+    jMods: new Store({ path: "./src/db/general//mods.json", indent: null }),
     jRocketLeague: new Store({ path: "./src/db/general/rocket_league.json", indent: null }),
     init: init()
 }
