@@ -1,6 +1,7 @@
 const {
     Command,
-    Universal
+    Universal,
+    Discord
 } = require("../../../../imports/Imports");
 
 const {
@@ -10,6 +11,7 @@ const {
 module.exports = new Command.Normal()
       .setName("POLL")
       .setInfo("Command for polls!")
+      .addSubCommand("VOTES", votes)
       .setCommand(vote);
 
 async function vote(msg, args) {
@@ -43,5 +45,21 @@ async function vote(msg, args) {
     await ioPoll.db.set(`voters.${msg.author.id}`, vote);
     await ioPoll.db.set("poll", poll);
     await ioPoll.io.emit("poll", poll);
+}
+
+function votes(msg) {
+    const poll = ioPoll.db.get("poll") || {};
+    if(!poll.name || !poll.votes || !poll.options) return msg.channel.send("No active poll!");
+    const eVotes = new Discord.RichEmbed()
+                .setColor("RANDOM")
+                .setTitle(`**${poll.name}**`)
+                .setDescription(`Total votes: ${poll.votes}`)
+                .addField(
+                    "**OPTIONS**", 
+                    poll.options.map(o => `[${o.id}]: ${o.name} (${o.votes} votes)`)
+                        .join("\n")
+                );
+
+    return msg.channel.send(eVotes);
 }
 
