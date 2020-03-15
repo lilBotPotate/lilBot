@@ -29,7 +29,7 @@ async function join(msg) {
         }
     }
 
-    const queue = await ioPrivateMatch.db.get("queue");
+    let queue = await ioPrivateMatch.db.get("queue");
     if(!queue) queue = [];
     if(await queue.find(p => p.id == id)) return msg.reply("you are already in the queue!");
 
