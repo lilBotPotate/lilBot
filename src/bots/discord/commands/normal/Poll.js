@@ -22,7 +22,7 @@ async function vote(msg, args) {
     if(!options) return msg.reply("Poll is not open!");
 
     const voter = await ioPoll.db.get(`voters.${msg.author.id}`);
-    if(voter && false) {
+    if(voter) {
         const index = await options.findIndex(o => o.id == voter);
         if(index === -1) return msg.reply("That option desn't exist!");
         const option = options[index];
