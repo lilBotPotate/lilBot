@@ -28,7 +28,7 @@ async function tournament(msg) {
         }
     }
 
-    const canJoin = true;
+    let canJoin = true;
     const filters = await ioTournament.db.get("filters") || [];
     if(filters.includes("subscriber") && !subscriber) canJoin = false;
     if(filters.includes("moderator") && !moderator) canJoin = false;
