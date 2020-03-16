@@ -9,8 +9,7 @@ const {
 
 module.exports = new Command.Normal()
       .setName("TOURNAMENT")
-      .setCommand(tournament)
-      .disable("Not finished");
+      .setCommand(tournament);
       
 async function tournament(msg) {
     const name = ioTournament.db.get("name");
