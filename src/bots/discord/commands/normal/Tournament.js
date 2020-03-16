@@ -11,9 +11,9 @@ module.exports = new Command.Normal()
       .setName("TOURNAMENT")
       .setCommand(tournament);
       
-async function tournament(msg) {
-    const name = ioTournament.db.get("name");
-    const password = ioTournament.db.get("password");
+async function tournament(msg) {    
+    const name = await ioTournament.db.get("name");
+    const password = await ioTournament.db.get("password");
 
     if(!name || !password) return msg.channel.send("No active tournament");
 
@@ -30,8 +30,8 @@ async function tournament(msg) {
 
     let canJoin = true;
     const filters = await ioTournament.db.get("filters") || [];
-    if(filters.includes("subscriber") && !subscriber) canJoin = false;
-    if(filters.includes("moderator") && !moderator) canJoin = false;
+    if(await filters.includes("subscriber") && !subscriber) canJoin = false;
+    if(await filters.includes("moderator") && !moderator) canJoin = false;
     
     if(canJoin) {
         const eTournament = new Discord.RichEmbed()
