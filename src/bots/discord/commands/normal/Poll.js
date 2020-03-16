@@ -11,6 +11,8 @@ const {
 module.exports = new Command.Normal()
       .setName("POLL")
       .setInfo("Command for polls!")
+      .addUse("poll {number}", "vote for that option")
+      .addUse("poll votes", "get corrent poll")
       .addSubCommand("VOTES", votes)
       .setCommand(vote);
 
