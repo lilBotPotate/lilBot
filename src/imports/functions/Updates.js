@@ -2,7 +2,7 @@ const {
     Universal
 } = require("../Imports");
 
-let twitchLive = false;
+let twitchLive = true;
 
 module.exports = function() {
     return checkTwitch();
