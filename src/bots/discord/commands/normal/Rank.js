@@ -206,6 +206,7 @@ async function createImage({ rankData, profileData }) {
         for (let j = 0; j < selectedRow.length; j++) {
             const element = selectedRow[j];
             const elementData = rankData[element];
+            if(!elementData.rank) return msg.channel.send("Whoops something went wrong... Don't blame yourself it was me who did it :(");
             if(!rankImages[elementData.rank]) {
                 rankImages[elementData.rank] = await Canvas.loadImage(`./src/files/images/rocket_league/rank_icons/${elementData.rank}.png`);
             }
