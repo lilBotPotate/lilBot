@@ -2,7 +2,7 @@ const {
     Command
 } = require("../../../../imports/Imports");
 
-const roastsArr = require("../../../../files/json/roasts.json");
+const roastsArr = require("../../../../db/roasts.json");
 
 module.exports = new Command.Normal()
       .setName("ROAST")

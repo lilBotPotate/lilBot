@@ -3,7 +3,7 @@ const {
     Command
 } = require("../../../../imports/Imports");
 
-const jInfo = require("../../../../files/json/info.json");
+const jInfo = require("../../../../db/info.json");
 
 module.exports = new Command.Normal()
       .setName("SPECS")

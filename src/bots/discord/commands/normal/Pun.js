@@ -2,7 +2,7 @@ const {
     Command
 } = require("../../../../imports/Imports");
 
-const punArr = require("../../../../files/json/puns.json");
+const punArr = require("../../../../db/puns.json");
 
 module.exports = new Command.Normal()
       .setName("PUN")

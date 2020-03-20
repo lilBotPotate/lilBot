@@ -13,7 +13,7 @@ const {
     ranks, 
     changeName, 
     validPlatforms 
-} = require("../../../../files/json/rl_rank.json");
+} = require("../../../../db/rl_rank.json");
 
 module.exports = new Command.Normal()
       .setName("RANK")
