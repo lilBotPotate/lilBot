@@ -1,16 +1,11 @@
 # Files
 src/config/config.yaml
 src/config/.env
-src/db/queue.json
-src/db/commands.json
-src/db/enemies.json
-src/db/mods.json
-src/db/rocket_league.json
-src/db/pokemon/*.json
 
 # Dirs
 node_modules/
 .idea/
-src/db/
-
+src/db/general/
+src/db/rl/
+src/db/twitch/
 .vscode/launch.json

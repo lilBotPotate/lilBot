@@ -53,7 +53,6 @@ async function getId(msg, args) {
     const platform = args && args.length > 0 ? await args.shift().toLowerCase() : "steam";
     if(isValidPlatform(platform)) return await msg.channel.send(`That is not a valid platform! Choose from: ${validPlatforms.join(", ")}`);
     let userId = await args.shift();
-    console.log(global.gConfig.extra.default_steam_id);
     
     userId = !userId ? global.gConfig.extra.default_steam_id
            : platform === "steam" ? await getValidId(userId)
@@ -177,7 +176,7 @@ async function getIdFromUrl(urlName) {
     return jUser.response.steamid;
 }
 
-async function createImage({ rankData, profileData }) {
+async function createImage({ msg, rankData, profileData }) {
     const iCard = await Canvas.loadImage("./src/files/images/rocket_league/card.png");
     const iRingShadow = await Canvas.loadImage("./src/files/images/rocket_league/rank_rings/shadow.png");
 
@@ -206,13 +205,14 @@ async function createImage({ rankData, profileData }) {
         for (let j = 0; j < selectedRow.length; j++) {
             const element = selectedRow[j];
             const elementData = rankData[element];
-            if(!elementData.rank) return msg.channel.send("Whoops something went wrong... Don't blame yourself it was me who did it :(");
-            if(!rankImages[elementData.rank]) {
-                rankImages[elementData.rank] = await Canvas.loadImage(`./src/files/images/rocket_league/rank_icons/${elementData.rank}.png`);
-            }
-            ctx.drawImage(rankImages[elementData.rank], 458 + 224*j, 114 + 257*i, 160, 136);
-            ctx.fillText(elementData.mmr, 458 + 80 + 224*j, 114 + 161 + 257*i);
-            if(elementData.rank >= maxRank) maxRank = elementData.rank;
+            if(!isNaN(elementData.rank)) {
+                if(!rankImages[elementData.rank]) {
+                    rankImages[elementData.rank] = await Canvas.loadImage(`./src/files/images/rocket_league/rank_icons/${elementData.rank}.png`);
+                }
+                ctx.drawImage(rankImages[elementData.rank], 458 + 224*j, 114 + 257*i, 160, 136);
+                ctx.fillText(elementData.mmr, 458 + 80 + 224*j, 114 + 161 + 257*i);
+                if(elementData.rank >= maxRank) maxRank = elementData.rank;
+            } 
         }
     }
     
@@ -238,6 +238,7 @@ async function createImage({ rankData, profileData }) {
 function sendRankData({ msg, args, rankData, profileData }) {
     if(!rankData) return msg.channel.send("Whoops something went wrong... Missing rank data... :(");
     if(!profileData) return msg.channel.send("Whoops something went wrong... Missing profile data... :(");
+
     const sendType = args && args.length > 0 ? args.shift().toUpperCase() : "embed";
     switch(sendType) {
         case "STRING":
@@ -255,7 +256,7 @@ function sendRankData({ msg, args, rankData, profileData }) {
 }
 
 async function sendImage({ msg, rankData, profileData }) {
-    const imageBuffer = await createImage({ rankData, profileData });
+    const imageBuffer = await createImage({ msg, rankData, profileData });
     const imageAttachment = new Discord.Attachment(imageBuffer, "rank.png");
     
     const eRanks = new Discord.RichEmbed()
