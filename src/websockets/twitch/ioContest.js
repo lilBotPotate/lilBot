@@ -37,6 +37,22 @@ module.exports = (io, app, path) => new ServerSocket(io, app, path)
     }
     Universal.sendLog("info", "setData");
 })
+.request.IO("leaveQueue", async function(data) {
+    if(!data) return this.sendError("Missing data");
+    const { id } = data;
+
+    if((typeof id !== "string") && typeof id !== "number") return this.sendError("Missing id");
+
+    const queue = await this.db.get("queue") || [];
+    if(!queue) queue = [];
+    const index = await queue.findIndex(p => p.id == id);
+    if(index == -1) return this.sendError("Participant is not in the queue");
+    await queue.splice(index, 1);
+
+    await this.db.set("queue", queue);
+    await this.io.emit("queue", queue);
+    Universal.sendLog("info", "leaveQueue");
+})
 .request.IO("drawWinner", async function() {  
     Universal.sendLog("info", "drawWinner");
     const queue = await this.db.get("queue") || [];
