@@ -12,6 +12,7 @@ module.exports = {
     jEnemys: new Store({ path: "./src/db/general/enemies.json", indent: null }),
     jMods: new Store({ path: "./src/db/general/mods.json", indent: null }),
     jRocketLeague: new Store({ path: "./src/db/general/rocket_league.json", indent: null }),
+    jRecipes: new Store({ path: "./src/db/general/recipes.json", indent: null }),
     init: init()
 }
 
