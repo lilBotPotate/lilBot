@@ -80,7 +80,7 @@ function isValidPlatform(platform) {
 async function getUserData({ msg, userId, platform }) {
     const steamCheckUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.STEAM_KEY}&steamids=${userId}`;
     const rankData = await getRankData({ msg, userId, platform });
-    if(rankData == null) return await msg.channel.send("Whoopsie something went wrong with getting the data...");
+    if(rankData == null) return null;
     let profileData = {
         name: userId,
         avatarUrl: "./src/files/images/rocket_league/psy.png"
