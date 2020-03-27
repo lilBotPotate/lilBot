@@ -17,8 +17,9 @@ const {
 
 module.exports = new Command.Normal()
       .setName("RANK")
-      .setInfo("Its complicated")
-      .addUse("ugh", "ugh")
+      .setInfo("Check your Rocket Leg rank!")
+      .addUse("rank", "get lilPotate's rank")
+      .addUse("rank {platform} {steam id / url name} {type}", "get rank based on the id. Platforms: `steam, ps, xbox`. Types: `card, embed, text`")
       // .addSubCommand("SET", setProfile)
       // .addSubCommand("ME", getProfile)
       .setCommand(getId);
