@@ -80,6 +80,7 @@ function isValidPlatform(platform) {
 async function getUserData({ msg, userId, platform }) {
     const steamCheckUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.STEAM_KEY}&steamids=${userId}`;
     const rankData = await getRankData({ msg, userId, platform });
+    if(rankData == null) return await msg.channel.send("Whoopsie something went wrong with getting the data...");
     let profileData = {
         name: userId,
         avatarUrl: "./src/files/images/rocket_league/psy.png"
@@ -128,7 +129,7 @@ async function getRankData({ msg, userId, platform }) {
     };
 
     const rankData = await selectedAPI(userId);
-    if(!rankData || rankData == null || rankData == {} || !rankData["1v1"]) return await msg.channel.send("Whoopsie something went wrong with getting the data...");
+    if(!rankData || rankData == null || rankData == {} || !rankData["1v1"]) return null;
     return rankData;
 
     async function kyuuAPI(id, platform) {
