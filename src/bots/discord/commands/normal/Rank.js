@@ -206,7 +206,7 @@ async function createImage({ msg, rankData, profileData }) {
         for (let j = 0; j < selectedRow.length; j++) {
             const element = selectedRow[j];
             const elementData = rankData[element];
-            if(!isNaN(elementData.rank)) {
+            if(elementData && !isNaN(elementData.rank)) {
                 if(!rankImages[elementData.rank]) {
                     rankImages[elementData.rank] = await Canvas.loadImage(`./src/files/images/rocket_league/rank_icons/${elementData.rank}.png`);
                 }
