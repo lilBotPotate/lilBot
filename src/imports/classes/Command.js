@@ -128,20 +128,17 @@ class Command {
             "command", 
             `DISCORD >>> ${msg.guild === null ? "DM " : this.type} >> ${msg.author.tag} > ${this.name} ${args}`
         );
-        await msg.channel.startTyping();
         if(this.subCommands.size > 0 && args && args.length > 0) {
             const newArgs = [...args];
             const commandName = newArgs.shift().toUpperCase();
             if(this.subCommands.has(commandName)) {
                 this.execCounter++;
-                await this.subCommands.get(commandName)(msg, newArgs);
-                return await msg.channel.stopTyping();
+                return await this.subCommands.get(commandName)(msg, newArgs);
             }
         }
-        if(!this.command) return await msg.channel.stopTyping();
+        if(!this.command) return;
         this.execCounter++;
-        await this.command(msg, args);
-        return await msg.channel.stopTyping();
+        return await this.command(msg, args);
     }
 }
 
