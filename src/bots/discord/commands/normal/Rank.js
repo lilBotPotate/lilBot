@@ -81,24 +81,41 @@ async function getUserData({ msg, userId, platform }) {
     const steamCheckUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.STEAM_KEY}&steamids=${userId}`;
     const rankData = await getRankData({ msg, userId, platform });
     if(rankData == null) return null;
-    let profileData = {
-        name: userId,
-        avatarUrl: "./src/files/images/rocket_league/psy.png"
-    };
+    let profileData; 
+    switch(platform) {
+        case "steam":
+            const profileJson = await Universal.getData(steamCheckUrl, { json: true });
+            if(
+                !profileJson || !profileJson.response || 
+                !profileJson.response.players || !profileJson.response.players[0] 
+            ) return null;
+            
+            const playerJson = profileJson.response.players[0];
+            profileData = {
+                steamId: playerJson.steamid,
+                name: playerJson.personaname,
+                avatarUrl: playerJson.avatarfull,
+                url: playerJson.profileurl
+            }
+            break;
+        case "ps":
+            profileData = {
+                name: userId,
+                avatarUrl: "./src/files/images/rocket_league/psy.png"
+            };
+            break;
+
+        case "xbox":
+            profileData = {
+                name: userId.replace(/-/g, " "),
+                avatarUrl: "./src/files/images/rocket_league/xbox.png"
+            };
+            break;
+        default:
+            break;
+    }
     if(platform === "steam") {
-        const profileJson = await Universal.getData(steamCheckUrl, { json: true });
-        if(
-            !profileJson || !profileJson.response || 
-            !profileJson.response.players || !profileJson.response.players[0] 
-        ) return null;
-        
-        const playerJson = profileJson.response.players[0];
-        profileData = {
-            steamId: playerJson.steamid,
-            name: playerJson.personaname,
-            avatarUrl: playerJson.avatarfull,
-            url: playerJson.profileurl
-        }
+
     }
     return { rankData, profileData };
 }
