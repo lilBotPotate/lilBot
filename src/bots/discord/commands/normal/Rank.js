@@ -53,7 +53,7 @@ async function getProfile(msg, args) {
 async function getId(msg, args) {
     const platform = args && args.length > 0 ? await args.shift().toLowerCase() : "steam";
     if(isValidPlatform(platform)) return await msg.channel.send(`That is not a valid platform! Choose from: ${validPlatforms.join(", ")}`);
-    let userId = await args.shift();
+    let userId = await args.join("-");
     
     userId = !userId ? global.gConfig.extra.default_steam_id
            : platform === "steam" ? await getValidId(userId)
@@ -134,7 +134,7 @@ async function getRankData({ msg, userId, platform }) {
 
     async function kyuuAPI(id, platform) {
         try {
-            const url = `https://kyuu.moe/extra/rankapi.php?channel=${id}&user=${id}&plat=${platform}`;
+            const url = `https://kyuu.moe/extra/rankapi.php?channel=lilBunane&user=${id}&plat=${platform}`;
             const data = await Universal.getData(url, { json: false });
             if(!data || data === "") return null;
             const dataArray = await data.split(" | ");
@@ -237,24 +237,10 @@ async function createImage({ msg, rankData, profileData }) {
     return canvas.toBuffer();
 }
 
-function sendRankData({ msg, args, rankData, profileData }) {
+function sendRankData({ msg, rankData, profileData }) {
     if(!rankData) return msg.channel.send("Whoops something went wrong... Missing rank data... :(");
     if(!profileData) return msg.channel.send("Whoops something went wrong... Missing profile data... :(");
-
-    const sendType = args && args.length > 0 ? args.shift().toUpperCase() : "embed";
-    switch(sendType) {
-        case "STRING":
-        case "NORMAL":
-        case "DEFAULT":
-        case "BASIC":
-        case "TEXT": return sendText({ msg, rankData, profileData });
-        case "NICE":
-        case "EMBED": return sendEmbed({ msg, rankData, profileData });
-        case "PHOTO":
-        case "CARD":
-        case "IMAGE": return sendImage({ msg, rankData, profileData });
-        default: return sendImage({ msg, rankData, profileData });
-    }
+    return sendImage({ msg, rankData, profileData });
 }
 
 async function sendImage({ msg, rankData, profileData }) {
