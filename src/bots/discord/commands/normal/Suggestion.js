@@ -4,7 +4,7 @@ const {
     Command
 } = require("../../../../imports/Imports");
 
-module.exports = new Command.Admin()
+module.exports = new Command.Normal()
       .setName("SUGGESTION")
       .setInfo("Have a great idea? Share it!")
       .addUse("suggestion {suggestion}", "send a suggestion")
@@ -12,6 +12,18 @@ module.exports = new Command.Admin()
 
 function makeSuggestion(msg, args) {
     if(!args || args.length < 1) return msg.channel.send("You need to insert your suggestion!");
+    const subscriber = msg.member.roles.has(global.gConfig.discord.subscriber_role);
+    let moderator = msg.member.hasPermission("ADMINISTRATOR");
+    if(!moderator) {
+        for(const role of global.gConfig.discord.admin_roles) {
+            if(msg.member.roles.has(role)) {
+                moderator = true;
+                break;
+            }
+        }
+    }
+    if(!subscriber && !moderator) return;
+    
     const username = msg.author.tag;
     const suggestion = args.join(" ");
     return authorize(JSON.parse(process.env.GOOGLE_CREDENTIALS), (auth) => appendSuggestion(auth, msg, { username, suggestion }));
