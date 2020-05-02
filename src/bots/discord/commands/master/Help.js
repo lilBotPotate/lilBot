@@ -26,7 +26,7 @@ function listCommand(client, msg, commandName) {
 					  ? `This command is disabled. Reason: **${command.reason}**\n`
 					  : command.info;
 	if(description) helpEmbed.setDescription(description);
-	if(command.uses && command.uses.length > 1) {
+	if(command.uses && command.uses.length > 0) {
 		const usageText = command.uses
 						.map(u => `**${global.gConfig.prefixes.master}${u.format}:** ${u.description}`)
 						.join("\n");
