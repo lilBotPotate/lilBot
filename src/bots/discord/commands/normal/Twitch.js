@@ -11,7 +11,8 @@ module.exports = new Command.Normal()
       .setInfo("Twitch > Mixer")
       .addUse("twitch", "get lilPotate's status")
       .addUse("twitch {username}", "get defined users status")
-      .setCommand(sendData);
+      .setCommand(sendData)
+      .disable("Twitch broke me");
 
 async function sendData(msg, args) {
     const channel = args[0] ? args[0] : "lilpotate";

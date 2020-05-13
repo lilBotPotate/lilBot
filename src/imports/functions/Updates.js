@@ -5,10 +5,11 @@ const {
 let twitchLive = true;
 
 module.exports = function() {
-    return checkTwitch();
+    // return checkTwitch();
 };
 
 async function checkTwitch() {
+    console.log("update");
     let jStream = await Universal.getData(
         `https://api.twitch.tv/helix/streams?user_login=lilpotate`,
         {
@@ -17,7 +18,12 @@ async function checkTwitch() {
         }
     );
 
+    console.log(jStream);
+    
+
     if(jStream.data.length > 0) {
+        console.log("is live");
+        
         if(twitchLive) return;
         twitchLive = true;
         const message = "@everyone **lilPotate** is now live! Come join us! <:lilpotHypebot:642086734774927363>";
