@@ -78,12 +78,12 @@ function isValidPlatform(platform) {
 }
 
 async function getUserData({ msg, userId, platform }) {
-    const steamCheckUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.STEAM_KEY}&steamids=${userId}`;
     const rankData = await getRankData({ msg, userId, platform });
     if(rankData == null) return null;
     let profileData; 
     switch(platform) {
         case "steam":
+            const steamCheckUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.STEAM_KEY}&steamids=${userId}`;
             const profileJson = await Universal.getData(steamCheckUrl, { json: true });
             if(
                 !profileJson || !profileJson.response || 
@@ -114,30 +114,14 @@ async function getUserData({ msg, userId, platform }) {
         default:
             break;
     }
-    if(platform === "steam") {
-
-    }
     return { rankData, profileData };
 }
 
 async function getRankData({ msg, userId, platform }) {
     const selectedAPI = ({
-        // "steam": async (userId) => {
-        //     let rankData;
-        //     try { rankData = await calculatedAPI(userId); } 
-        //     catch (error) { 
-        //         "[ERROR]: Calgulated.gg API failed!".sendLog(msg);
-        //         rankData = null; 
-        //     }
-        //     try { if(rankData == null) return await kyuuAPI(userId, "steam"); } 
-        //     catch (error) {
-        //         "[ERROR]: Both API's for rank failed!".sendLog(msg);
-        //         return null;
-        //     }
-        // }, 
-        "steam": async (userId) => await kyuuAPI(userId, "steam"), 
-        "ps": async (userId) => await kyuuAPI(userId, "ps"), 
-        "xbox": async (userId) => await kyuuAPI(userId, "xbox") 
+        "steam": async (userId) => await jsonKyuuAPI(userId, "steam"), 
+        "ps": async (userId) => await jsonKyuuAPI(userId, "ps"), 
+        "xbox": async (userId) => await jsonKyuuAPI(userId, "xbox") 
     })[platform];
     
     if(!selectedAPI) {
@@ -171,6 +155,27 @@ async function getRankData({ msg, userId, platform }) {
                 dataJSON[mode] = { rank, mmr };
             }
             return dataJSON;
+        } catch (error) { return null; }
+    }
+
+    async function jsonKyuuAPI(id, platform) {
+        try {
+            const custom = "%7B%221v1%22%3A%7B%22rank%22%3A%22!1sName!%22%2C%22mmr%22%3A!1sMMR!%7D%2C%222v2%22%3A%7B%22rank%22%3A%22!2sName!%22%2C%22mmr%22%3A!2sMMR!%7D%2C%223v3%22%3A%7B%22rank%22%3A%22!3sName!%22%2C%22mmr%22%3A!3sMMR!%7D%2C%22solo%203v3%22%3A%7B%22rank%22%3A%22!Solo3sName!%22%2C%22mmr%22%3A!Solo3sMMR!%7D%2C%22dropshot%22%3A%7B%22rank%22%3A%22!DropName!%22%2C%22mmr%22%3A!DropMMR!%7D%2C%22hoops%22%3A%7B%22rank%22%3A%22!HoopsName!%22%2C%22mmr%22%3A!HoopsMMR!%7D%2C%22rumble%22%3A%7B%22rank%22%3A%22!RumbleName!%22%2C%22mmr%22%3A!RumbleMMR!%7D%2C%22snowday%22%3A%7B%22rank%22%3A%22!SnowName!%22%2C%22mmr%22%3A!SnowMMR!%7D%7D";
+            const url = `https://kyuu.moe/extra/rankapi.php?channel=${id}&user=${id}&plat=${platform}&custom=${custom}`;
+            let data = await Universal.getData(url, { json: true });
+            if(!data || data === "") return null;
+
+            for(const rank_name in data) {
+                const rank_data = data[rank_name];
+                
+                if(!rank_data.rank) continue;
+
+                for(let r in ranks) {
+                    if(ranks[r].name === rank_data.rank.toLowerCase()) { rank_data.rank = parseInt(r); break; }
+                }
+            }
+            data.api = "kyuu.moe";
+            return data;
         } catch (error) { return null; }
     }
     
