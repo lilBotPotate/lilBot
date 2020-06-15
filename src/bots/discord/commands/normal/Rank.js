@@ -161,8 +161,10 @@ async function getRankData({ msg, userId, platform }) {
     async function jsonKyuuAPI(id, platform) {
         try {
             const custom = "%7B%221v1%22%3A%7B%22rank%22%3A%22!1sName!%22%2C%22mmr%22%3A!1sMMR!%7D%2C%222v2%22%3A%7B%22rank%22%3A%22!2sName!%22%2C%22mmr%22%3A!2sMMR!%7D%2C%223v3%22%3A%7B%22rank%22%3A%22!3sName!%22%2C%22mmr%22%3A!3sMMR!%7D%2C%22solo%203v3%22%3A%7B%22rank%22%3A%22!Solo3sName!%22%2C%22mmr%22%3A!Solo3sMMR!%7D%2C%22dropshot%22%3A%7B%22rank%22%3A%22!DropName!%22%2C%22mmr%22%3A!DropMMR!%7D%2C%22hoops%22%3A%7B%22rank%22%3A%22!HoopsName!%22%2C%22mmr%22%3A!HoopsMMR!%7D%2C%22rumble%22%3A%7B%22rank%22%3A%22!RumbleName!%22%2C%22mmr%22%3A!RumbleMMR!%7D%2C%22snowday%22%3A%7B%22rank%22%3A%22!SnowName!%22%2C%22mmr%22%3A!SnowMMR!%7D%7D";
-            const url = `https://kyuu.moe/extra/rankapi.php?channel=${id}&user=${id}&plat=${platform}&custom=${custom}`;
+            const url = `https://kyuu.moe/extra/rankapi.php?channel=${id.replace(/[\W_]+/g,"")}&user=${id}&plat=${platform}&custom=${custom}`;
             let data = await Universal.getData(url, { json: true });
+            console.log({ data });
+            
             if(!data || data === "" || (typeof data != "object")) return null;
 
             for(const rank_name in data) {
