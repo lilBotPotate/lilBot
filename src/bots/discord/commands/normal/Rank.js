@@ -12,8 +12,19 @@ const {
 const { 
     ranks, 
     changeName, 
-    validPlatforms 
+    validPlatforms
 } = require("../../../../db/rl_rank.json");
+
+const changeNameNew = {
+    "Ranked Duel 1v1": "1v1",
+    "Ranked Doubles 2v2": "2v2",
+    "Ranked Standard 3v3": "3v3",
+    "Ranked Solo Standard 3v3": "solo 3v3",
+    "Hoops": "hoops",
+    "Rumble": "rumble",
+    "Dropshot": "dropshot",
+    "Snowday": "snowday"
+}
 
 module.exports = new Command.Normal()
       .setName("RANK")
@@ -119,9 +130,9 @@ async function getUserData({ msg, userId, platform }) {
 
 async function getRankData({ msg, userId, platform }) {
     const selectedAPI = ({
-        "steam": async (userId) => await jsonKyuuAPI(userId, "steam"), 
-        "ps": async (userId) => await jsonKyuuAPI(userId, "ps"), 
-        "xbox": async (userId) => await jsonKyuuAPI(userId, "xbox") 
+        "steam": async (userId) => await YannismateApi(userId, "steam"), 
+        "ps": async (userId) => await YannismateApi(userId, "ps"), 
+        "xbox": async (userId) => await YannismateApi(userId, "xbox") 
     })[platform];
     
     if(!selectedAPI) {
@@ -177,6 +188,38 @@ async function getRankData({ msg, userId, platform }) {
             }
             data.api = "kyuu.moe";
             return data;
+        } catch (error) { return null; }
+    }
+
+    async function YannismateApi(id, platform) {
+        try {
+            const url = `https://api.yannismate.de/rank/${platform}/${id}?playlists=ranked_1v1,ranked_2v2,ranked_3v3,hoops,rumble,snowday,dropshot,ranked_solo_3v3`;
+            const data = await Universal.getData(url, { json: false });
+            if(!data || data === "") return null;
+            const full_rank_data = {};
+            for(const d of data.split(" | ")) {
+                const rank_data = d.split(": ");
+                if(!rank_data || rank_data.length < 2) continue;
+                const rank_name = changeNameNew[rank_data[0]];
+                if(!rank_name) continue;
+                const rank_details = rank_data[1].split(" ");
+                if(!rank_details || rank_details.length < 5) continue;
+                let rank;
+                rank_loop:
+                for(const rank_id in ranks) {
+                    const rank_full_name = `${rank_details[0]} ${rank_details[1]}`.toLowerCase();
+                    if(ranks[rank_id].name == rank_full_name) {
+                        rank = parseInt(rank_id);
+                        break rank_loop;
+                    }
+                }
+                if(!rank) continue;
+                const mmr = parseInt(rank_details[4].replace("(", "").replace(")", ""));
+                if(!mmr) continue;
+                full_rank_data[rank_name] = { rank, mmr };
+            }
+            full_rank_data.api = "api.yannismate.de";
+            return full_rank_data;
         } catch (error) { return null; }
     }
     
