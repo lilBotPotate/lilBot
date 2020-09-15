@@ -9,6 +9,7 @@ discord:
   twitch_updates_chat: CHAT TO SEND WHEN LILPOTATE IS LIVE
   twitch_discord_chat: CHAT TO SEND TWITCH CHAT
   bot_owner_id: DISCORD ID OF THE BOT OWNER
+  admin_log_chat: ADMIN LOG CHAT
   admin_roles:
     - DISCORD ADMIN ROLE 
   owners:
