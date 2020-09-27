@@ -57,10 +57,12 @@ async function createDiscordBot() {
     const onMessage = require("../../bots/discord/events/onMessage");
     const onGuildMemberAdd = require("../../bots/discord/events/onGuildMemberAdd");
     const onReady = require("../../bots/discord/events/onReady");
+    const onGuildMemberUpdate = require("../../bots/discord/events/onGuildMemberUpdate");
 
     clientDiscord.on("message", onMessage);
     clientDiscord.on("guildMemberAdd", onGuildMemberAdd);
     clientDiscord.on("ready", onReady);
+    clientDiscord.on("guildMemberUpdate", onGuildMemberUpdate);
 
     clientDiscord.on("disconnect", (event) => Universal.sendLog("warn", `Discord client disconnected: ${event}`));
     clientDiscord.on("error", (error) => Universal.sendLog("error", `Discord client error: ${error}`));
