@@ -1,7 +1,7 @@
 {
-  "name": "discordjs-mongodb-template",
+  "name": "lilbot",
   "version": "1.0.0",
-  "description": "",
+  "description": "Discord bot for lilPotate's server",
   "main": "src/index.ts",
   "scripts": {
     "start": "npm run build && node build/index.js",
