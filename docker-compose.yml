@@ -1,5 +1,9 @@
 version: "3.7"
 
+variables:
+  MONGODB_USERNAME: root
+  MONGODB_PASSWORD: 1234
+
 services:
   db:
     image: mongo:4.4.1
@@ -9,5 +13,24 @@ services:
     ports:
       - 6000:27017
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_ROOT_USERNAME=$(MONGODB_USERNAME)
+      - MONGO_INITDB_ROOT_PASSWORD=$(MONGODB_PASSWORD)
+  bot:
+    image: lilbunnyrabbit/lilbot:latest
+    container_name: lilbot
+    environment:
+      # General config
+      - PREFIX=!
+      # Discord bot config
+      - BOT_TOKEN= # Discord bot token
+      # Twitch bot config
+      - TWITCH_BOT_TOKEN= # Twitch bot token
+      - TWITCH_BOT_USERNAME= # Twitch bot username
+      - TWITCH_BOT_CHANNELS= # Twitch channels seperated by ","
+      # Steam bot config
+      - STEAM_USERNAME= # Steam account username
+      - STEAM_PASSWORD= # Steam account password
+      - STEAM_CHAT_ID= # Steam chat for binding
+      # Mongodb config
+      - MONGODB_URL=mongodb://$(MONGODB_USERNAME):$(MONGODB_PASSWORD)@db:27017
+      - DB_NAME=lilBot
