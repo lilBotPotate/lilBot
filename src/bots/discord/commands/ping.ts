@@ -1,8 +1,7 @@
 import { DiscordBotCommandProps } from '../configDiscord';
-import { DynamicRace } from '../dynamic/DynamicRace';
 
 export default function ({ msg }: DiscordBotCommandProps) {
-    new DynamicRace(msg);
+    msg.channel.send("Ping!");
 }
 
 export function dong({ msg }: DiscordBotCommandProps) {

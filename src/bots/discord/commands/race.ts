@@ -6,6 +6,7 @@ import { GifRaceProps } from '../../../workers/gif-race/GifRace';
 import { GifRaceUser } from '../../../workers/gif-race/GifRaceUser';
 import { DiscordEmbed } from '../../../utils/discord';
 import { logger } from '../../../utils/logger';
+import { ConfigDb } from '../../../database/database';
 
 export default async function ({ msg, args }: DiscordBotCommandProps) {
     if (!msg.guild) return;
@@ -42,10 +43,11 @@ export default async function ({ msg, args }: DiscordBotCommandProps) {
         }))
     };
 
-    // TODO: loading emote
+    const emojis = await ConfigDb.get('emojis');
+
     msg.channel
         .send(
-            `<a:loading:840716456147812372> ${data.users
+            `${emojis?.loading || 'Loading'} ${data.users
                 .map((user, i) => {
                     if (i == data.users.length - 2) {
                         return `<@${user.id}>`;

@@ -3,7 +3,7 @@ import assert from 'assert';
 import { logger } from '../utils/logger';
 import { DatabaseHandler } from '../handlers/database/DatabaseHandler';
 import { CollectionHandler } from '../handlers/database/CollectionHandler';
-import { Configs, defaultConfigs } from './objects/Configs';
+import { ConfigHandler } from '../handlers/database/ConfigHandler';
 
 export let databaseHandler: DatabaseHandler;
 
@@ -18,7 +18,9 @@ export enum Collection {
 export const UsersDb = new CollectionHandler(Collection.USERS);
 export const CustomCommandsDb = new CollectionHandler(Collection.CUSTOM_COMMANDS);
 export const RequestsDb = new CollectionHandler(Collection.REQUESTS);
-export const ConfigDb = new CollectionHandler(Collection.CONFIG);
+
+// Config Handler
+export const ConfigDb = new ConfigHandler(Collection.CONFIG);
 
 // Init
 export async function createDatabaseClient(): Promise<DatabaseHandler | undefined> {
@@ -30,24 +32,7 @@ export async function createDatabaseClient(): Promise<DatabaseHandler | undefine
             assert.strictEqual(null, error);
             logger.info('Successfully connected to the MongoDb database');
             databaseHandler = new DatabaseHandler(result, process.env.DB_NAME || '');
-            addDefaultConfig();
             resolve(databaseHandler);
         });
     });
-}
-
-async function addDefaultConfig() {
-    // const collection = databaseHandler.getDatabase().collection(Collection.CONFIG);
-
-    // return Promise.all(
-    //     Object.keys(defaultConfigs).map(async (key) => {
-    //         await collection.updateOne(
-    //             {
-    //                 _id: key
-    //             },
-    //             { $set: { value: (defaultConfigs as any)[key] } },
-    //             { upsert: true }
-    //         );
-    //     })
-    // );
 }

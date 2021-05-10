@@ -91,7 +91,7 @@ export class DatabaseHandler {
         });
     }
 
-    public async updateOne<T, S>(
+    public async updateOne<T extends { _id: any }, S>(
         collection: string,
         filter: mongodb.FilterQuery<T>,
         data: S

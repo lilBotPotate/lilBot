@@ -1,11 +1,11 @@
-import { databaseHandler } from '../../database/database';
+import { Collection, databaseHandler } from '../../database/database';
 import { logger } from '../../utils/logger';
 import { CursorCallback } from './DatabaseHandler';
 
 export class CollectionHandler {
-    private collection: string;
+    private collection: Collection;
 
-    constructor(collection: string) {
+    constructor(collection: Collection) {
         this.collection = collection;
         logger.database(`New CollectionHandler for collection "${collection}"`);
     }

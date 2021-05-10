@@ -3,7 +3,6 @@ import { logger } from './utils/logger';
 import { createDatabaseClient } from './database/database';
 import { startBots } from './bots/bots';
 import { createSchedules } from './schedules/shedules';
-// import { gifGame } from './bots/discord/gif/GifRace';
 
 const output = dotenv.config();
 
@@ -12,9 +11,7 @@ const output = dotenv.config();
     if (!output.parsed) return logger.error('Failedto load environment variables');
     logger.info('Loaded environment variables');
     checkEnv();
-
-    // gifGame();
-
+    
     await createDatabaseClient();
     await startBots();
 
@@ -23,16 +20,21 @@ const output = dotenv.config();
 
 function checkEnv() {
     const environmentVariables = [
+        // General config
         'PREFIX',
+        // Discord bot config
         'BOT_TOKEN',
+        // Twitch bot config
         'TWITCH_BOT_TOKEN',
         'TWITCH_BOT_USERNAME',
         'TWITCH_BOT_CHANNELS',
-        'MONGODB_URL',
-        'DB_NAME',
+        // Steam bot config
         'STEAM_USERNAME',
         'STEAM_PASSWORD',
-        'STEAM_CHAT_ID'
+        'STEAM_CHAT_ID',
+        // Mongodb config
+        'MONGODB_URL',
+        'DB_NAME'
     ];
 
     for (const env of environmentVariables) {
