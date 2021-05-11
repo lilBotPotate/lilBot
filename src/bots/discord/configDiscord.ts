@@ -14,6 +14,7 @@ import bind, { bindSteam, bindTwitch } from './commands/bind';
 import customCommands, { customCommandsAdd } from './commands/customCommands';
 import birthday, { birthdaySet, birthdayRemove, birthdayList } from './commands/birthday';
 import race from './commands/race';
+import hangman from './commands/hangman';
 
 export type DiscordBotEvent = {
     type: keyof Discord.ClientEvents;
@@ -157,6 +158,12 @@ export const discordNormalCommands: DiscordBotCommands = {
         usage: [['', 'Race']],
         delay: 10000,
         function: race
+    },
+    HANGMAN: {
+        type: 'normal',
+        description: 'Hangman',
+        usage: [['', 'Hangman']],
+        function: hangman
     }
 };
 

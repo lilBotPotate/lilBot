@@ -11,7 +11,7 @@ const output = dotenv.config();
     if (!output.parsed) return logger.error('Failedto load environment variables');
     logger.info('Loaded environment variables');
     checkEnv();
-    
+
     await createDatabaseClient();
     await startBots();
 
