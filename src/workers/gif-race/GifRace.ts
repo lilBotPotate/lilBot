@@ -16,7 +16,7 @@ export type GifRacePropsUser = {
     id: string;
     avatarUrl: string;
     color: string;
-}
+};
 
 export type GifRaceOptions = {
     lms?: boolean;
@@ -55,9 +55,8 @@ export class GifRace {
         this.dimensions = {
             width: this.options.userSize * this.options.width,
             height:
-                this.options.userSize * users.length +
-                this.options.dividerSize * (users.length - 1) +
-                (this.options.borderWidth / 2) * (users.length * 2 - 3)
+                (this.options.userSize + this.options.borderWidth) * users.length +
+                this.options.dividerSize * (users.length - 1)
         };
 
         this.onResults = onResults;
@@ -110,7 +109,7 @@ export class GifRace {
                     user,
                     image,
                     this.options,
-                    i * (this.options.userSize + this.options.dividerSize + this.options.borderWidth / 2) +
+                    i * (this.options.userSize + this.options.dividerSize + this.options.borderWidth) +
                         this.options.borderWidth / 2
                 );
             })

@@ -1,4 +1,5 @@
 import dateFormat from 'dateformat';
+import stack from 'callsite';
 
 export const colors = {
     RESET: '\x1b[0m',
@@ -108,7 +109,11 @@ function log(type: LogTypes, color: null | string, ...args: any) {
         ? `${color || logColors[type]} ${type.padEnd(logTypePadding)} |${colors.RESET}`
         : `${type.padEnd(logTypePadding)} |`;
 
-    console.log(`[${getTime()}] ${typeString} `, ...args);
+    const callSite = type === 'DEBUG' && stack()[2];
+    const path = !callSite
+        ? ''
+        : `${callSite.getFileName().substring(process.cwd().length || 0)}:${callSite.getLineNumber()} `;
+    console.log(`[${getTime()}] ${path}${typeString} `, ...args);
     if (type == 'FATAL') process.exit(1);
 }
 

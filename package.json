@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/lilBunnyRabbit/discordjs-mongodb-template#readme",
   "dependencies": {
+    "callsite": "^1.0.0",
     "canvas": "^2.7.0",
     "dateformat": "^4.5.1",
     "discord.js": "^12.5.3",
@@ -35,6 +36,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/callsite": "^1.0.30",
     "@types/dateformat": "^3.0.1",
     "@types/gif-encoder": "^0.7.0",
     "@types/gifencoder": "^2.0.1",
