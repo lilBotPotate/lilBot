@@ -15,6 +15,7 @@ import customCommands, { customCommandsAdd } from './commands/customCommands';
 import birthday, { birthdaySet, birthdayRemove, birthdayList } from './commands/birthday';
 import race from './commands/race';
 import hangman from './commands/hangman';
+import highLow from './commands/highLow';
 
 export type DiscordBotEvent = {
     type: keyof Discord.ClientEvents;
@@ -164,6 +165,12 @@ export const discordNormalCommands: DiscordBotCommands = {
         description: 'Hangman',
         usage: [['', 'Hangman']],
         function: hangman
+    },
+    HIGHLOW: {
+        type: 'normal',
+        description: 'HIGHLOW',
+        usage: [['', 'HIGHLOW']],
+        function: highLow
     }
 };
 
