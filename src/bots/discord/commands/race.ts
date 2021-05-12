@@ -1,12 +1,12 @@
 import Discord from 'discord.js';
 import fs from 'fs';
 import { DiscordBotCommandProps } from '../configDiscord';
-import { fork } from 'child_process';
 import { GifRaceProps } from '../../../workers/gif-race/GifRace';
 import { GifRaceUser } from '../../../workers/gif-race/GifRaceUser';
 import { DiscordEmbed } from '../../../utils/discord';
 import { logger } from '../../../utils/logger';
 import { ConfigDb } from '../../../database/database';
+import { forkWorker } from '../../../utils/workers';
 
 export default async function ({ msg, args }: DiscordBotCommandProps) {
     if (!msg.guild) return;
@@ -60,9 +60,7 @@ export default async function ({ msg, args }: DiscordBotCommandProps) {
                 .join(' ')} are racing`
         )
         .then((message) => {
-            const worker = fork('./src/workers/gif-race/workerGifRace', {
-                detached: true
-            });
+            const worker = forkWorker("gif-race");
 
             worker?.send({ type: 'start', data });
             worker.on('message', ({ type, data }: { type: 'results'; data: any }) => {

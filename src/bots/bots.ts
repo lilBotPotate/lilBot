@@ -4,6 +4,6 @@ import { createTwitchClient } from './twitch/botTwitch';
 
 export async function startBots(): Promise<any> {
     await createDiscordClient();
-    // await createTwitchClient();
-    // await createSteamClient();
+    await createTwitchClient();
+    await createSteamClient();
 }

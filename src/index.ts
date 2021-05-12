@@ -8,14 +8,14 @@ const output = dotenv.config();
 
 (async () => {
     if (output.error) return logger.error(output.error);
-    if (!output.parsed) return logger.error('Failedto load environment variables');
+    if (!output.parsed) return logger.error('Failed to load environment variables');
     logger.info('Loaded environment variables');
     checkEnv();
 
     await createDatabaseClient();
     await startBots();
 
-    // return createSchedules();
+    return createSchedules();
 })();
 
 function checkEnv() {
